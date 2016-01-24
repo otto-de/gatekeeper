@@ -1,0 +1,43 @@
+{
+  "app": {
+    "live": {
+      "business_time_mo_to_do": {
+        "hours_range": [
+          8,
+          16
+        ],
+        "days_range": [
+          0,
+          3
+        ]
+      },
+      "business_time_fr": {
+        "hours_range": [
+          8,
+          14
+        ],
+        "days_range": [
+          4,
+          4
+        ]
+      }
+    },
+    "develop": {
+      "no_restriction": {
+        "hours_range": [
+          0,
+          24
+        ],
+        "days_range": [
+          0,
+          6
+        ]
+      }
+    }
+  },
+  "mongo": {
+    "uris": [],
+    "database": "",
+    "collection": ""
+  }
+}

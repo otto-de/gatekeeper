@@ -1,0 +1,67 @@
+/*-------------------------
+	Api Documentation
+--------------------------*/
+
+.api_interface {
+   border-radius: 25px;
+   border: 2px solid royalblue;
+   margin-bottom: 20px;
+}
+
+.api_content {
+    padding-left: 20px;
+}
+
+.api_title_box {
+  background: royalblue;
+  color: white;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  padding-top: 20px;
+  padding-left: 20px;
+}
+
+.api_usage {
+   padding-left: 20px;
+}
+
+.api_usage_title_box {
+  background: #7b97ea;
+  font-size: 20px;
+  color: white;
+  padding: 3px;
+}
+
+.api_title {
+  font-size: 30px;
+  padding-bottom: 5px;
+}
+
+.api_method {
+  font-size: 15px;
+}
+
+.api_version_lable {
+    float: right;
+    margin-right: 20px;
+}
+
+.codeblock {
+    font-family: monospace;
+    padding: 2px 4px;
+    font-size: 90%;
+    color: #ffffff;
+    background-color: #333333;
+    border-radius: 3px;
+    -webkit-box-shadow: inset 0 -1px 0 rgba(0,0,0,0.25);
+    box-shadow: inset 0 -1px 0 rgba(0,0,0,0.25);
+}
+
+.inside {
+    vertical-align: middle !important;
+    padding-top: 5px !important;
+    padding-bottom: 4px !important;
+    padding-right: 6px !important;
+    margin-right: 5px !important;
+    margin: -4px;
+}

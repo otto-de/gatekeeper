@@ -1,0 +1,37 @@
+<div style="margin:20px; min-width:600px; min-height:500px">
+    <div id="new_gate_alert_box"></div>
+    <form class="form-horizontal">
+        <fieldset>
+            <legend>Create a new Gate</legend>
+            <div class="form-group">
+                <label for="gate_name" class="col-lg-2 control-label">Name</label>
+                <div class="col-lg-10">
+                    <input type="text" class="form-control" id="name" placeholder="Name">
+                </div>
+                <span id="name_error"></span>
+            </div>
+            <div class="form-group">
+                <label for="group" class="col-lg-2 control-label">Group</label>
+                <div class="col-lg-10">
+                    <input type="text" class="form-control" id="group" placeholder="Group">
+                </div>
+                <span id="group_error"></span>
+            </div>
+            <div class="form-group">
+                <label for="environments" class="col-lg-2 control-label">Environments</label>
+                <div class="col-lg-10">
+                    <input type="text" class="form-control" id="environments" placeholder="develop, live">
+                    <small>Put your values comma seperated. eg.: develop,live</small>
+                </div>
+                <span id="environments_error"></span>
+            </div>
+
+            <div class="form-group">
+                <div class="col-lg-10 col-lg-offset-2">
+                    <button id="save_gate" type="button" class="btn btn-primary">Submit</button>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</div>
+<script src="/static/js/new_gate.js"></script>

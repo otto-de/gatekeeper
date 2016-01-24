@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<link rel="shortcut icon" type="image/png" href="static/img/fav.png">
+
+<link href="/static/css/base.css" rel=stylesheet type="text/css" media=screen>
+{% if parameter.style == "night" %}
+<link href="/static/css/footer_night.css" rel=stylesheet type="text/css" media=screen>
+<link href="/static/3rd/css/darkly/bootstrap.min.css" rel="stylesheet" media="screen">
+{% else %}
+<link href="/static/css/footer_day.css" rel=stylesheet type="text/css" media=screen>
+<link href="/static/3rd/css/flatly/bootstrap.min.css" rel="stylesheet" media="screen">
+{% endif %}
+
+<script src="/static/3rd/js/jquery-2.1.4.min.js"></script>
+<script src="/static/3rd/js/bootstrap.min.js"></script>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<head>
+    {% if title %}
+    <title>{{ title }} - {{ app_name }}</title>
+    {% else %}
+    <title>{{ app_name }}</title>
+    {% endif %}
+</head>
+<body>
+<div id="main">
+
+    {% set active_page = active_page|default('index') -%}
+
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                        data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">{{ app_name }}</a>
+            </div>
+
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    {% for id, caption in navigation_bar %}
+                    <li {% if id== active_page %} class="active" {% endif %}>
+                        <a href="{{ url_for(id) }}{{url_query}}">{{caption }}</a>
+                    </li>
+                    {% endfor %}
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <button id="style_change" type="button" class="btn btn-default btn-sm navbar-btn" aria-label="Left Align">
+                        {% if parameter.style == "night" %}
+                            Switch to day style
+                        {% else %}
+                            Switch to night style
+                        {% endif %}
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    {% block content %}{% endblock %}
+
+</div>
+
+</body>
+<script src="/static/js/url_params.js"></script>
+<script>
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();
+});
+</script>
+
+<footer>
+    <div class="container footerWrap">
+        <div class="row">
+            <div class="col-xs-12 col-sm-3">
+                <h4>Contact</h4>
+                <ul class="list-unstyled">
+                    <li><a href="http://dev.otto.de/">Otto Dev Blog</a></li>
+                </ul>
+            </div>
+            <div class="col-xs-12 col-sm-3">
+                <h4>Resources</h4>
+                <ul class="list-unstyled">
+                    <li><a href="http://getbootstrap.com/" target="_blank">Bootstrap</a></li>
+                    <li><a href="https://bootswatch.com/flatly/">Bootswatch: Flatly</a></li>
+                    <li><a href="https://www.python.org/">Python</a></li>
+                    <li><a href="http://flask.pocoo.org/">Flask</a></li>
+                    <li><a href="https://api.mongodb.org/python/current/">Pymongo</a></li>
+                    <li><a href="http://flaticons.net/">Flaticons</a></li>
+                </ul>
+            </div>
+            <div class="col-xs-12 col-sm-3">
+                <h4>Social</h4>
+                <ul class="list-unstyled">
+                    <li><a href="https://www.facebook.com/Otto" target="_blank">Facebook</a></li>
+                    <li><a href="https://twitter.com/otto_de" target="_blank">Twitter</a></li>
+                    <li><a href="https://www.youtube.com/user/OTTO" target="_blank">YouTube</a></li>
+                    <li><a href="https://plus.google.com/+ottode" target="_blank">Google+</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="subFooter">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="pull-left">
+                        © 2015 <a href="http://otto.de/" target="_blank">Otto GmbH</a> /
+                        <a href="/licenses">Licenses</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+</html>
