@@ -2,6 +2,8 @@
 
 Manages environments, regulates deploys, advises pipelines and facilitates communication.
 
+Readme to short? [Read the docs!](http://otto-gatekeeper.rtfd.org)
+
 ## About
 
 The Gatekeeper manages deploys from multiple pipelines to multiple environments in one single place.
