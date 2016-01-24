@@ -1,0 +1,37 @@
+footer {
+    background-color: #eee;
+    border-top: 4px solid #ddd;
+    color: #777;
+    font-size: 14px;
+    display: block;
+}
+
+footer .subFooter {
+    color: #777777;
+    font-size: 12px;
+    padding: 12px 0;
+    background-color: #e5e5e5;
+    border-top: 1px solid #ddd;
+}
+
+.list-unstyled {
+    padding-left: 0;
+    list-style: none;
+}
+
+footer ul {
+    margin: 0;
+}
+
+footer h4 {
+    border-bottom: 1px dotted #bbb;
+    font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+    margin: 0 0 10px;
+    padding-bottom: 10px;
+}
+
+.footerWrap {
+    padding: 20px;
+}

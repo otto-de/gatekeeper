@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Tool Status</title>
+    <link rel="stylesheet" href="/static/3rd/css/flatly/bootstrap.min.css">
+
+<style type="text/css"></style></head>
+<body>
+<ol class="breadcrumb">
+    <!--<li><a href="/internal">Internal</a></li>-->
+    <li class="active">Status</li>
+</ol>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Status</h3>
+                </div>
+                <div class="panel-body">
+                    <dl class="dl-horizontal">
+                        <dt>Name:</dt>
+                        <dd>{{status.application.name}}</dd>
+                        <dt>Status:</dt>
+                        <dd>{{status.application.status}}</dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Version</h3>
+                </div>
+                <div class="panel-body">
+                    <dl class="dl-horizontal">
+                        <dt>Version:</dt>
+                        <dd>{{status.application.version}}</dd>
+                        <dt>Git Commit:</dt>
+                        <dd>{{status.application.commit}}</dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">System</h3>
+                </div>
+                <div class="panel-body">
+                    <dl class="dl-horizontal">
+                        <dt>Host:</dt>
+                        <dd>{{status.application.hostname}}</dd>
+                        <dt>System Time:</dt>
+                        <dd>{{status.application.systemtime}}</dd>
+                        <dt>System Started</dt>
+                        <dd>{{status.application.systemstarttime}}</dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Details</h3>
+                </div>
+                <div class="panel-body">
+
+                    <div class="list-group">
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div> <!-- /container -->
+
+<script src="/static/3rd/js/jquery.min.js"></script>
+<script src="/static/3rd/js/bootstrap/bootstrap.min.js"></script>
+</body></html>

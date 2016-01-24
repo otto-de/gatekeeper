@@ -1,0 +1,35 @@
+{
+  "app": {
+    "live": {
+      "business_time_mo_to_do": {
+        "hours_range": [
+          0,
+          24
+        ],
+        "days_range": [
+          0,
+          6
+        ]
+      }
+    },
+    "develop": {
+      "no_restriction": {
+        "hours_range": [
+          0,
+          24
+        ],
+        "days_range": [
+          0,
+          6
+        ]
+      }
+    }
+  },
+  "mongo": {
+    "uris": [
+      "localhost"
+    ],
+    "database": "gatekeeper",
+    "collection": "gatekeeper"
+  }
+}
