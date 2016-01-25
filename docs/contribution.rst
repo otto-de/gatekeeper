@@ -6,7 +6,7 @@ requests. For those of your interested, providing documentation to other parties
 
 Open a pull request for the source::
 
-    $ git clone git@gitlab.lhotse.ov.otto.de:p13n/gatekeeper.git
+    $ git clone https://github.com/otto-de/gatekeeper.git
 
 .. note::
 
