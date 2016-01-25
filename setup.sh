@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 ./get-pip.sh
-python get-pip.py
+python get-pip.py --user
 
-python -m pip install virtualenv
+python -m pip install --user virtualenv
 python -m virtualenv venv
 
 source venv/bin/activate
