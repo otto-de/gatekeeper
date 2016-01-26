@@ -6,9 +6,9 @@
 Gatekeeper Documentation
 ========================
 
-For multiple services as many pipelines are required, while in each pipeline different servers can be provisioned.
+For multiple services many pipelines are required, while in each pipeline different servers can be provisioned.
 A pipeline naturally does not know anything about the state of a server. To give any pipeline for any service all
-relevant information, what server can be provisioned (or not) the Gatekeeper was built.
+relevant information which server can be provisioned (or not) the Gatekeeper was built.
 
 The Gatekeeper manages the gates to different environments (e.g.”test-server”, “integration-server”, “production-server”).
 In this way you can manage the provisioning of all your servers for all your pipelines in one single place.
