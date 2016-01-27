@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
-./get-pip.sh
+if [ ! -f "get-pip.py" ]; then
+    ./get-pip.sh
+fi
 python get-pip.py --user
 
 python -m pip install --user virtualenv

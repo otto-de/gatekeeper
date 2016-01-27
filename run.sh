@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
+set -e
+
+source which-python.sh
+
 if [ -z "${1}" ]; then
-    ./venv/local/bin/python run.py "local" 8080
+    ${PYTHON} run.py "local" 8080
 else
-    ./venv/local/bin/python run.py "${1}" 8080
+    ${PYTHON} run.py "${1}" 8080
 fi
