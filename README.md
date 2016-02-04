@@ -27,13 +27,28 @@ to let the pipelines just roll.
 - Installing from Source:
 
 ````bash
-    $ ./setup.sh
+    $ ./setup.sh [OPTIONS]
 ````
+    Options:
+        --no-venv   Installs packages globally. May need root privileges. Default is off.
+        --doc-deps  Includes depedencies to generate documentation.
+
 
 - Run tests:
 
 ````bash
     $ ./run-tests.sh
+````
+
+- Run gatekeeper:
+
+````bash
+    $ ./run.sh [OPTIONS]
+    
+    Options:
+        -p <port>      Port to access UI. Default is 8080
+        -e <env>       Sets Environment config file. Default is local.
+        -v             Enables debug mode. Default is off.
 ````
 
 ## Contribute
