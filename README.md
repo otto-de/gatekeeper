@@ -30,7 +30,7 @@ to let the pipelines just roll.
     $ ./setup.sh [OPTIONS]
 ````
     Options:
-        --no-venv   Installs packages globally. May need root privileges. Default is off.
+        --no-venv   Installs packages globally. May need root privileges.  
         --doc-deps  Includes depedencies to generate documentation.
 
 
