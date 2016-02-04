@@ -31,9 +31,19 @@ to let the pipelines just roll.
 
 Getting Started
 ---------------
-After cloning the source, just run::
+To start the service just run:
 
-    $ python run.py develop 8080
+    .. code::
+
+        $ ./run.sh [OPTIONS]
+
+    **Options**::
+
+        -p <port>           Port. Default 8080.
+
+        -e <environment>    Specifies environment configuration file. Default is local.
+
+        -v                  Enable debug mode.
 
 
 Guide
