@@ -33,13 +33,6 @@ to let the pipelines just roll.
         --no-venv   Installs packages globally. May need root privileges.  
         --doc-deps  Includes depedencies to generate documentation.
 
-
-- Run tests:
-
-````bash
-    $ ./run-tests.sh
-````
-
 - Run gatekeeper:
 
 ````bash
@@ -49,6 +42,12 @@ to let the pipelines just roll.
         -p <port>      Port to access UI. Default is 8080
         -e <env>       Sets Environment config file. Default is local.
         -v             Enables debug mode. Default is off.
+````
+
+- Run tests:
+
+````bash
+    $ ./run-tests.sh <environment>
 ````
 
 ## Contribute
