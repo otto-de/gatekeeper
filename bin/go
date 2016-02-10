@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+BASE_DIR="$( dirname "${0}" )"
+
+runTests() {
+   ${BASE_DIR}/../run-tests.sh
+   if [ "$?" -ne 0 ]; then
+        echo -e '\E[30;41m'
+        cat $BASE_DIR/buildflags/failed.txt
+        echo -e '\E[0m'
+        exit 1
+    else
+        echo -e '\E[30;42m'
+        cat $BASE_DIR/buildflags/passed.txt
+        echo -e '\E[0m'
+        exit 0
+    fi
+}
+
+if [ -z "$@" ]; then
+    runTests
+else
+    case "$@" in
+        "run")
+            ${BASE_DIR}/../run.sh -v
+            ;;
+        "check" | "test")
+            runTests
+            ;;
+        esac
+fi
