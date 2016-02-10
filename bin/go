@@ -26,6 +26,9 @@ else
         "check" | "test")
             runTests
             ;;
+        "deps")
+            ${BASE_DIR}/../setup.sh
+            ;;
         "docs")
             ${BASE_DIR}/../docs/build.sh
             ;;
