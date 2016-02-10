@@ -26,5 +26,8 @@ else
         "check" | "test")
             runTests
             ;;
+        "docs")
+            ${BASE_DIR}/../docs/build.sh
+            ;;
         esac
 fi
