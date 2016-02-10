@@ -4,9 +4,9 @@ VENV=true
 DOCS_DEPS=false
 
 usage() { echo "Usage: $0 [--no-venv] [--doc-deps]" 1>&2;
-	  echo "Options:"
-	  echo "	--no-venv   Install packages globally. May need root privileges."
-	  echo "	--doc-deps	Includes dependencies to generate docs (ie. Sphinx)."
+          echo "Options:"
+          echo "	--no-venv   Install packages globally. May need root privileges."
+          echo "	--doc-deps  Includes dependencies to generate docs (ie. Sphinx)."
           exit 1; }
 
 while getopts "h-:" opt; do
@@ -14,11 +14,9 @@ while getopts "h-:" opt; do
     -)
       case $OPTARG in
         no-venv)
-            echo "venv disabled."
             VENV=false
             ;;
         doc-deps)
-            echo "Includes dependencies to generate docs"
             DOCS_DEPS=true
             ;;
         *)
@@ -38,32 +36,23 @@ while getopts "h-:" opt; do
 done
 
 useVirtualEnv() {
-  echo "Using VirtualEnv"
+  echo -e "\e[1mPreparing VirtualEnv\e[0m"
   python -m pip install --user virtualenv
   python -m virtualenv venv
   source venv/bin/activate
 }
-
-if [ ! -f "get-pip.py" ]; then
-    ./get-pip.sh
-fi
 
 python get-pip.py --user
 
 if $VENV; then
   useVirtualEnv
 else
-  echo "Installing packages globally"
+  echo -e "\e[1m\e[31mInstalling packages globally. This may need root privileges.\e[0m"
 fi
 
-python -m pip install pymongo flask datetime tzlocal python-dateutil humanize babel
+python -m pip install -r requirements.txt
 
 if $DOCS_DEPS; then
-    python -m pip install Sphinx sphinxcontrib-httpdomain
+    echo -e "\e[1mInstalling dependencies for docs\e[0m"
+    python -m pip install -r docs/requirements.txt
 fi
-
-git clone -c http.sslVerify=false https://github.com/myusuf3/delorean.git
-cd delorean
-python setup.py install
-cd ..
-rm -rf delorean
