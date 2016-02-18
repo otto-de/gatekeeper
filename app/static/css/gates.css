@@ -40,3 +40,8 @@ a.timestamp {
     vertical-align: top;
     font-size: 0.8em;
 }
+
+.new_gate_button {
+    margin-bottom:5px;
+    color: white !important;
+}
