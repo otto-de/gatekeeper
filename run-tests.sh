@@ -8,6 +8,7 @@ else
     environment="${1}"
 fi
 
+${VENV}jasmine-ci --browser phantomjs
 ${PYTHON} -m tests.test_api $environment
 exit_codes=$?
 

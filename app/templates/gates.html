@@ -3,7 +3,6 @@
 {% block content %}
     <link href="/static/css/gates.css" rel=stylesheet type="text/css" media=screen>
 
-
     {% if parameter.style == "night" %}
         <link href="/static/3rd/css/colorbox/colorbox_night.css" rel=stylesheet type="text/css" media=screen>
     {% else %}
@@ -17,15 +16,8 @@
         </div>
     {% endfor %}
     <div id="alert_box"></div>
-    <a href="/gates/new" class="new_gate_button btn btn-primary ajax cboxElement">New Gate</a>
-    <script src="/static/3rd/js/jquery.colorbox-min.js"></script>
-    <script>
-        $(document).ready(function () {
-            $(".ajax").colorbox({closeButton: false});
-        });
-    </script>
-
-    <script src="/static/js/gates.js"></script>
+    <a id="open_new_gate_overlay" href="/gates/new" class="new_gate_button btn btn-primary ajax cboxElement">New
+        Gate</a>
     <div>
         <ul class="nav nav-tabs" role="tablist">
             {%- if parameter.tab %}
@@ -62,11 +54,11 @@
                                 {% for env in env_list[group] %}
                                     {% if env in gate.environments %}
                                         <td>
-                                            <a id="{{ gate._id }}-{{ env }}"
+                                            <a data-gate-id="{{ gate._id }}-{{ env }}" data-gate-name="{{ gate.name }}" data-gate-environment="{{ env }}"
                                                     {% if gate.environments[env].state == "open" %}
-                                               action="closed" class="btn btn-success">Open
+                                                        action="closed" class="js_gate_button btn btn-success">Open
                                                     {% else %}
-                                                        action="open" class="btn btn-danger">Closed
+                                                        action="open" class="js_gate_button btn btn-danger">Closed
                                                     {% endif %}
                                             </a>
                                             {% if gate.environments[env].api_closed %}
@@ -75,7 +67,6 @@
                                             <div id="{{ gate._id }}-{{ env }}-button-timestamp" class="timestamp"
                                                  data-toggle="tooltip" data-placement="bottom"
                                                  title="{{ gate.environments[env].state_timestamp }}">{{ gate.environments[env].state_age }}</div>
-                                            <div class="timestamp">{{ gate.environments[env].api }}</div>
                                             {% for t in gate.environments[env].queue %}
                                                 <div id="ticket_{{ t['id'] }}_env" class="timestamp">
                                                     {% if t['link'] %}
@@ -100,9 +91,6 @@
                                                  style="font-size:0.8em" data-toggle="tooltip" data-placement="bottom"
                                                  title="{{ gate.environments[env].message_timestamp }}">{{ gate.environments[env].message_age }}</div>
                                         </td>
-                                        <script>
-                                            document.getElementById('{{gate._id}}-{{env}}').onclick = createOnClickHandler('{{gate._id}}-{{env}}', '{{gate.name}}', '{{env}}');
-                                        </script>
                                     {% else %}
                                         <td></td>
                                         <td></td>
@@ -117,5 +105,6 @@
 
         </div>
     </div>
-    <script src="/static/js/gates_textarea.js"></script>
+    <script src="/static/3rd/js/jquery.colorbox-min.js"></script>
+    <script async src="/static/js/gates.js"></script>
 {% endblock %}

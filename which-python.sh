@@ -3,10 +3,11 @@
 set -e
 
 if [ -d ./venv ]; then
-  PYTHON=./venv/bin/python
+  VENV=./venv/bin/
+  PYTHON=${VENV}python
 else
   PYTHON=python
 fi
 
+export VENV
 export PYTHON
-

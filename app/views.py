@@ -51,7 +51,7 @@ def gates():
 @blueprint.route('/gates/new')
 @blueprint.route('/gates/new/')
 def new_gate():
-    return render_template("new_gate.html")
+    return render_template("new_gate_overlay.html")
 
 
 def error_page(error):
