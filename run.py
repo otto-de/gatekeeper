@@ -5,7 +5,7 @@ environment = sys.argv[1]
 port = int(sys.argv[2])
 debug = sys.argv[3] == "true"
 
-app = create_app(environment=environment)
+app = create_app(environment=environment, port=port)
 print("\nApplication staring...")
 print(" Environment: " + str(environment))
 print(" Port: " + str(port))

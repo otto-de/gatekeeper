@@ -12,7 +12,7 @@ class TestValidateTickets(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        create_app(environment)
+        create_app(environment=environment, port=8080)
 
     def create_ticket(self, expiration_date):
         return {"id": str(uuid.uuid4()),

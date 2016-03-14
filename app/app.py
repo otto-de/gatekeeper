@@ -2,6 +2,7 @@ import views
 import api
 import status
 import view_util
+from delorean import Delorean
 
 from flask import Flask
 from mongo_connect import MongoConnect
@@ -12,21 +13,22 @@ navigation_bar = [('views.gates', 'Gates')]
 app_name = "Gatekeeper"
 
 
-def create_app(environment):
+def create_app(environment, port):
     flask = Flask(__name__)
     flask.config.from_pyfile('config.py')
 
     config = load_config(environment)
-    with open('version-info.json', 'r') as configFile:
-        version = json.loads(configFile.read())
+    with open('info.json', 'r') as configFile:
+        info = json.loads(configFile.read())
 
     view_util.navigation_bar = navigation_bar
-    view_util.app_name = version['name']
+    view_util.app_name = info['name']
 
     status.blueprint.navigation_bar = navigation_bar
-    status.blueprint.app_name = app_name
-    status.blueprint.version = version
-    status.blueprint.start_time = time.strftime('%d-%m-%Y %H:%M', time.localtime(time.time()))
+    status.blueprint.info = info
+    status.blueprint.environment = environment
+    status.blueprint.port = port
+    status.blueprint.start_time = Delorean.now()
 
     mongo = MongoConnect(config)
 
@@ -39,6 +41,7 @@ def create_app(environment):
     flask.register_blueprint(views.blueprint)
     flask.register_blueprint(api.blueprint)
     return flask
+
 
 def load_config(environment):
     with open('./resources/default.json', 'r') as configFile:

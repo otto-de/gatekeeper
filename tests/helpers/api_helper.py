@@ -6,7 +6,7 @@ from app.app import create_app
 class ApiHelper:
     def __init__(self, environment):
         print('Run tests on environment ' + environment)
-        self.app = create_app(environment)
+        self.app = create_app(environment=environment, port=8080)
         self.app.config.update(
             DEBUG=True,
             SECRET_KEY='secret_key',

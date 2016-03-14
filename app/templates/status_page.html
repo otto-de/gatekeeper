@@ -18,18 +18,47 @@
         <div class="col-md-6">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h3 class="panel-title">Status</h3>
+                    <h3 class="panel-title">Application</h3>
                 </div>
                 <div class="panel-body">
                     <dl class="dl-horizontal">
                         <dt>Name:</dt>
                         <dd>{{status.application.name}}</dd>
+                        <dt>Description:</dt>
+                        <dd>{{status.application.description}}</dd>
+                        <dt>Group:</dt>
+                        <dd>{{status.application.group}}</dd>
+                        <dt>Environment:</dt>
+                        <dd>{{status.application.environment}}</dd>
                         <dt>Status:</dt>
                         <dd>{{status.application.status}}</dd>
                     </dl>
                 </div>
             </div>
         </div>
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">System</h3>
+                </div>
+                <div class="panel-body">
+                    <dl class="dl-horizontal">
+                        <dt>Host:</dt>
+                        <dd>{{status.application.hostname}}</dd>
+                        <dt>Port:</dt>
+                        <dd>{{status.application.port}}</dd>
+                        <dt>System Time:</dt>
+                        <dd>{{status.application.systemtime}}</dd>
+                        <dt>System Started</dt>
+                        <dd>{{status.application.systemstarttime}}</dd>
+                        <dt>System Uptime</dt>
+                        <dd>{{status.application.uptime}}</dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
         <div class="col-md-6">
             <div class="panel panel-default">
                 <div class="panel-heading">
@@ -41,30 +70,29 @@
                         <dd>{{status.application.version}}</dd>
                         <dt>Git Commit:</dt>
                         <dd>{{status.application.commit}}</dd>
+                        <dt>VCS:</dt>
+                        <dd><a href="{{status.application.vcs_link}}">Link</a></dd>
                     </dl>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-6">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h3 class="panel-title">System</h3>
+                    <h3 class="panel-title">Team</h3>
                 </div>
                 <div class="panel-body">
                     <dl class="dl-horizontal">
-                        <dt>Host:</dt>
-                        <dd>{{status.application.hostname}}</dd>
-                        <dt>System Time:</dt>
-                        <dd>{{status.application.systemtime}}</dd>
-                        <dt>System Started</dt>
-                        <dd>{{status.application.systemstarttime}}</dd>
+                        <dt>Name:</dt>
+                        <dd>{{status.application.team}}</dd>
+                        <dt>Technical Contact:</dt>
+                        <dd>{{status.application.contact_technical}}</dd>
+                        <dt>Business Contact:</dt>
+                        <dd>{{status.application.contact_business}}</dd>
                     </dl>
                 </div>
             </div>
         </div>
-
     </div>
     <div class="row">
         <div class="col-md-12">
@@ -73,17 +101,23 @@
                     <h3 class="panel-title">Details</h3>
                 </div>
                 <div class="panel-body">
-
-                    <div class="list-group">
-
-                    </div>
-
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Services in Use</h3>
+                </div>
+                <div class="panel-body">
                 </div>
             </div>
         </div>
     </div>
 </div> <!-- /container -->
 
-<script src="/static/3rd/js/jquery-2.1.4.min.js"></script>
+                <script src="/static/3rd/js/jquery-2.1.4.min.js"></script>
 <script src="/static/3rd/js/bootstrap.min.js"></script>
 </body></html>

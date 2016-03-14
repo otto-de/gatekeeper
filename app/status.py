@@ -1,8 +1,10 @@
 import json
-import time
 import socket
+import time
+from delorean import parse, Delorean
+from flask import Response, render_template, request, jsonify, Blueprint
+
 import view_util
-from flask import Response, render_template, request, jsonify, Blueprint, g
 
 blueprint = Blueprint('status', __name__)
 
@@ -26,23 +28,46 @@ def status_page():
                            status=status)
 
 
+@blueprint.route("/internal/status.json")
+def status_page_json():
+    status = generate_status()
+    return Response(json.dumps(status), status=200, mimetype='application/json')
+
+
 def generate_status():
+    now = Delorean.now()
+    uptime = (now - (now - blueprint.start_time)).humanize()
+
     return {
         "application": {
-            "status": "OK",
-            "name": blueprint.version['name'],
-            "hostname": socket.gethostname(),
-            "systemtime": get_timestamp(),
-            "systemstarttime": blueprint.start_time,
-            "commit": blueprint.version['commit'],
-            "version": blueprint.version['version'],
+            "name": blueprint.info['name'],
+            "description": blueprint.info['description'],
+            "group": blueprint.info['group'],
+            "environment": blueprint.environment,
+            "version": blueprint.info['version'],
+            "commit": blueprint.info['commit'],
+            "vcs_link": blueprint.info['vcs_link'] + blueprint.info['commit'],
+            "status": "ok",
             "statusDetails": {
-            }
+            },
+        },
+        "system": {
+            "hostname": socket.gethostname(),
+            "port": blueprint.port,
+            "systemtime": now.format_datetime(format=get_timestamp_format()),
+            "systemstarttime": blueprint.start_time.format_datetime(format=get_timestamp_format()),
+            "uptime": uptime
+        },
+        "team": {
+            "team": blueprint.info['team'],
+            "contact_technical": blueprint.info['contact_technical'],
+            "contact_business": blueprint.info['contact_business']
+        },
+        "serviceSpecs": {
+
         }
+
     }
-
-
-
 
 
 @blueprint.errorhandler(404)
@@ -56,5 +81,5 @@ def not_found(error=None):
     return resp
 
 
-def get_timestamp():
-    return time.strftime('%d-%m-%Y %H:%M', time.localtime(time.time()))
+def get_timestamp_format():
+    return 'dd-MM-YYYY H:m'

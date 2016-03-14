@@ -1,0 +1,11 @@
+{
+  "name": "gatekeeper",
+  "team": "unknown",
+  "group": "tools",
+  "description": "Manages environments, regulates deploys, advises pipelines and facilitates communication.",
+  "version": "unknown",
+  "commit": "unknown",
+  "vcs_link": "https://github.com/otto-de/gatekeeper/commit/",
+  "contact_technical": "unknown",
+  "contact_business": "unknown"
+}
