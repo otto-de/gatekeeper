@@ -7,6 +7,7 @@ from flask import Response, render_template, request, jsonify, Blueprint, g
 blueprint = Blueprint('status', __name__)
 
 
+@blueprint.route("/internal/health")
 def status_health():
     dic = {
         "status": "ok"
@@ -16,6 +17,7 @@ def status_health():
     return resp
 
 
+@blueprint.route("/internal/status")
 def status_page():
     status = generate_status()
     if view_util.request_wants_json():

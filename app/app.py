@@ -27,8 +27,6 @@ def create_app(environment):
     status.blueprint.app_name = app_name
     status.blueprint.version = version
     status.blueprint.start_time = time.strftime('%d-%m-%Y %H:%M', time.localtime(time.time()))
-    flask.add_url_rule('/' + version['name'] + '/internal/health', view_func=status.status_health)
-    flask.add_url_rule('/' + version['name'] + '/internal/status', view_func=status.status_page)
 
     mongo = MongoConnect(config)
 
