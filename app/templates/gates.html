@@ -77,9 +77,9 @@
                                                     <span class="label label-default" data-toggle="tooltip"
                                                           data-placement="bottom"
                                                           title="Updated: {{ t['updated'] }}">{{ t["age"] }}</span>
-                                                    <a href="javascript: remove_ticket('{{ t['id'] }}');"><span
-                                                            class="glyphicon glyphicon-trash"
-                                                            id="ticket_{{ t['id'] }}"></span></a>
+                                                    <a class="js_remove_button" data-ticket-id="{{ t['id'] }}">
+                                                        <span class="glyphicon glyphicon-trash"></span>
+                                                    </a>
                                                 </div>
                                             {% endfor %}
                                         </td>

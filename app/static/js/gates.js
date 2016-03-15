@@ -41,14 +41,16 @@ o_p13n.tools.gates = function () {
         });
     };
 
-    module.remove_ticket = function (ticket_id) {
+    module.remove_ticket = function ($button) {
+        console.log($button.data("ticket-id"))
+        console.log("/api/tickets/" + $button.data("ticket-id"))
         $.ajax({
             type: "DELETE",
-            url: "/api/tickets/" + ticket_id,
+            url: "/api/tickets/" + $button.data("ticket-id"),
             dataType: 'json',
             timeout: 5000,
             success: function (response) {
-                $("div[id*=ticket_" + ticket_id + "_]").remove();
+                $button.parent().remove();
             },
             error: function (response) {
                 $("#alert_box").html(createAlertBox(response.responseJSON.reason));
@@ -118,6 +120,15 @@ o_p13n.tools.gates = function () {
         });
     };
 
+    var initRemoveButtons = function() {
+        $('.js_remove_button').each(function () {
+            var $this = $(this);
+            $this.click(function () {
+                module.remove_ticket($this);
+            });
+        });
+    }
+
     var initNewGateOverlay = function () {
         $("#open_new_gate_overlay").onclick = function () {
             colorbox();
@@ -130,8 +141,10 @@ o_p13n.tools.gates = function () {
         });
     };
 
+
     module.init = function () {
         initToggleGateButtons();
+        initRemoveButtons();
         initNewGateOverlay();
         enableResizeTextAreas();
         disableColorboxCloseButton();
