@@ -42,8 +42,6 @@ o_p13n.tools.gates = function () {
     };
 
     module.remove_ticket = function ($button) {
-        console.log($button.data("ticket-id"))
-        console.log("/api/tickets/" + $button.data("ticket-id"))
         $.ajax({
             type: "DELETE",
             url: "/api/tickets/" + $button.data("ticket-id"),
