@@ -84,7 +84,7 @@
                                             {% endfor %}
                                         </td>
                                         <td>
-                        <textarea class="textarea" name="{{ gate.name }}" env="{{ env }}" data-autoresize
+                        <textarea class="textarea js_gate_textarea" name="{{ gate.name }}" env="{{ env }}" data-autoresize
                                   rows="2"> {{ gate.environments[env].message }}</textarea>
                                             </br>
                                             <div id="{{ gate.name }}-{{ env }}-message-timestamp" class="timestamp"

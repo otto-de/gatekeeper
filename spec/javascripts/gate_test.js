@@ -6,51 +6,6 @@ describe("gates toggles", function () {
 
     beforeEach(function () {
         setFixtures('<td>' +
-            '<a ' +
-            'data-gate-id="0c3a0328-ee73-48c6-a94a-a701d21a99b8-1" ' +
-            'data-gate-name="1" ' +
-            'data-gate-environment="1" ' +
-            'action="open" ' +
-            'class="js_gate_button btn btn-danger"> ' +
-            'Open' +
-            '</a> ' +
-            '<div ' +
-            'id="0c3a0328-ee73-48c6-a94a-a701d21a99b8-1-button-timestamp" ' +
-            'class="timestamp" ' +
-            'data-toggle="tooltip" ' +
-            'data-placement="bottom" ' +
-            'title="" ' +
-            'data-original-title="2016-03-10 17:19:47+0100"> ' +
-            '5 seconds ago ' +
-            '</div> ' +
-            '</td>');
-
-        gates = o_p13n.tools.gates();
-    });
-
-    describe("click", function () {
-
-        beforeEach(function() {
-            gates.init();
-            ajax_spy = spyOn($, "ajax");
-        });
-
-        it("sends request", function () {
-            $('.js_gate_button').trigger('click');
-            expect(ajax_spy.calls.mostRecent().args[0]["type"]).toEqual("PUT");
-            expect(ajax_spy.calls.mostRecent().args[0]["url"]).toEqual("/api/services/1/1");
-        });
-    });
-});
-
-describe("delete ticket", function () {
-    "use strict";
-
-    var gates,
-        ajax_spy;
-
-    beforeEach(function () {
-        setFixtures('<td>' +
             '<a data-gate-id="0c3a0328-ee73-48c6-a94a-a701d21a99b8-1" data-gate-name="1" data-gate-environment="1" action="open"' +
             'class="js_gate_button btn btn-danger">Closed' +
             '</a>' +
@@ -72,7 +27,21 @@ describe("delete ticket", function () {
         gates = o_p13n.tools.gates();
     });
 
-    describe("click", function () {
+    describe("click on button and", function () {
+
+        beforeEach(function() {
+            gates.init();
+            ajax_spy = spyOn($, "ajax");
+        });
+
+        it("sends request", function () {
+            $('.js_gate_button').trigger('click');
+            expect(ajax_spy.calls.mostRecent().args[0]["type"]).toEqual("PUT");
+            expect(ajax_spy.calls.mostRecent().args[0]["url"]).toEqual("/api/services/1/1");
+        });
+    });
+
+    describe("click on delete and", function () {
 
         beforeEach(function() {
             gates.init();
@@ -83,6 +52,45 @@ describe("delete ticket", function () {
             $('.js_remove_button').trigger('click');
             expect(ajax_spy.calls.mostRecent().args[0]["type"]).toEqual("DELETE");
             expect(ajax_spy.calls.mostRecent().args[0]["url"]).toEqual("/api/tickets/a73e5dcf-376b-4e2d-ae7c-53130934bcf6");
+        });
+    });
+});
+
+
+describe("textarea", function () {
+    "use strict";
+
+    var gates,
+        ajax_spy;
+
+    beforeEach(function () {
+        setFixtures('<textarea class="textarea js_gate_textarea" name="some-service" env="develop" rows="2" style="height: 50px;">Some Text</textarea>');
+
+        gates = o_p13n.tools.gates();
+    });
+
+    describe("", function () {
+
+        beforeEach(function(done) {
+            gates.init();
+            ajax_spy = spyOn($, "ajax");
+
+            $('.js_gate_textarea').height(0)
+            $('.js_gate_textarea').val('This is a very important message\n\n\n\n');
+            $('.js_gate_textarea').keyup()
+            $('.js_gate_textarea').focus()
+
+            setTimeout(function() {
+                done();
+            }, 1000);
+        });
+
+        it("saves on input", function (done) {
+            expect(ajax_spy.calls.mostRecent().args[0]["type"]).toEqual("PUT");
+            expect(ajax_spy.calls.mostRecent().args[0]["url"]).toEqual("/api/services/some-service/develop");
+            expect(ajax_spy.calls.mostRecent().args[0]["data"]).toEqual('{"message":"This is a very important message\\n\\n\\n\\n"}');
+            expect($('.js_gate_textarea').height()).toBeGreaterThan(50);
+            done();
         });
     });
 });

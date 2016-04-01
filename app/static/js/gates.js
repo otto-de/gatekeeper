@@ -56,8 +56,8 @@ o_p13n.tools.gates = function () {
         })
     };
 
-    var enableResizeTextAreas = function () {
-        jQuery.each(jQuery('textarea[data-autoresize]'), function () {
+    var initTextarea = function () {
+        $('.js_gate_textarea').each(function () {
             var i;
             var t;
             var has_changed = false;
@@ -144,7 +144,7 @@ o_p13n.tools.gates = function () {
         initToggleGateButtons();
         initRemoveButtons();
         initNewGateOverlay();
-        enableResizeTextAreas();
+        initTextarea();
         disableColorboxCloseButton();
     };
 
