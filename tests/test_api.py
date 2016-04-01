@@ -2,23 +2,23 @@ import sys
 import unittest
 import uuid
 
+from app import config
 from app.errors import EnvironmentNotFound
 from app.errors import GateAlreadyExists
 from app.errors import GateNameNotValid
 from app.errors import GateNotFound
 from app.errors import GateStateNotValid
-from app.errors import TicketNotFound
 from app.errors import JsonStructureError
+from app.errors import TicketNotFound
 from app.util import get_by_list
-
-
+from delorean import Delorean
 from helpers.api_helper import ApiHelper
 from helpers.database_helper import DatabaseHelper
 from helpers.testdata_helper import TestDataHelper
+from mock import mock
 
 
 class TestApi(unittest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.maxDiff = None
@@ -38,8 +38,13 @@ class TestApi(unittest.TestCase):
         cls.keys_develop_state = ['environments', 'develop', 'state']
 
     @classmethod
+    def setUp(self):
+        config.TICKET_MAX_LIFETIME = 1
+        self.an_hour_from_now = Delorean.now().epoch + 3600000
+
+    @classmethod
     def tearDown(cls):
-        cls.database_helper.clearDatabase()
+        cls.database_helper.clear_database()
 
     def test_api_service_page_is_available(self):
         response = self.api_helper.get_html('/index')
@@ -255,7 +260,11 @@ class TestApi(unittest.TestCase):
         self.assertEqual(response['environments']['develop']['state'], 'open')
         self.assertEqual(response['environments']['live']['state'], 'closed')
 
-    def test_api_test_and_set_gate_then_release(self):
+    @mock.patch('app.api.blueprint.mongo.get_expiration_date')
+    def test_api_test_and_set_gate_then_release_max_lifetime_0(self, mongo_mock):
+        config.TICKET_MAX_LIFETIME = 0
+        mongo_mock.return_value = self.an_hour_from_now
+
         gate_name, _ = self.testdata_helper.prepare_test_and_set_data()
         gate_name2, _ = self.testdata_helper.prepare_test_and_set_data()
 
@@ -269,6 +278,40 @@ class TestApi(unittest.TestCase):
         self.assertEqual(response['status'], 'ok', response)
         self.assertIn('ticket', response)
         self.assertEqual(response['ticket']["expiration_date"], 0)
+        ticket_id = response['ticket']["id"]
+
+        response = self.api_helper.delete_ticket(ticket_id)
+        self.assertEqual(response['status'], 'ok')
+
+        response = self.api_helper.get_gate(gate_name)
+        self.assertEqual(response['environments']['develop']['state'], 'open')
+        self.assertEqual(len(response['environments']['develop']['queue']), 0)
+        self.assertEqual(response['environments']['live']['state'], 'open')
+        self.assertEqual(len(response['environments']['live']['queue']), 0)
+
+        response = self.api_helper.get_gate(gate_name2)
+        self.assertEqual(response['environments']['develop']['state'], 'open')
+        self.assertEqual(len(response['environments']['develop']['queue']), 0)
+        self.assertEqual(response['environments']['live']['state'], 'open')
+        self.assertEqual(len(response['environments']['live']['queue']), 0)
+
+    @mock.patch('app.api.blueprint.mongo.get_expiration_date')
+    def test_api_test_and_set_gate_then_release_with_max_lifetime_1(self, mongo_mock):
+        mongo_mock.return_value = self.an_hour_from_now
+
+        gate_name, _ = self.testdata_helper.prepare_test_and_set_data()
+        gate_name2, _ = self.testdata_helper.prepare_test_and_set_data()
+
+        set_data = {
+            "services": {
+                gate_name: ['develop'],
+                gate_name2: ['live']
+            }
+        }
+        response = self.api_helper.set_gate(set_data)
+        self.assertEqual(response['status'], 'ok', response)
+        self.assertIn('ticket', response)
+        self.assertEqual(response['ticket']["expiration_date"], self.an_hour_from_now)
         ticket_id = response['ticket']["id"]
 
         response = self.api_helper.delete_ticket(ticket_id)
@@ -324,7 +367,7 @@ class TestApi(unittest.TestCase):
         self.assertIn('ticket', response)
         ticket_id = response['ticket']["id"]
 
-        self.database_helper.decreaseTicketExpirationDateBy(ticket_id, -2)
+        self.database_helper.decrease_ticket_expiration_date_by(ticket_id, -2)
 
         set_data["ticket"] = ticket_id
         response = self.api_helper.set_gate(set_data)
@@ -396,7 +439,7 @@ class TestApi(unittest.TestCase):
         self.assertEqual(response['status'], 'denied')
 
         # ticket 1 has been expired
-        self.database_helper.decreaseTicketExpirationDateBy(ticket_id_1, -2)
+        self.database_helper.decrease_ticket_expiration_date_by(ticket_id_1, -2)
 
         response = self.api_helper.set_gate(set_data)
         self.assertEqual(response['status'], 'error')
@@ -434,18 +477,21 @@ class TestApi(unittest.TestCase):
         response = self.api_helper.delete_ticket(ticket)
         self.assertEqual(response['status'], 'ok')
 
-    def test_api_test_and_set_queue_in(self):
+    @mock.patch('app.api.blueprint.mongo.get_expiration_date')
+    def test_api_test_and_set_queue_in(self, mongo_mock):
+        mongo_mock.return_value = self.an_hour_from_now
+
         gate_name, set_data = self.testdata_helper.prepare_test_and_set_data()
 
         response = self.api_helper.set_gate(set_data)
         self.assertEqual(response['status'], 'ok')
         self.assertIn('ticket', response)
-        self.assertEqual(response['ticket']["expiration_date"], 0)
+        self.assertEqual(response['ticket']["expiration_date"], self.an_hour_from_now)
         ticket_id = response['ticket']["id"]
 
         response = self.api_helper.set_gate_or_queue_ticket(set_data)
-        self.assertEqual(response['status'], 'queued', response)
-        self.assertGreater(response['ticket']["expiration_date"], 0)
+        self.assertEqual(response['status'], 'queued')
+        self.assertEqual(response['ticket']["expiration_date"], self.an_hour_from_now)
         ticket_id_2 = response['ticket']["id"]
 
         response = self.api_helper.get_gate(gate_name)
@@ -467,7 +513,7 @@ class TestApi(unittest.TestCase):
 
         response = self.api_helper.set_gate(set_data2)
         self.assertEqual(response['status'], 'ok', response)
-        self.assertEqual(response['ticket']["expiration_date"], 0, response)
+        self.assertEqual(response['ticket']["expiration_date"], self.an_hour_from_now)
 
     def test_api_switch_non_existing_gate(self):
         gate_name = 'zzzzzZZZZZzzzZZZ'
@@ -548,7 +594,8 @@ class TestApi(unittest.TestCase):
         message = "total_original_test_message"
 
         original = self.api_helper.get_gate(gate_name)
-        self.api_helper.update_gate(gate_name, {"environments": {"develop": {"state": "closed"}, "live": {"message": message}}})
+        self.api_helper.update_gate(gate_name,
+                                    {"environments": {"develop": {"state": "closed"}, "live": {"message": message}}})
         updated = self.api_helper.get_gate(gate_name)
 
         self.assertEqual(get_by_list(updated, ["environments", "live", "message"]), message)

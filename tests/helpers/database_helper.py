@@ -1,16 +1,16 @@
 from app.mongo_connect import MongoConnect
 from app.app import load_config
 
-class DatabaseHelper:
 
+class DatabaseHelper:
     def __init__(self, environment):
         self.config = load_config(environment)
 
-    def decreaseTicketExpirationDateBy(self, ticket_id, delta):
+    def decrease_ticket_expiration_date_by(self, ticket_id, delta):
         mongo = MongoConnect(self.config)
         mongo.set_ticket_expiration_date(ticket_id, expiration_date=mongo.get_expiration_date(delta))
 
-    def clearDatabase(self):
+    def clear_database(self):
         mongo = MongoConnect(self.config)
         mongo.collection.drop()
         mongo.tickets.drop()

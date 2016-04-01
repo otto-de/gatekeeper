@@ -1,10 +1,9 @@
 import json
 import uuid
 
-from delorean import Delorean
-from flask import Response, request, Blueprint
-
+import config
 import util
+from delorean import Delorean
 from errors import EnvironmentNotFound
 from errors import GateAlreadyExists
 from errors import GateNameNotValid
@@ -14,8 +13,10 @@ from errors import JsonStructureError
 from errors import JsonValidationError
 from errors import NotMasterError
 from errors import TicketNotFound
+from flask import Response, request, Blueprint
 
 blueprint = Blueprint('api', __name__)
+blueprint.mongo = None
 
 
 @blueprint.route('/api/services', methods=['PUT'])
@@ -46,8 +47,12 @@ def api_test_and_set():
                         break
                     return Response('{"status": "denied"}', status=200, mimetype='application/json')
 
+        if status == "queued":
+            expiration_date = blueprint.mongo.get_expiration_date(config.TICKET_QUEUE_LIFETIME)
+        else:
+            expiration_date = blueprint.mongo.get_expiration_date(
+                config.TICKET_MAX_LIFETIME) if config.TICKET_MAX_LIFETIME != 0 else 0
         if not ticket:
-            expiration_date = blueprint.mongo.get_expiration_date(2) if status == "queued" else 0
             ticket = {"id": str(uuid.uuid4()),
                       "updated": Delorean.now().format_datetime(format='y-MM-dd HH:mm:ssz'),
                       "expiration_date": expiration_date,
@@ -62,7 +67,6 @@ def api_test_and_set():
                         "ticket": ticket
                     }
         else:
-            expiration_date = blueprint.mongo.get_expiration_date(2) if status == "queued" else 0
             ticket.update({"expiration_date": expiration_date})
             ticket.update({"updated": Delorean.now().format_datetime(format='y-MM-dd HH:mm:ssz')})
             blueprint.mongo.set_ticket_expiration_date(ticket["id"], expiration_date)

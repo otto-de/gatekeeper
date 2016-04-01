@@ -1,2 +1,6 @@
 WTF_CSRF_ENABLED = True
 SECRET_KEY = 'you-will-never-guess'
+
+# In minutes
+TICKET_MAX_LIFETIME = 720
+TICKET_QUEUE_LIFETIME = 2

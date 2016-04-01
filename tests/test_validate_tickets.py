@@ -9,16 +9,15 @@ from app.app import create_app
 
 
 class TestValidateTickets(unittest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         create_app(environment=environment, port=8080)
 
     def create_ticket(self, expiration_date):
         return {"id": str(uuid.uuid4()),
-                  "updated": Delorean.now().format_datetime(format='y-MM-dd HH:mm:ssz'),
-                  "expiration_date": expiration_date,
-                  "link": None}
+                "updated": Delorean.now().format_datetime(format='y-MM-dd HH:mm:ssz'),
+                "expiration_date": expiration_date,
+                "link": None}
 
     def test_validate_tickets(self):
         queue = []
@@ -65,6 +64,7 @@ class TestValidateTickets(unittest.TestCase):
             expiration_date += timedelta(hours=-1)
             queue.append(self.create_ticket(expiration_date.epoch))
         self.assertEqual(api.queue_is_blocked(queue), False)
+
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
