@@ -39,7 +39,7 @@ class TestApi(unittest.TestCase):
 
     @classmethod
     def setUp(self):
-        config.TICKET_MAX_LIFETIME = 1
+        config.CURRENT_TICKET_LIFETIME = 1
         self.an_hour_from_now = Delorean.now().epoch + 3600000
 
     @classmethod
@@ -262,7 +262,7 @@ class TestApi(unittest.TestCase):
 
     @mock.patch('app.api.blueprint.mongo.get_expiration_date')
     def test_api_test_and_set_gate_then_release_max_lifetime_0(self, mongo_mock):
-        config.TICKET_MAX_LIFETIME = 0
+        config.CURRENT_TICKET_LIFETIME = 0
         mongo_mock.return_value = self.an_hour_from_now
 
         gate_name, _ = self.testdata_helper.prepare_test_and_set_data()

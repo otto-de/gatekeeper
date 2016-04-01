@@ -48,10 +48,10 @@ def api_test_and_set():
                     return Response('{"status": "denied"}', status=200, mimetype='application/json')
 
         if status == "queued":
-            expiration_date = blueprint.mongo.get_expiration_date(config.TICKET_QUEUE_LIFETIME)
+            expiration_date = blueprint.mongo.get_expiration_date(config.QUEUED_TICKET_LIFETIME)
         else:
             expiration_date = blueprint.mongo.get_expiration_date(
-                config.TICKET_MAX_LIFETIME) if config.TICKET_MAX_LIFETIME != 0 else 0
+                config.CURRENT_TICKET_LIFETIME) if config.CURRENT_TICKET_LIFETIME != 0 else 0
         if not ticket:
             ticket = {"id": str(uuid.uuid4()),
                       "updated": Delorean.now().format_datetime(format='y-MM-dd HH:mm:ssz'),
