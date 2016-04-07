@@ -47,7 +47,7 @@ def generate_status():
             "version": blueprint.info['version'],
             "commit": blueprint.info['commit'],
             "vcs_link": blueprint.info['vcs_link'] + blueprint.info['commit'],
-            "status": "ok",
+            "status": "OK",
             "statusDetails": {
             },
         },
