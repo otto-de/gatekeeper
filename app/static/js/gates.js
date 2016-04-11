@@ -28,7 +28,7 @@ o_p13n.tools.gates = function () {
         };
         $.ajax({
             type: "PUT",
-            url: "/api/services/" + $button.data("gate-name") + "/" + $button.data("gate-environment"),
+            url: "/api/gates/" + $button.data("gate-group") + "/" + $button.data("gate-name") + "/" + $button.data("gate-environment"),
             contentType: 'application/json',
             data: JSON.stringify(data),
             timeout: 5000,
@@ -36,7 +36,7 @@ o_p13n.tools.gates = function () {
                 toggleGateButton($button);
             },
             error: function (response) {
-                $("#alert_box").html(createAlertBox(response.responseJSON.reason));
+                $("#alert_box").html(module.createAlertBox(response.responseJSON.reason));
             }
         });
     };
@@ -51,7 +51,7 @@ o_p13n.tools.gates = function () {
                 $button.parent().remove();
             },
             error: function (response) {
-                $("#alert_box").html(createAlertBox(response.responseJSON.reason));
+                $("#alert_box").html(module.createAlertBox(response.responseJSON.reason));
             }
         })
     };
@@ -80,17 +80,17 @@ o_p13n.tools.gates = function () {
                     has_changed = false;
                     $.ajax({
                         type: "PUT",
-                        url: "/api/services/" + el.getAttribute("name") + "/" + el.getAttribute("env"),
+                        url: "/api/gates/" + el.getAttribute("data-gate-group") + "/" + el.getAttribute("data-gate-name") + "/" + el.getAttribute("data-gate-environment"),
                         contentType: 'application/json',
                         timeout: 5000,
                         data: JSON.stringify(data),
                         success: function (response) {
-                            var t = $("#" + el.getAttribute("name") + "-" + el.getAttribute("env") + "-message-timestamp")
+                            var t = $("#" + el.getAttribute("data-gate-group") + "-" + el.getAttribute("data-gate-name") + "-" + el.getAttribute("data-gate-environment") + "-message-timestamp")
                             t.text("now");
                         },
                         error: function (response) {
                             has_changed = true;
-                            $("#alert_box").html(createAlertBox(response.responseJSON.reason));
+                            $("#alert_box").html(module.createAlertBox(response.responseJSON.reason));
                         }
                     });
                 }

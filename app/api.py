@@ -5,9 +5,9 @@ import config
 import util
 from delorean import Delorean
 from errors import EnvironmentNotFound
-from errors import GateAlreadyExists
-from errors import GateNameNotValid
-from errors import GateNotFound
+from errors import ServiceAlreadyExists
+from errors import ServiceNameNotValid
+from errors import NotFound
 from errors import GateStateNotValid
 from errors import JsonStructureError
 from errors import JsonValidationError
@@ -19,11 +19,11 @@ blueprint = Blueprint('api', __name__)
 blueprint.mongo = None
 
 
-@blueprint.route('/api/services', methods=['PUT'])
+@blueprint.route('/api/gates', methods=['PUT'])
 def api_test_and_set():
     try:
         status = "ok"
-        data = data_from_request()
+        data = util.data_from_request()
         ticket_id = (data["ticket"] if "ticket" in data else None)
         ticket = (blueprint.mongo.get_ticket(ticket_id) if ticket_id else None)
 
@@ -32,21 +32,21 @@ def api_test_and_set():
         if ticket:
             date = Delorean.now().epoch
             if ticket['expiration_date'] != 0 and ticket['expiration_date'] < date:
-                raise TicketNotFound
-        if "services" not in data:
-            raise JsonStructureError("Could not find services")
+                raise TicketNotFound  # TODO the ticket was found, but was not valid anymore
+        if "gates" not in data:
+            raise JsonStructureError("Could not find gates")  # TODO extract string into errors
 
-        for name in data["services"]:
-            entry = blueprint.mongo.get_gate(name)
-            if type(data["services"][name]) != type(list()):
-                data["services"][name] = [data["services"][name]]
-            for env in data["services"][name]:
-                if check_gate(entry, env, ticket_id):
-                    if request.args and request.args['queue']:
-                        status = "queued"
-                        break
-                    return Response('{"status": "denied"}', status=200, mimetype='application/json')
-
+        for group, services in data['gates'].iteritems():
+            for service, environments in services.iteritems():
+                entry = blueprint.mongo.get_gate(group, service)
+                if type(environments) != type(list()):
+                    environments = [environments]
+                for env in environments:
+                    if check_gate(entry, env, ticket_id):
+                        if request.args and request.args['queue']:
+                            status = "queued"
+                            break
+                        return Response('{"status": "denied"}', status=200, mimetype='application/json')
         if status == "queued":
             expiration_date = blueprint.mongo.get_expiration_date(config.QUEUED_TICKET_LIFETIME)
         else:
@@ -57,15 +57,16 @@ def api_test_and_set():
                       "updated": Delorean.now().format_datetime(format='y-MM-dd HH:mm:ssz'),
                       "expiration_date": expiration_date,
                       "link": data["link"] if "link" in data else None}
-            for name in data["services"]:
-                if type(data["services"][name]) != type(list()):
-                    data["services"][name] = [data["services"][name]]
-                for env in data["services"][name]:
-                    blueprint.mongo.add_ticket(name, env, ticket)
-                    response = {
-                        "status": status,
-                        "ticket": ticket
-                    }
+            for group, services in data['gates'].iteritems():
+                for service, environments in services.iteritems():
+                    if type(environments) != type(list()):
+                        environments = [environments]
+                    for env in environments:
+                        blueprint.mongo.add_ticket(group, service, env, ticket)
+                        response = {
+                            "status": status,
+                            "ticket": ticket
+                        }
         else:
             ticket.update({"expiration_date": expiration_date})
             ticket.update({"updated": Delorean.now().format_datetime(format='y-MM-dd HH:mm:ssz')})
@@ -76,26 +77,29 @@ def api_test_and_set():
             }
 
         return Response(json.dumps(response), status=200, mimetype='application/json')
-    except (GateNotFound, NotMasterError, GateAlreadyExists, GateNameNotValid, JsonValidationError, JsonStructureError,
+    except (NotFound, NotMasterError, ServiceAlreadyExists, ServiceNameNotValid, JsonValidationError,
+            JsonStructureError,
             TicketNotFound) as error:
         return error_response(error)
 
 
-@blueprint.route('/api/services/<string:name>', methods=['POST'])
-def api_new_gate(name=None):
+@blueprint.route('/api/gates/<string:group>/<string:name>', methods=['POST'])
+def api_new_gate(group, name):
     try:
-        data = data_from_request()
-        entry = blueprint.mongo.new_gate(name, data)
+        data = util.data_from_request()
+        entry = blueprint.mongo.create_new_gate(group, name, data)
         return Response(json.dumps(entry), status=200, mimetype='application/json')
-    except (NotMasterError, GateAlreadyExists, GateNameNotValid, JsonValidationError, JsonStructureError) as error:
+    except (
+            NotMasterError, ServiceAlreadyExists, ServiceNameNotValid, JsonValidationError,
+            JsonStructureError) as error:
         return error_response(error)
 
 
-@blueprint.route('/api/services/<string:name>', methods=['GET'])
-@blueprint.route('/api/services/<string:name>/<string:environment>', methods=['GET'])
-def api_get_gate(name, environment=None):
+@blueprint.route('/api/gates/<string:group>/<string:name>', methods=['GET'])
+@blueprint.route('/api/gates/<string:group>/<string:name>/<string:environment>', methods=['GET'])
+def api_get_gate(group, name, environment=None):
     try:
-        entry = blueprint.mongo.get_gate(name)
+        entry = blueprint.mongo.get_gate(group, name)
         if environment and environment not in entry['environments']:
             raise EnvironmentNotFound
         for env in entry['environments']:
@@ -104,50 +108,53 @@ def api_get_gate(name, environment=None):
         if environment:
             entry = entry['environments'][environment]
         return Response(json.dumps(entry), status=200, mimetype='application/json')
-    except (GateNotFound, EnvironmentNotFound) as error:
+    except (NotFound, EnvironmentNotFound) as error:
         return error_response(error)
 
 
-@blueprint.route('/api/services/<string:name>', methods=['PUT'])
-@blueprint.route('/api/services/<string:name>/<string:environment>', methods=['PUT'])
-def api_update_gate(name, environment=None):
+@blueprint.route('/api/gates/<string:group>/<string:name>', methods=['PUT'])
+@blueprint.route('/api/gates/<string:group>/<string:name>/<string:environment>', methods=['PUT'])
+def api_update_gate(group, name, environment=None):
     try:
-        data = data_from_request()
-        entry = blueprint.mongo.get_gate(name)
+        data = util.data_from_request()
+        entry = blueprint.mongo.get_gate(group, name)
 
         if "group" in data:
             entry["group"] = data["group"]
-            blueprint.mongo.update_gate(name, entry)
+            blueprint.mongo.update_gate(group, name, entry)
         if "name" in data:
             entry["name"] = data["name"]
-            blueprint.mongo.update_gate(name, entry)
+            blueprint.mongo.update_gate(group, name, entry)
             name = data["name"]
 
         if environment:
             if "state" in data:
-                blueprint.mongo.set_gate(name, environment, data["state"])
+                blueprint.mongo.set_gate(group, name, environment, data["state"])
             if "message" in data:
-                blueprint.mongo.set_message(name, environment, data["message"])
+                blueprint.mongo.set_message(group, name, environment, data["message"])
         else:
             if "environments" in data:
                 for env in data["environments"]:
                     if "state" in data["environments"][env]:
-                        blueprint.mongo.set_gate(name, env, data["environments"][env]["state"])
+                        blueprint.mongo.set_gate(group, name, env, data["environments"][env]["state"])
                     if "message" in data["environments"][env]:
-                        blueprint.mongo.set_message(name, env, data["environments"][env]["message"])
-        entry = blueprint.mongo.get_gate(name)
+                        blueprint.mongo.set_message(group, name, env, data["environments"][env]["message"])
+        entry = blueprint.mongo.get_gate(group, name)
         return Response(json.dumps(entry), status=200, mimetype='application/json')
-    except (NotMasterError, GateNameNotValid, GateNotFound, GateStateNotValid, EnvironmentNotFound, JsonValidationError,
+    except (
+            NotMasterError, ServiceNameNotValid, NotFound, GateStateNotValid, EnvironmentNotFound,
+            JsonValidationError,
             JsonStructureError) as error:
         return error_response(error)
 
 
-@blueprint.route('/api/services/<string:name>', methods=['DELETE'])
-def api_remove_gate(name):
+@blueprint.route('/api/gates/<string:name>', methods=['DELETE'])
+@blueprint.route('/api/gates/<string:group>/<string:name>', methods=['DELETE'])
+def api_remove_gate(group, name):
     try:
-        blueprint.mongo.remove_gate(name)
+        blueprint.mongo.remove_gate(group, name)
         return Response('{"status": "ok"}', status=200, mimetype='application/json')
-    except(GateNotFound, NotMasterError) as error:
+    except(NotFound, NotMasterError) as error:
         return error_response(error)
 
 
@@ -156,20 +163,13 @@ def api_release(ticket_id):
     try:
         blueprint.mongo.remove_ticket(ticket_id)
         return Response('{"status": "ok"}', status=200, mimetype='application/json')
-    except (NotMasterError, GateAlreadyExists, GateNameNotValid, JsonValidationError, JsonStructureError,
+    except (NotMasterError, ServiceAlreadyExists, ServiceNameNotValid, JsonValidationError, JsonStructureError,
             TicketNotFound) as error:
         return error_response(error)
 
 
-def data_from_request():
-    try:
-        data = json.loads(request.data)
-    except ValueError or TypeError as error:
-        raise JsonValidationError()
-    return data
-
-
 def check_gate(entry, env, ticket_id=None):
+    clean_queue(entry['environments'][env]['queue'])
     return env not in entry['environments'] or \
            entry['environments'][env]['state'] == 'closed' or \
            queue_is_blocked(entry['environments'][env]['queue'], ticket_id) or \

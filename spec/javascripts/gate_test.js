@@ -6,7 +6,7 @@ describe("gates toggles", function () {
 
     beforeEach(function () {
         setFixtures('<td>' +
-            '<a data-gate-id="0c3a0328-ee73-48c6-a94a-a701d21a99b8-1" data-gate-name="1" data-gate-environment="1" action="open"' +
+            '<a data-gate-id="0c3a0328-ee73-48c6-a94a-a701d21a99b8-1" data-gate-group="group" data-gate-name="name" data-gate-environment="environment" action="open"' +
             'class="js_gate_button btn btn-danger">Closed' +
             '</a>' +
             '<div class="label label-danger">api closed</div>' +
@@ -37,7 +37,7 @@ describe("gates toggles", function () {
         it("sends request", function () {
             $('.js_gate_button').trigger('click');
             expect(ajax_spy.calls.mostRecent().args[0]["type"]).toEqual("PUT");
-            expect(ajax_spy.calls.mostRecent().args[0]["url"]).toEqual("/api/services/1/1");
+            expect(ajax_spy.calls.mostRecent().args[0]["url"]).toEqual("/api/gates/group/name/environment");
         });
     });
 
@@ -64,7 +64,7 @@ describe("textarea", function () {
         ajax_spy;
 
     beforeEach(function () {
-        setFixtures('<textarea class="textarea js_gate_textarea" name="some-service" env="develop" rows="2" style="height: 50px;">Some Text</textarea>');
+        setFixtures('<textarea class="textarea js_gate_textarea" data-gate-group="some-group" data-gate-name="some-service" data-gate-environment="develop" rows="2" style="height: 50px;">Some Text</textarea>');
 
         gates = o_p13n.tools.gates();
     });
@@ -87,7 +87,7 @@ describe("textarea", function () {
 
         it("saves on input", function (done) {
             expect(ajax_spy.calls.mostRecent().args[0]["type"]).toEqual("PUT");
-            expect(ajax_spy.calls.mostRecent().args[0]["url"]).toEqual("/api/services/some-service/develop");
+            expect(ajax_spy.calls.mostRecent().args[0]["url"]).toEqual("/api/gates/some-group/some-service/develop");
             expect(ajax_spy.calls.mostRecent().args[0]["data"]).toEqual('{"message":"This is a very important message\\n\\n\\n\\n"}');
             expect($('.js_gate_textarea').height()).toBeGreaterThan(50);
             done();

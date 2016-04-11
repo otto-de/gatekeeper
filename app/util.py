@@ -1,4 +1,16 @@
+import json
 import time
+
+from errors import JsonValidationError
+from flask import request
+
+
+def data_from_request():
+    try:
+        data = json.loads(request.data)
+    except ValueError or TypeError:
+        raise JsonValidationError()
+    return data
 
 
 def generate_info(config):

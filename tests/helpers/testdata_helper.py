@@ -1,34 +1,37 @@
 import uuid
 
-class TestDataHelper:
 
+class TestDataHelper:
     def __init__(self, api_helper):
         self.api_helper = api_helper
 
     def prepare_test_and_set_data(self):
-        gate_name = self.createDefaultGate()
+        service, group = self.create_default_gate()
 
         set_data = {
-            "services": {
-                gate_name: ['develop']
+            "gates": {
+                group: {
+                    service: ['develop']
+                }
             }
         }
 
-        return gate_name, set_data
+        return service, group, set_data
 
-    def createGateName(self):
-        return 'test-gate' + str(uuid.uuid4())
+    def create_service_name(self):
+        return 'test-gate_' + str(uuid.uuid4())
 
-    def createDefaultGate(self):
-        gate_name = self.createGateName()
-        self.createDefaultGateWith(gate_name, ['develop', 'live'])
-        return gate_name
+    def create_group_name(self):
+        return 'test-group_' + str(uuid.uuid4())
 
-    def createDefaultGateWith(self, gate_name, environments):
+    def create_default_gate(self):
+        service = self.create_service_name()
+        group = self.create_group_name()
+        self.create_default_gate_with(group, service, ['develop', 'live'])
+        return service, group
+
+    def create_default_gate_with(self, group, service, environments):
         gate_data = {
-            'name': gate_name,
-            'group': 'dog',
             'environments': environments
         }
-        return self.api_helper.create_gate(gate_name, gate_data)
-
+        return self.api_helper.create_gate(group, service, gate_data)

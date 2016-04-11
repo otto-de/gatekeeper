@@ -8,8 +8,8 @@ o_p13n.tools.new_gate_overlay = function () {
     var initNewGateButton = function () {
         document.getElementById('save_gate').onclick = function () {
             var name = $("#name").val();
+            var group = $("#group").val();
             var data = {
-                "group": $("#group").val(),
                 "environments": $("#environments").val().split(',')
             };
             if (data["environments"].length == 1 && data["environments"][0] == "") {
@@ -17,7 +17,7 @@ o_p13n.tools.new_gate_overlay = function () {
             }
             $.ajax({
                 type: "POST",
-                url: "/api/services/" + name,
+                url: "/api/gates/" + group + "/" + name,
                 contentType: 'application/json',
                 timeout: 5000,
                 data: JSON.stringify(data),

@@ -1,110 +1,115 @@
 {% extends "base.html" %}
 {% set active_page = "views.gates" %}
 {% block content %}
-    <link href="/static/css/gates.css" rel=stylesheet type="text/css" media=screen>
+<link href="/static/css/gates.css" rel=stylesheet type="text/css" media=screen>
 
-    {% if parameter.style == "night" %}
-        <link href="/static/3rd/css/colorbox/colorbox_night.css" rel=stylesheet type="text/css" media=screen>
-    {% else %}
-        <link href="/static/3rd/css/colorbox/colorbox_day.css" rel=stylesheet type="text/css" media=screen>
-    {% endif %}
+{% if parameter.style == "night" %}
+<link href="/static/3rd/css/colorbox/colorbox_night.css" rel=stylesheet type="text/css" media=screen>
+{% else %}
+<link href="/static/3rd/css/colorbox/colorbox_day.css" rel=stylesheet type="text/css" media=screen>
+{% endif %}
 
-    <h2>Gates</h2>
-    {% for info in info_list %}
-        <div class="alert alert-dismissible alert-danger">
-            <strong>{{ info }}</strong>
-        </div>
-    {% endfor %}
-    <div id="alert_box"></div>
-    <a id="open_new_gate_overlay" href="/gates/new" class="new_gate_button btn btn-primary ajax cboxElement">New
-        Gate</a>
-    <div>
-        <ul class="nav nav-tabs" role="tablist">
-            {%- if parameter.tab %}
-                {%- set tab = parameter.tab %}
-            {%- else %}
-                {%- set tab = gate_list.keys()[0] %}
-            {%- endif %}
-            {% for group in gate_list %}
-                <li role="presentation" data-group="{{ group }}"
-                    class="tab-title {% if tab == group %} active {% endif %}">
-                    <a href="#{{ group }}" name="#{{ group }}" aria-controls="{{ group }}" role="tab"
-                       data-toggle="tab">{{ group }}</a>
-                </li>
-            {% endfor %}
-        </ul>
-
-
-        <div class="tab-content">
-            {% for group, gates in gate_list.iteritems() %}
+<h2>Gates</h2>
+{% for info in info_list %}
+<div class="alert alert-dismissible alert-danger">
+    <strong>{{ info }}</strong>
+</div>
+{% endfor %}
+<div id="alert_box"></div>
+<a id="open_new_gate_overlay" href="/gates/new" class="new_gate_button btn btn-primary ajax cboxElement">New
+    Gate</a>
+<div>
+    <ul class="nav nav-tabs" role="tablist">
+        {%- if parameter.tab %}
+        {%- set tab = parameter.tab %}
+        {%- else %}
+        {%- set tab = gate_list.keys()[0] %}
+        {%- endif %}
+        {% for group in gate_list %}
+        <li role="presentation" data-group="{{ group }}"
+            class="tab-title {% if tab == group %} active {% endif %}">
+            <a href="#{{ group }}" name="#{{ group }}" aria-controls="{{ group }}" role="tab"
+               data-toggle="tab">{{ group }}</a>
+        </li>
+        {% endfor %}
+    </ul>
 
 
-                <div role="tabpanel" class="tab-pane fade {% if tab == group %} active in {% endif %}" id="{{ group }}">
-                    <table class="table table-condensed">
-                        <th>
-                            {% for env in env_list[group] %}
-                                <td>Gate to <b>{{ env }}</b></td>
-                                <td></td>
-                            {% endfor %}
-                        </th>
+    <div class="tab-content">
+        {% for group, gates in gate_list.iteritems() %}
 
-                        {% for gate in gates %}
-                            <tr>
-                                <td>{{ gate.name }}</td>
-                                {% for env in env_list[group] %}
-                                    {% if env in gate.environments %}
-                                        <td>
-                                            <a data-gate-id="{{ gate._id }}-{{ env }}" data-gate-name="{{ gate.name }}" data-gate-environment="{{ env }}"
-                                                    {% if gate.environments[env].state == "open" %}
-                                                        action="closed" class="js_gate_button btn btn-success">Open
-                                                    {% else %}
-                                                        action="open" class="js_gate_button btn btn-danger">Closed
-                                                    {% endif %}
-                                            </a>
-                                            {% if gate.environments[env].api_closed %}
-                                                <div class="label label-danger">api closed</div> {% endif %}
-                                            </br>
-                                            <div id="{{ gate._id }}-{{ env }}-button-timestamp" class="timestamp"
-                                                 data-toggle="tooltip" data-placement="bottom"
-                                                 title="{{ gate.environments[env].state_timestamp }}">{{ gate.environments[env].state_age }}</div>
-                                            {% for t in gate.environments[env].queue %}
-                                                <div id="ticket_{{ t['id'] }}_env" class="timestamp">
-                                                    {% if t['link'] %}
-                                                        <a href="{{ t['link'] }}">{{ t['id'] }}</a>
-                                                    {% else %}
-                                                        {{ t['id'] }}
-                                                    {% endif %}
+        <div role="tabpanel" class="tab-pane fade {% if tab == group %} active in {% endif %}" id="{{ group }}">
+            <table class="table table-condensed">
+                <th>
+                    {% for env in env_list[group] %}
+                <td>Gate to <b>{{ env }}</b></td>
+                <td></td>
+                {% endfor %}
+                </th>
+
+                {% for gate in gates %}
+                <tr>
+                    <td>{{ gate.name }}</td>
+                    {% for env in env_list[group] %}
+                    {% if env in gate.environments %}
+                    <td>
+                        <a data-gate-id="{{ gate._id }}-{{ env }}" data-gate-group="{{ gate.group }}"
+                           data-gate-name="{{ gate.name }}" data-gate-environment="{{ env }}"
+                           {% if gate.environments[env].state== "open" %}
+                        action="closed" class="js_gate_button btn btn-success">Open
+                        {% else %}
+                        action="open" class="js_gate_button btn btn-danger">Closed
+                        {% endif %}
+                        </a>
+                        {% if gate.environments[env].api_closed %}
+                        <div class="label label-danger">api closed</div>
+                        {% endif %}
+                        </br>
+                        <div id="{{ gate._id }}-{{ env }}-button-timestamp" class="timestamp"
+                             data-toggle="tooltip" data-placement="bottom"
+                             title="{{ gate.environments[env].state_timestamp }}">{{ gate.environments[env].state_age }}
+                        </div>
+                        {% for t in gate.environments[env].queue %}
+                        <div id="ticket_{{ t['id'] }}_env" class="timestamp">
+                            {% if t['link'] %}
+                            <a href="{{ t['link'] }}">{{ t['id'] }}</a>
+                            {% else %}
+                            {{ t['id'] }}
+                            {% endif %}
                                                     <span class="label label-default" data-toggle="tooltip"
                                                           data-placement="bottom"
                                                           title="Updated: {{ t['updated'] }}">{{ t["age"] }}</span>
-                                                    <a class="js_remove_button" data-ticket-id="{{ t['id'] }}">
-                                                        <span class="glyphicon glyphicon-trash"></span>
-                                                    </a>
-                                                </div>
-                                            {% endfor %}
-                                        </td>
-                                        <td>
-                        <textarea class="textarea js_gate_textarea" name="{{ gate.name }}" env="{{ env }}" data-autoresize
-                                  rows="2"> {{ gate.environments[env].message }}</textarea>
-                                            </br>
-                                            <div id="{{ gate.name }}-{{ env }}-message-timestamp" class="timestamp"
-                                                 style="font-size:0.8em" data-toggle="tooltip" data-placement="bottom"
-                                                 title="{{ gate.environments[env].message_timestamp }}">{{ gate.environments[env].message_age }}</div>
-                                        </td>
-                                    {% else %}
-                                        <td></td>
-                                        <td></td>
-                                    {% endif %}
-                                {% endfor %}
-                            </tr>
+                            <a class="js_remove_button" data-ticket-id="{{ t['id'] }}">
+                                <span class="glyphicon glyphicon-trash"></span>
+                            </a>
+                        </div>
                         {% endfor %}
-                    </table>
-                </div>
-
-            {% endfor %}
-
+                    </td>
+                    <td>
+                        <textarea class="textarea js_gate_textarea" data-gate-group="{{ gate.group }}"
+                                  data-gate-name="{{ gate.name }}" data-gate-environment="{{ env }}" data-autoresize
+                                  rows="2"> {{ gate.environments[env].message }}</textarea>
+                        </br>
+                        <div id="{{ gate.group }}-{{ gate.name }}-{{ env }}-message-timestamp" class="timestamp"
+                             style="font-size:0.8em" data-toggle="tooltip" data-placement="bottom"
+                             title="{{ gate.environments[env].message_timestamp }}">{{
+                            gate.environments[env].message_age }}
+                        </div>
+                    </td>
+                    {% else %}
+                    <td></td>
+                    <td></td>
+                    {% endif %}
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </table>
         </div>
+
+        {% endfor %}
+
     </div>
-    <script src="/static/3rd/js/jquery.colorbox-min.js"></script>
-    <script async src="/static/js/gates.js"></script>
+</div>
+<script src="/static/3rd/js/jquery.colorbox-min.js"></script>
+<script async src="/static/js/gates.js"></script>
 {% endblock %}
