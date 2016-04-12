@@ -1,3 +1,4 @@
+import pprint
 import sys
 import unittest
 import uuid
@@ -164,12 +165,12 @@ class TestApi(unittest.TestCase):
         response = self.api_helper.set_gate(set_data)
         self.assertEqual(response['status'], 'ok')
         self.assertIn('ticket', response)
-        ticket_id = response['ticket']["id"]
+        ticket_id = response['ticket']["_id"]
 
         response = self.api_helper.get_gate(group, service)
         self.assertEqual(response['environments']['develop']['state'], 'closed')
         self.assertEqual(len(response['environments']['develop']['queue']), 1)
-        self.assertEqual(response['environments']['develop']['queue'][0]["id"], ticket_id)
+        self.assertEqual(response['environments']['develop']['queue'][0]["_id"], ticket_id)
         self.assertEqual(response['environments']['live']['state'], 'open')
         self.assertEqual(len(response['environments']['live']['queue']), 0)
 
@@ -179,16 +180,16 @@ class TestApi(unittest.TestCase):
         response = self.api_helper.set_gate(set_data)
         self.assertEqual(response['status'], 'ok')
         self.assertIn('ticket', response)
-        ticket_id = response['ticket']["id"]
+        ticket_id = response['ticket']["_id"]
 
         set_data["ticket"] = ticket_id
         response = self.api_helper.set_gate(set_data)
         self.assertEqual(response['status'], 'ok')
-        self.assertEqual(response['ticket']["id"], ticket_id)
+        self.assertEqual(response['ticket']["_id"], ticket_id)
 
         response = self.api_helper.get_gate(group, service)
         self.assertEqual(response['environments']['develop']['state'], 'closed')
-        self.assertEqual(response['environments']['develop']['queue'][0]["id"], ticket_id)
+        self.assertEqual(response['environments']['develop']['queue'][0]["_id"], ticket_id)
         self.assertEqual(response['environments']['live']['state'], 'open')
         self.assertEqual(len(response['environments']['live']['queue']), 0)
 
@@ -205,13 +206,13 @@ class TestApi(unittest.TestCase):
         response = self.api_helper.set_gate(set_data)
         self.assertEqual(response['status'], 'ok', response)
         self.assertIn('ticket', response)
-        ticket_id = response['ticket']["id"]
+        ticket_id = response['ticket']["_id"]
 
         response = self.api_helper.get_gate(group, service)
         self.assertEqual(response['environments']['develop']['state'], 'closed')
-        self.assertEqual(response['environments']['develop']['queue'][0]["id"], ticket_id)
+        self.assertEqual(response['environments']['develop']['queue'][0]["_id"], ticket_id)
         self.assertEqual(response['environments']['live']['state'], 'closed')
-        self.assertEqual(response['environments']['live']['queue'][0]["id"], ticket_id)
+        self.assertEqual(response['environments']['live']['queue'][0]["_id"], ticket_id)
 
     def test_api_test_and_set_gate_closed(self):
         service, group, set_data = self.testdata_helper.prepare_test_and_set_data()
@@ -239,11 +240,11 @@ class TestApi(unittest.TestCase):
         response = self.api_helper.set_gate(set_data)
         self.assertEqual(response['status'], 'ok', response)
         self.assertIn('ticket', response)
-        ticket_id = response['ticket']["id"]
+        ticket_id = response['ticket']["_id"]
 
         response = self.api_helper.get_gate(group, service)
         self.assertEqual(response['environments']['develop']['state'], 'closed')
-        self.assertEqual(response['environments']['develop']['queue'][0]["id"], ticket_id)
+        self.assertEqual(response['environments']['develop']['queue'][0]["_id"], ticket_id)
         self.assertEqual(response['environments']['live']['state'], 'open')
         self.assertEqual(len(response['environments']['live']['queue']), 0)
 
@@ -251,7 +252,7 @@ class TestApi(unittest.TestCase):
         self.assertEqual(response['environments']['develop']['state'], 'open')
         self.assertEqual(len(response['environments']['develop']['queue']), 0)
         self.assertEqual(response['environments']['live']['state'], 'closed')
-        self.assertEqual(response['environments']['live']['queue'][0]["id"], ticket_id)
+        self.assertEqual(response['environments']['live']['queue'][0]["_id"], ticket_id)
 
     def test_api_test_and_set_gate_multiple_one_closed(self):
         service, group = self.testdata_helper.create_default_gate()
@@ -300,10 +301,10 @@ class TestApi(unittest.TestCase):
             }
         }
         response = self.api_helper.set_gate(set_data)
-        self.assertEqual(response['status'], 'ok', response)
+        self.assertEqual(response['status'], 'ok')
         self.assertIn('ticket', response)
         self.assertEqual(response['ticket']["expiration_date"], 0)
-        ticket_id = response['ticket']["id"]
+        ticket_id = response['ticket']["_id"]
 
         response = self.api_helper.delete_ticket(ticket_id)
         self.assertEqual(response['status'], 'ok')
@@ -341,7 +342,7 @@ class TestApi(unittest.TestCase):
         self.assertEqual(response['status'], 'ok', response)
         self.assertIn('ticket', response)
         self.assertEqual(response['ticket']["expiration_date"], self.an_hour_from_now)
-        ticket_id = response['ticket']["id"]
+        ticket_id = response['ticket']["_id"]
 
         response = self.api_helper.delete_ticket(ticket_id)
         self.assertEqual(response['status'], 'ok')
@@ -364,7 +365,7 @@ class TestApi(unittest.TestCase):
         response = self.api_helper.set_gate(set_data)
         self.assertEqual(response['status'], 'ok')
         self.assertIn('ticket', response)
-        ticket_id = response['ticket']["id"]
+        ticket_id = response['ticket']["_id"]
 
         response = self.api_helper.remove_gate(group, service)
         self.assertEqual(response['status'], 'ok')
@@ -378,7 +379,7 @@ class TestApi(unittest.TestCase):
         response = self.api_helper.set_gate(set_data)
         self.assertEqual(response['status'], 'ok', response)
         self.assertIn('ticket', response)
-        ticket_id = response['ticket']["id"]
+        ticket_id = response['ticket']["_id"]
 
         response = self.api_helper.delete_ticket(ticket_id)
         self.assertEqual(response['status'], 'ok')
@@ -394,7 +395,7 @@ class TestApi(unittest.TestCase):
         response = self.api_helper.set_gate(set_data)
         self.assertEqual(response['status'], 'ok')
         self.assertIn('ticket', response)
-        ticket_id = response['ticket']["id"]
+        ticket_id = response['ticket']["_id"]
 
         self.database_helper.decrease_ticket_expiration_date_by(ticket_id, -2)
 
@@ -410,7 +411,7 @@ class TestApi(unittest.TestCase):
         response = self.api_helper.set_gate_or_queue_ticket(set_data)
         self.assertEqual(response['status'], 'ok')
         self.assertIn('ticket', response)
-        ticket_id_1 = response['ticket']["id"]
+        ticket_id_1 = response['ticket']["_id"]
 
         response = self.api_helper.get_gate(group, service)
         self.assertEqual(len(response['environments']['develop']['queue']), 1)
@@ -418,7 +419,7 @@ class TestApi(unittest.TestCase):
         response = self.api_helper.set_gate_or_queue_ticket(set_data)
         self.assertEqual(response['status'], 'queued')
         self.assertIn('ticket', response)
-        ticket_id_2 = response['ticket']["id"]
+        ticket_id_2 = response['ticket']["_id"]
 
         response = self.api_helper.get_gate(group, service)
         self.assertEqual(len(response['environments']['develop']['queue']), 2)
@@ -445,7 +446,7 @@ class TestApi(unittest.TestCase):
 
         self.assertEqual(response['status'], 'ok', response)
         self.assertIn('ticket', response)
-        ticket_id_1 = response['ticket']["id"]
+        ticket_id_1 = response['ticket']["_id"]
 
         response = self.api_helper.get_gate(group, service)
         self.assertEqual(len(response['environments']['develop']['queue']), 1)
@@ -453,7 +454,7 @@ class TestApi(unittest.TestCase):
         response = self.api_helper.set_gate_or_queue_ticket(set_data)
         self.assertEqual(response['status'], 'queued', response)
         self.assertIn('ticket', response)
-        ticket_id_2 = response['ticket']["id"]
+        ticket_id_2 = response['ticket']["_id"]
 
         response = self.api_helper.get_gate(group, service)
         self.assertEqual(len(response['environments']['develop']['queue']), 2)
@@ -461,7 +462,7 @@ class TestApi(unittest.TestCase):
         set_data["ticket"] = ticket_id_1
         response = self.api_helper.set_gate(set_data)
         self.assertEqual(response['status'], 'ok')
-        self.assertEqual(response['ticket']["id"], ticket_id_1)
+        self.assertEqual(response['ticket']["_id"], ticket_id_1)
 
         set_data_copy["ticket"] = ticket_id_2
         response = self.api_helper.set_gate(set_data_copy)
@@ -476,7 +477,7 @@ class TestApi(unittest.TestCase):
 
         response = self.api_helper.set_gate(set_data_copy)
         self.assertEqual(response['status'], 'ok')
-        self.assertEqual(response['ticket']["id"], ticket_id_2)
+        self.assertEqual(response['ticket']["_id"], ticket_id_2)
 
     def test_api_test_and_set_release_non_existing_ticket_no_error(self):
         response = self.api_helper.delete_ticket('zzzzZZZzzzZZzzZzzZZzz')
@@ -496,7 +497,7 @@ class TestApi(unittest.TestCase):
         response = self.api_helper.set_gate(set_data)
         self.assertEqual(response['status'], 'ok', response)
         self.assertIn('ticket', response)
-        ticket = response['ticket']["id"]
+        ticket = response['ticket']["_id"]
 
         response = self.api_helper.remove_gate(group, service)
         self.assertEqual(response['status'], 'ok')
@@ -516,12 +517,12 @@ class TestApi(unittest.TestCase):
         self.assertEqual(response['status'], 'ok', response)
         self.assertIn('ticket', response)
         self.assertEqual(response['ticket']["expiration_date"], self.an_hour_from_now)
-        ticket_id = response['ticket']["id"]
+        ticket_id = response['ticket']["_id"]
 
         response = self.api_helper.set_gate_or_queue_ticket(set_data)
         self.assertEqual(response['status'], 'queued')
         self.assertEqual(response['ticket']["expiration_date"], self.an_hour_from_now)
-        ticket_id_2 = response['ticket']["id"]
+        ticket_id_2 = response['ticket']["_id"]
 
         response = self.api_helper.get_gate(group, service)
         self.assertEqual(response['environments']['develop']['state'], 'closed')

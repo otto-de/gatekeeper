@@ -1,3 +1,5 @@
+import pprint
+
 from flask import Blueprint, render_template
 from collections import OrderedDict
 from delorean import Delorean
@@ -18,31 +20,38 @@ blueprint = Blueprint('views', __name__, template_folder='templates')
 @blueprint.route('/gates/')
 def gates():
     try:
-        gate_list = OrderedDict()
-        group_list = sorted(blueprint.mongo.get_groups())
-        for group in group_list:
-            gate_list[group] = sorted(blueprint.mongo.get_gates(group), key=lambda k: k['name'])
-
+        service_list = OrderedDict()
         env_list = dict()
         now = Delorean.now()
-        for group, gates in gate_list.iteritems():
+        for group in sorted(blueprint.mongo.get_groups()):
             env_list[group] = set()
-            for gate in gates:
-                for env in gate['environments']:
+            service_list[group] = dict()
+
+            for service_name in sorted(blueprint.mongo.get_services_in_group(group)):
+                service = blueprint.mongo.get_gate(group, service_name)
+
+                for env in service['environments']:
                     env_list[group].add(env)
-                    if gate['environments'][env]['state_timestamp']:
-                        gate['environments'][env]['state_age'] = (now - (now - parse(gate['environments'][env]['state_timestamp']))).humanize()
-                    if gate['environments'][env]['message_timestamp']:
-                        gate['environments'][env]['message_age'] = (
-                        now - (now - parse(gate['environments'][env]['message_timestamp']))).humanize()
-                    gate['environments'][env]['api_closed'] = check_gate(gate, env)
-                    for t in gate['environments'][env]["queue"]:
+                    if service['environments'][env]['state_timestamp']:
+                        service['environments'][env]['state_age'] = (
+                            now - (now - parse(service['environments'][env]['state_timestamp']))).humanize()
+                    if service['environments'][env]['message_timestamp']:
+                        service['environments'][env]['message_age'] = (
+                            now - (now - parse(service['environments'][env]['message_timestamp']))).humanize()
+
+                    service['environments'][env]['api_closed'] = check_gate(service, env)
+
+                    for t in service['environments'][env]["queue"]:
                         t["age"] = (now - (now - parse(t["updated"]))).humanize()
+
+                    service_list[group][service_name] = service
+
             env_list[group] = sorted(env_list[group])
+
         return view_util.render("gates.html",
                                 'Gates',
                                 env_list=env_list,
-                                gate_list=gate_list,
+                                gate_list=service_list,
                                 info_list=util.generate_info(blueprint.config))
     except (ConnectionFailure, OperationFailure) as error:
         return view_util.error_page(error.message)

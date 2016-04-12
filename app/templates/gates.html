@@ -47,7 +47,7 @@
                 {% endfor %}
                 </th>
 
-                {% for gate in gates %}
+                {% for name, gate in gates.iteritems() %}
                 <tr>
                     <td>{{ gate.name }}</td>
                     {% for env in env_list[group] %}
@@ -70,16 +70,16 @@
                              title="{{ gate.environments[env].state_timestamp }}">{{ gate.environments[env].state_age }}
                         </div>
                         {% for t in gate.environments[env].queue %}
-                        <div id="ticket_{{ t['id'] }}_env" class="timestamp">
+                        <div id="ticket_{{ t['_id'] }}_env" class="timestamp">
                             {% if t['link'] %}
-                            <a href="{{ t['link'] }}">{{ t['id'] }}</a>
+                            <a href="{{ t['link'] }}">{{ t['_id'] }}</a>
                             {% else %}
-                            {{ t['id'] }}
+                            {{ t['_id'] }}
                             {% endif %}
                                                     <span class="label label-default" data-toggle="tooltip"
                                                           data-placement="bottom"
                                                           title="Updated: {{ t['updated'] }}">{{ t["age"] }}</span>
-                            <a class="js_remove_button" data-ticket-id="{{ t['id'] }}">
+                            <a class="js_remove_button" data-ticket-id="{{ t['_id'] }}">
                                 <span class="glyphicon glyphicon-trash"></span>
                             </a>
                         </div>

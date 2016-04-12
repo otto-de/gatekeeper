@@ -20,8 +20,9 @@ class MongoConnect:
     def __init__(self, config):
         self.client = MongoClient(config['mongo']['uris'])
         self.db = self.client[config['mongo']['database']]
-        self.collection = self.db[config['mongo']['collection']]
-        self.tickets = self.db[config['mongo']['collection'] + '_tickets']
+        self.collection = self.db['services']
+        self.tickets = self.db['tickets']
+        self.queue = self.db['queue']
         self.d = Delorean()
         self.d = self.d.shift('Europe/Amsterdam')
 
@@ -66,17 +67,6 @@ class MongoConnect:
         except pymongo.errors.NotMasterError as error:
             raise NotMasterError(error.message)
 
-    def get_gates(self, group=''):
-        try:
-            if group:
-                return list(self.collection.find({'group': group}))
-            else:
-                return list(self.collection.find({}))
-        except pymongo.errors.ConnectionFailure as error:
-            raise ConnectionFailure(error.message)
-        except pymongo.errors.OperationFailure as error:
-            raise OperationFailure(error.message)
-
     def update_gate(self, group, name, entry):
         try:
             self.collection.update({"name": name, "group": group}, {'$set': entry}, upsert=False)
@@ -89,6 +79,15 @@ class MongoConnect:
         entry = self.check_existence(group, name)
         if not entry:
             raise NotFound
+        for env, info in entry['environments'].iteritems():
+            tickets = []
+            for ticket_id in info['queue']:
+                ticket = self.get_ticket(ticket_id)
+                if ticket:
+                    tickets.append(ticket)
+                else:
+                    self.remove_ticket_link(group, name, env, ticket_id)
+            entry['environments'][env]['queue'] = tickets
         return entry
 
     def set_gate(self, group, name, environment, state):
@@ -109,62 +108,35 @@ class MongoConnect:
         expiration_date += timedelta(minutes=minutes_delta)
         return expiration_date.epoch
 
-    def add_ticket(self, group, name, environment, ticket):
-        entry = self.check_existence(group, name)
-        self.validate_environment_state(entry, environment, 'open')
-        entry['environments'][environment]['queue'].append(ticket)
+    def add_ticket_link(self, group, name, environment, ticket_id):
+        self.collection.update({'name': name, 'group': group},
+                               {'$push': {"environments."+ environment + ".queue": ticket_id}})
+
+    def remove_ticket_link(self, group, name, environment, ticket_id):
+        self.collection.update({'name': name, 'group': group},
+                               {'$pull': {"environments."+ environment + ".queue": ticket_id}})
+
+    def add_ticket(self, ticket_id, ticket):
         try:
-            self.collection.update({'name': name, 'group': group}, {'$set': entry}, upsert=False)
-            mapping = self.get_ticket(ticket["id"])
-            if not mapping:
-                mapping = ticket.copy()
-                mapping.update({"gates": [[group, name, environment]]})
-            else:
-                mapping['gates'].append([group, name, environment])
-            self.tickets.update({"id": ticket["id"]}, {'$set': mapping}, upsert=True)
+            self.tickets.update({"_id": ticket_id}, ticket, upsert=True)
         except pymongo.errors.NotMasterError as error:
             raise NotMasterError(error.message)
         return ticket
 
     def get_ticket(self, ticket_id):
-        return self.tickets.find_one({"id": ticket_id}, {'_id': False})
+        ticket = self.tickets.find_one({"_id": ticket_id})
+        now = Delorean.now().epoch
+        if ticket and (ticket["expiration_date"] == 0 or ticket["expiration_date"] > now):
+            return ticket
+        else:
+            self.remove_ticket(ticket_id)
+        return None
 
     def remove_ticket(self, ticket_id):
-        mapping = self.get_ticket(ticket_id)
-        if mapping:
-            for gate_tripel in mapping['gates']:
-                entry = self.check_existence(gate_tripel[0], gate_tripel[1])
-                if entry and gate_tripel[2] in entry['environments']:
-                    for t in entry['environments'][gate_tripel[2]]['queue']:
-                        if t["id"] == ticket_id:
-                            entry['environments'][gate_tripel[2]]['queue'].remove(t)
-                            break
-                    try:
-                        self.collection.update({'group': gate_tripel[0], 'name': gate_tripel[1]}, {'$set': entry},
-                                               upsert=False)
-                    except pymongo.errors.NotMasterError as error:
-                        raise NotMasterError(error.message)
-            self.tickets.remove({"id": ticket_id})
+        self.tickets.remove({"_id": ticket_id})
 
-    def set_ticket_expiration_date(self, ticket_id, expiration_date):
-        mapping = self.get_ticket(ticket_id)
-        if mapping:
-            for gate_tupel in mapping['gates']:
-                entry = self.check_existence(gate_tupel[0], gate_tupel[1])
-                if entry and gate_tupel[2] in entry['environments']:
-                    for i, t in enumerate(entry['environments'][gate_tupel[2]]['queue']):
-                        if t["id"] == ticket_id:
-                            entry['environments'][gate_tupel[2]]['queue'][i]["expiration_date"] = expiration_date
-                            break
-                    try:
-                        self.collection.update({'group': gate_tupel[0], 'name': gate_tupel[1]}, {'$set': entry},
-                                               upsert=False)
-                    except pymongo.errors.NotMasterError as error:
-                        raise NotMasterError(error.message)
-            mapping['expiration_date'] = expiration_date
-            self.tickets.update({"id": ticket_id}, {'$set': mapping}, upsert=False)
-        else:
-            raise TicketNotFound
+    def update_ticket(self, ticket_id, ticket):
+        self.tickets.update({"_id": ticket_id}, {'$set': ticket}, upsert=False)
 
     @staticmethod
     def validate_environment_state(entry, environment, state):
@@ -193,6 +165,9 @@ class MongoConnect:
 
     def get_groups(self):
         return self.collection.distinct('group')
+
+    def get_services_in_group(self, group):
+        return self.collection.find({'group': group}).distinct("name")
 
     def get_formatted_timestamp(self):
         return self.d.now().format_datetime(format='y-MM-dd HH:mm:ssz')

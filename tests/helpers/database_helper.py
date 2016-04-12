@@ -8,7 +8,7 @@ class DatabaseHelper:
 
     def decrease_ticket_expiration_date_by(self, ticket_id, delta):
         mongo = MongoConnect(self.config)
-        mongo.set_ticket_expiration_date(ticket_id, expiration_date=mongo.get_expiration_date(delta))
+        mongo.update_ticket(ticket_id, {"expiration_date": mongo.get_expiration_date(delta)})
 
     def clear_database(self):
         mongo = MongoConnect(self.config)

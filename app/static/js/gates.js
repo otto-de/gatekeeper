@@ -47,7 +47,7 @@ o_p13n.tools.gates = function () {
             url: "/api/tickets/" + $button.data("ticket-id"),
             dataType: 'json',
             timeout: 5000,
-            success: function (response) {
+            success: function (response) { //TODO for each for every ticket with this id
                 $button.parent().remove();
             },
             error: function (response) {

@@ -29,19 +29,14 @@ def api_test_and_set():
 
         if ticket_id and not ticket:
             raise TicketNotFound
-        if ticket:
-            date = Delorean.now().epoch
-            if ticket['expiration_date'] != 0 and ticket['expiration_date'] < date:
-                raise TicketNotFound  # TODO the ticket was found, but was not valid anymore
+
         if "gates" not in data:
             raise JsonStructureError("Could not find gates")  # TODO extract string into errors
 
         for group, services in data['gates'].iteritems():
             for service, environments in services.iteritems():
                 entry = blueprint.mongo.get_gate(group, service)
-                if type(environments) != type(list()):
-                    environments = [environments]
-                for env in environments:
+                for env in as_list(environments):
                     if check_gate(entry, env, ticket_id):
                         if request.args and request.args['queue']:
                             status = "queued"
@@ -52,35 +47,45 @@ def api_test_and_set():
         else:
             expiration_date = blueprint.mongo.get_expiration_date(
                 config.CURRENT_TICKET_LIFETIME) if config.CURRENT_TICKET_LIFETIME != 0 else 0
+
         if not ticket:
-            ticket = {"id": str(uuid.uuid4()),
-                      "updated": Delorean.now().format_datetime(format='y-MM-dd HH:mm:ssz'),
+            ticket_id = str(uuid.uuid4())
+            ticket = {"_id": ticket_id,
+                      "updated": get_now_timestamp(),
                       "expiration_date": expiration_date,
                       "link": data["link"] if "link" in data else None}
+
             for group, services in data['gates'].iteritems():
                 for service, environments in services.iteritems():
-                    if type(environments) != type(list()):
-                        environments = [environments]
-                    for env in environments:
-                        blueprint.mongo.add_ticket(group, service, env, ticket)
-                        response = {
-                            "status": status,
-                            "ticket": ticket
-                        }
+                    for env in as_list(environments):
+                        blueprint.mongo.add_ticket_link(group, service, env, ticket_id)
+
+            blueprint.mongo.add_ticket(ticket_id, ticket)
+
         else:
             ticket.update({"expiration_date": expiration_date})
-            ticket.update({"updated": Delorean.now().format_datetime(format='y-MM-dd HH:mm:ssz')})
-            blueprint.mongo.set_ticket_expiration_date(ticket["id"], expiration_date)
-            response = {
-                "status": status,
-                "ticket": ticket
-            }
+            ticket.update({"updated": get_now_timestamp()})
+            blueprint.mongo.update_ticket(ticket["_id"], ticket)
 
+        response = {
+            "status": status,
+            "ticket": ticket
+        }
         return Response(json.dumps(response), status=200, mimetype='application/json')
     except (NotFound, NotMasterError, ServiceAlreadyExists, ServiceNameNotValid, JsonValidationError,
             JsonStructureError,
             TicketNotFound) as error:
         return error_response(error)
+
+
+def as_list(environments):
+    if type(environments) != type(list()):
+        environments = [environments]
+    return environments
+
+
+def get_now_timestamp():
+    return Delorean.now().format_datetime(format='y-MM-dd HH:mm:ssz')
 
 
 @blueprint.route('/api/gates/<string:group>/<string:name>', methods=['POST'])
@@ -102,9 +107,11 @@ def api_get_gate(group, name, environment=None):
         entry = blueprint.mongo.get_gate(group, name)
         if environment and environment not in entry['environments']:
             raise EnvironmentNotFound
-        for env in entry['environments']:
+
+        for env, info in entry['environments'].iteritems():
             if check_gate(entry, env):
                 entry['environments'][env]['state'] = "closed"
+
         if environment:
             entry = entry['environments'][environment]
         return Response(json.dumps(entry), status=200, mimetype='application/json')
@@ -169,7 +176,6 @@ def api_release(ticket_id):
 
 
 def check_gate(entry, env, ticket_id=None):
-    clean_queue(entry['environments'][env]['queue'])
     return env not in entry['environments'] or \
            entry['environments'][env]['state'] == 'closed' or \
            queue_is_blocked(entry['environments'][env]['queue'], ticket_id) or \
@@ -177,29 +183,9 @@ def check_gate(entry, env, ticket_id=None):
 
 
 def queue_is_blocked(queue, ticket_id=None):
-    if not queue:
+    if not queue or queue[0]["_id"] == ticket_id:
         return False
-    queue = clean_queue(queue)
-    date = Delorean.now().epoch
-    for t in queue:
-        if ticket_id and t["id"] == ticket_id:
-            if t["expiration_date"] == 0 or t["expiration_date"] > date:
-                return False
-        if t["expiration_date"] == 0 or t["expiration_date"] > date:
-            return True
-    return False
-
-
-def clean_queue(queue):
-    date = Delorean.now().epoch
-    for t in queue:
-        if t["expiration_date"] != 0 and t["expiration_date"] < date:
-            queue.remove(t)
-            try:
-                blueprint.mongo.remove_ticket(t["expiration_date"])
-            except TicketNotFound:
-                pass
-    return queue
+    return True
 
 
 def error_response(exception):
