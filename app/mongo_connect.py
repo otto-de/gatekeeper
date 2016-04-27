@@ -95,6 +95,21 @@ class MongoConnect:
             entry['environments'][env]['queue'] = tickets
         return entry
 
+    def legacy_get_gate(self, name):
+        entry = self.legacy_check_existence(name)
+        if not entry:
+            raise NotFound
+        for env, info in entry['environments'].iteritems():
+            tickets = []
+            for ticket_id in info['queue']:
+                ticket = self.get_ticket(ticket_id)
+                if ticket:
+                    tickets.append(ticket)
+                else:
+                    self.legacy_remove_ticket_link(name, env, ticket_id)
+            entry['environments'][env]['queue'] = tickets
+        return entry
+
     def set_gate(self, group, name, environment, state):
         entry = self.check_existence(group, name)
         self.validate_environment_state(entry, environment, state)
@@ -115,11 +130,19 @@ class MongoConnect:
 
     def add_ticket_link(self, group, name, environment, ticket_id):
         self.collection.update({'name': name, 'group': group},
-                               {'$push': {"environments."+ environment + ".queue": ticket_id}})
+                               {'$push': {"environments." + environment + ".queue": ticket_id}})
+
+    def legacy_add_ticket_link(self, name, environment, ticket_id):
+        self.collection.update({'name': name},
+                               {'$push': {"environments." + environment + ".queue": ticket_id}})
 
     def remove_ticket_link(self, group, name, environment, ticket_id):
         self.collection.update({'name': name, 'group': group},
-                               {'$pull': {"environments."+ environment + ".queue": ticket_id}})
+                               {'$pull': {"environments." + environment + ".queue": ticket_id}})
+
+    def legacy_remove_ticket_link(self, name, environment, ticket_id):
+        self.collection.update({'name': name},
+                               {'$pull': {"environments." + environment + ".queue": ticket_id}})
 
     def add_ticket(self, ticket_id, ticket):
         try:
@@ -167,6 +190,9 @@ class MongoConnect:
 
     def check_existence(self, group, name):
         return self.collection.find_one({"name": name, "group": group}, {'_id': False})
+
+    def legacy_check_existence(self, name):
+        return self.collection.find_one({"name": name}, {'_id': False})
 
     def get_groups(self):
         return self.collection.distinct('group')

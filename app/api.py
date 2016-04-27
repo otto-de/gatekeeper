@@ -78,6 +78,63 @@ def api_test_and_set():
         return error_response(error)
 
 
+@blueprint.route('/api/services', methods=['PUT'])
+def api_legacy_test_and_set():
+    try:
+        status = "ok"
+        data = util.data_from_request()
+        ticket_id = (data["ticket"] if "ticket" in data else None)
+        ticket = (blueprint.mongo.get_ticket(ticket_id) if ticket_id else None)
+
+        if ticket_id and not ticket:
+            raise TicketNotFound
+
+        if "services" not in data:
+            raise JsonStructureError("Could not find services")  # TODO extract string into errors
+
+        for service in data['services']:
+            entry = blueprint.mongo.legacy_get_gate(service)
+            for environment in data['services'][service]:
+                if check_gate(entry, environment, ticket_id):
+                    if request.args and request.args['queue']:
+                        status = "queued"
+                        break
+                    return Response('{"status": "denied"}', status=200, mimetype='application/json')
+        if status == "queued":
+            expiration_date = blueprint.mongo.get_expiration_date(config.QUEUED_TICKET_LIFETIME)
+        else:
+            expiration_date = blueprint.mongo.get_expiration_date(
+                config.CURRENT_TICKET_LIFETIME) if config.CURRENT_TICKET_LIFETIME != 0 else 0
+
+        if not ticket:
+            ticket_id = str(uuid.uuid4())
+            ticket = {"_id": ticket_id,
+                      "updated": get_now_timestamp(),
+                      "expiration_date": expiration_date,
+                      "link": data["link"] if "link" in data else None}
+
+            for service in data['services']:
+                for environment in data['services'][service]:
+                    blueprint.mongo.legacy_add_ticket_link(service, environment, ticket_id)
+
+            blueprint.mongo.add_ticket(ticket_id, ticket)
+
+        else:
+            ticket.update({"expiration_date": expiration_date})
+            ticket.update({"updated": get_now_timestamp()})
+            blueprint.mongo.update_ticket(ticket["_id"], ticket)
+
+        response = {
+            "status": status,
+            "ticket": ticket
+        }
+        return Response(json.dumps(response), status=200, mimetype='application/json')
+    except (NotFound, NotMasterError, ServiceAlreadyExists, ServiceNameNotValid, JsonValidationError,
+            JsonStructureError,
+            TicketNotFound) as error:
+        return error_response(error)
+
+
 def as_list(environments):
     if type(environments) != type(list()):
         environments = [environments]

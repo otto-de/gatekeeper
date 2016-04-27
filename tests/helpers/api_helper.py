@@ -50,8 +50,8 @@ class ApiHelper:
 
     def set_state(self, group, service, environment, state):
         return load_json(self.api.put('/api/gates/' + group + "/" + service + '/' + environment,
-                                           headers=self.headers,
-                                           data=json.dumps({"state": state})).data)
+                                      headers=self.headers,
+                                      data=json.dumps({"state": state})).data)
 
     def set_message(self, group, service, message):
         return self.set_message_on(group, service, message, 'develop')
@@ -63,17 +63,22 @@ class ApiHelper:
 
     def set_gate(self, data):
         return load_json(self.api.put('/api/gates',
-                                           headers=self.content_json,
-                                           data=json.dumps(data)).data)
+                                      headers=self.content_json,
+                                      data=json.dumps(data)).data)
+
+    def legacy_set_gate(self, data):
+        return load_json(self.api.put('/api/services',
+                                      headers=self.content_json,
+                                      data=json.dumps(data)).data)
 
     def set_gate_or_queue_ticket(self, data):
         return load_json(self.api.put('/api/gates?queue=true',
-                                           headers=self.content_json,
-                                           data=json.dumps(data)).data)
+                                      headers=self.content_json,
+                                      data=json.dumps(data)).data)
 
     def delete_ticket(self, ticket_id):
         return load_json(self.api.delete('/api/tickets/' + ticket_id,
-                                              headers=self.content_json).data)
+                                         headers=self.content_json).data)
 
     def get_html(self, page):
         return self.api.get(page, content_type='text/html')

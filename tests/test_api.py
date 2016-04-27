@@ -174,6 +174,20 @@ class TestApi(unittest.TestCase):
         self.assertEqual(response['environments']['live']['state'], 'open')
         self.assertEqual(len(response['environments']['live']['queue']), 0)
 
+    def test_legacy_api_test_and_set_gate(self):
+        service, group, set_data = self.testdata_helper.prepare_legacy_test_and_set_data()
+        response = self.api_helper.legacy_set_gate(set_data)
+        self.assertEqual(response['status'], 'ok', response)
+        self.assertIn('ticket', response)
+        ticket_id = response['ticket']["_id"]
+
+        response = self.api_helper.get_gate(group, service)
+        self.assertEqual(response['environments']['develop']['state'], 'closed')
+        self.assertEqual(len(response['environments']['develop']['queue']), 1)
+        self.assertEqual(response['environments']['develop']['queue'][0]["_id"], ticket_id)
+        self.assertEqual(response['environments']['live']['state'], 'open')
+        self.assertEqual(len(response['environments']['live']['queue']), 0)
+
     def test_api_test_and_set_gate_then_query_with_valid_id(self):
         service, group, set_data = self.testdata_helper.prepare_test_and_set_data()
 
@@ -223,6 +237,15 @@ class TestApi(unittest.TestCase):
         response = self.api_helper.set_gate(set_data)
         self.assertEqual(response['status'], "denied")
 
+    def test_legacy_api_test_and_set_gate_closed(self):
+        service, group, set_data = self.testdata_helper.prepare_legacy_test_and_set_data()
+
+        response = self.api_helper.close_gate(group, service, 'develop')
+        self.assertEqual(get_by_list(response, ['environments', 'develop', 'state']), 'closed')
+
+        response = self.api_helper.legacy_set_gate(set_data)
+        self.assertEqual(response['status'], "denied", response)
+
     def test_api_test_and_set_gate_multiple(self):
         service, group = self.testdata_helper.create_default_gate()
         another_service, another_group = self.testdata_helper.create_default_gate()
@@ -238,6 +261,34 @@ class TestApi(unittest.TestCase):
             }
         }
         response = self.api_helper.set_gate(set_data)
+        self.assertEqual(response['status'], 'ok', response)
+        self.assertIn('ticket', response)
+        ticket_id = response['ticket']["_id"]
+
+        response = self.api_helper.get_gate(group, service)
+        self.assertEqual(response['environments']['develop']['state'], 'closed')
+        self.assertEqual(response['environments']['develop']['queue'][0]["_id"], ticket_id)
+        self.assertEqual(response['environments']['live']['state'], 'open')
+        self.assertEqual(len(response['environments']['live']['queue']), 0)
+
+        response = self.api_helper.get_gate(another_group, another_service)
+        self.assertEqual(response['environments']['develop']['state'], 'open')
+        self.assertEqual(len(response['environments']['develop']['queue']), 0)
+        self.assertEqual(response['environments']['live']['state'], 'closed')
+        self.assertEqual(response['environments']['live']['queue'][0]["_id"], ticket_id)
+
+    def test_legacy_api_test_and_set_gate_multiple(self):
+        service, group = self.testdata_helper.create_default_gate()
+        another_service, another_group = self.testdata_helper.create_default_gate()
+
+        set_data = {
+            "services": {
+                service: ['develop'],
+                another_service: ['live']
+            }
+        }
+
+        response = self.api_helper.legacy_set_gate(set_data)
         self.assertEqual(response['status'], 'ok', response)
         self.assertIn('ticket', response)
         ticket_id = response['ticket']["_id"]
@@ -272,6 +323,30 @@ class TestApi(unittest.TestCase):
             }
         }
         response = self.api_helper.set_gate(set_data)
+        self.assertEqual(response['status'], "denied", response)
+
+        response = self.api_helper.get_gate(group, service)
+        self.assertEqual(response['environments']['develop']['state'], 'open')
+        self.assertEqual(response['environments']['live']['state'], 'open')
+
+        response = self.api_helper.get_gate(another_group, another_service)
+        self.assertEqual(response['environments']['develop']['state'], 'open')
+        self.assertEqual(response['environments']['live']['state'], 'closed')
+
+    def test_legacy_api_test_and_set_gate_multiple_one_closed(self):
+        service, group = self.testdata_helper.create_default_gate()
+        another_service, another_group = self.testdata_helper.create_default_gate()
+
+        response = self.api_helper.close_gate(another_group, another_service, 'live')
+        self.assertEqual(get_by_list(response, ['environments', 'live', 'state']), 'closed')
+
+        set_data = {
+            "services": {
+                service: ['develop'],
+                another_service: ['live']
+            }
+        }
+        response = self.api_helper.legacy_set_gate(set_data)
         self.assertEqual(response['status'], "denied", response)
 
         response = self.api_helper.get_gate(group, service)
@@ -611,6 +686,18 @@ class TestApi(unittest.TestCase):
         self.assertNotEqual(original["name"], updated["name"])
         original.pop("name")
         updated.pop("name")
+        self.assertDictEqual(original, updated)
+
+    def test_api_update_gate_environments(self):
+        service, group = self.testdata_helper.create_default_gate()
+
+        original = self.api_helper.get_gate(group, service)
+        self.api_helper.update_gate(group, service, {"environments": ["colorado", "delaware"]})
+        updated = self.api_helper.get_gate(group, service)
+
+        self.assertNotEqual(original["environments"], updated["environments"])
+        original.pop("environments")
+        updated.pop("environments")
         self.assertDictEqual(original, updated)
 
     def test_api_update_gate_massage(self):
