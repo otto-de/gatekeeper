@@ -75,20 +75,20 @@ for API calls.
 The rules have the following format::
 
     {
-        "app": {
-            "<environment>": {
-                "<rule name>: {
-                    "hours_range": [
-                      <start>,
-                      <end>
-                    ],
-                    "days_range": [
-                      <start>,
-                      <end>
-                    ]
-                }
-            }
+      "app": {
+        "<environment>": {
+          "<rule name>: {
+            "hours_range": [
+              <start>,
+              <end>
+            ],
+            "days_range": [
+              <start>,
+              <end>
+            ]
+          }
         }
+      }
     }
 
 
