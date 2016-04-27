@@ -27,8 +27,8 @@ class TestApi(unittest.TestCase):
         cls.ticketNotFound = TicketNotFound().message
         cls.jsonStructureError = JsonStructureError().message
 
-        cls.api_helper = ApiHelper(environment) # TODO fix environment?
-        cls.database_helper = DatabaseHelper(environment) # TODO fix environment?
+        cls.api_helper = ApiHelper(environment)  # TODO fix environment?
+        cls.database_helper = DatabaseHelper(environment)  # TODO fix environment?
         cls.testdata_helper = TestDataHelper(cls.api_helper)
 
         cls.keys_develop_state = ['environments', 'develop', 'state']
@@ -131,7 +131,6 @@ class TestApi(unittest.TestCase):
 
         self.assertEqual(response['name'], service)
         self.assertEqual(response['group'], new_group)
-
 
     def test_api_create_empty_gate(self):
         gate_data = {
@@ -619,6 +618,16 @@ class TestApi(unittest.TestCase):
         response = self.api_helper.set_gate(set_data2)
         self.assertEqual(response['status'], 'ok', response)
         self.assertEqual(response['ticket']["expiration_date"], self.an_hour_from_now)
+
+    @mock.patch('app.api.blueprint.mongo.get_expiration_date')
+    def test_api_test_and_set_queue_denied_if_closed_manually(self, mongo_mock):
+        mongo_mock.return_value = self.an_hour_from_now
+
+        service, group, set_data = self.testdata_helper.prepare_test_and_set_data()
+        self.api_helper.close_gate(group, service, "develop")
+
+        response = self.api_helper.set_gate(set_data)
+        self.assertEqual(response['status'], 'denied')
 
     def test_api_switch_non_existing_group(self):
         service, group = self.testdata_helper.create_default_gate()
