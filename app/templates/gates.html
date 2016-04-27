@@ -53,7 +53,7 @@
                     {% for env in env_list[group] %}
                     {% if env in gate.environments %}
                     <td>
-                        <a data-gate-id="{{ gate._id }}-{{ env }}" data-gate-group="{{ gate.group }}"
+                        <a data-gate-id="{{ gate.id }}-{{ env }}" data-gate-group="{{ gate.group }}"
                            data-gate-name="{{ gate.name }}" data-gate-environment="{{ env }}"
                            {% if gate.environments[env].state== "open" %}
                         action="closed" class="js_gate_button btn btn-success">Open
@@ -65,21 +65,21 @@
                         <div class="label label-danger">api closed</div>
                         {% endif %}
                         </br>
-                        <div id="{{ gate._id }}-{{ env }}-button-timestamp" class="timestamp"
+                        <div id="{{ gate.id }}-{{ env }}-button-timestamp" class="timestamp"
                              data-toggle="tooltip" data-placement="bottom"
                              title="{{ gate.environments[env].state_timestamp }}">{{ gate.environments[env].state_age }}
                         </div>
                         {% for t in gate.environments[env].queue %}
-                        <div id="ticket_{{ t['_id'] }}_env" class="timestamp">
+                        <div id="ticket_{{ t['id'] }}_env" class="timestamp">
                             {% if t['link'] %}
-                            <a href="{{ t['link'] }}">{{ t['_id'] }}</a>
+                            <a href="{{ t['link'] }}">{{ t['id'] }}</a>
                             {% else %}
-                            {{ t['_id'] }}
+                            {{ t['id'] }}
                             {% endif %}
                                                     <span class="label label-default" data-toggle="tooltip"
                                                           data-placement="bottom"
                                                           title="Updated: {{ t['updated'] }}">{{ t["age"] }}</span>
-                            <a class="js_remove_button" data-ticket-id="{{ t['_id'] }}">
+                            <a class="js_remove_button" data-ticket-id="{{ t['id'] }}">
                                 <span class="glyphicon glyphicon-trash"></span>
                             </a>
                         </div>

@@ -50,7 +50,7 @@ def api_test_and_set():
 
         if not ticket:
             ticket_id = str(uuid.uuid4())
-            ticket = {"_id": ticket_id,
+            ticket = {"id": ticket_id,
                       "updated": get_now_timestamp(),
                       "expiration_date": expiration_date,
                       "link": data["link"] if "link" in data else None}
@@ -65,7 +65,7 @@ def api_test_and_set():
         else:
             ticket.update({"expiration_date": expiration_date})
             ticket.update({"updated": get_now_timestamp()})
-            blueprint.mongo.update_ticket(ticket["_id"], ticket)
+            blueprint.mongo.update_ticket(ticket["id"], ticket)
 
         response = {
             "status": status,
@@ -108,7 +108,7 @@ def api_legacy_test_and_set():
 
         if not ticket:
             ticket_id = str(uuid.uuid4())
-            ticket = {"_id": ticket_id,
+            ticket = {"id": ticket_id,
                       "updated": get_now_timestamp(),
                       "expiration_date": expiration_date,
                       "link": data["link"] if "link" in data else None}
@@ -122,7 +122,7 @@ def api_legacy_test_and_set():
         else:
             ticket.update({"expiration_date": expiration_date})
             ticket.update({"updated": get_now_timestamp()})
-            blueprint.mongo.update_ticket(ticket["_id"], ticket)
+            blueprint.mongo.update_ticket(ticket["id"], ticket)
 
         response = {
             "status": status,
@@ -242,7 +242,7 @@ def check_gate(entry, env, ticket_id=None):
 
 
 def queue_is_blocked(queue, ticket_id=None):
-    if not queue or queue[0]["_id"] == ticket_id:
+    if not queue or queue[0]["id"] == ticket_id:
         return False
     return True
 

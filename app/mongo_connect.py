@@ -155,6 +155,7 @@ class MongoConnect:
         ticket = self.tickets.find_one({"_id": ticket_id})
         now = Delorean.now().epoch
         if ticket and (ticket["expiration_date"] == 0 or ticket["expiration_date"] > now):
+            ticket.pop('_id')
             return ticket
         else:
             self.remove_ticket(ticket_id)
