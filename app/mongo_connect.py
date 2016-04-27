@@ -26,6 +26,18 @@ class MongoConnect:
         self.d = Delorean()
         self.d = self.d.shift('Europe/Amsterdam')
 
+    def get_environment_structure(self, environment_list):
+        data = dict()
+        for env in environment_list:
+            env = env.strip()
+            data[env] = dict()
+            data[env]['state'] = 'open'
+            data[env]['state_timestamp'] = self.get_formatted_timestamp()
+            data[env]['message'] = ''
+            data[env]['message_timestamp'] = ''
+            data[env]['queue'] = []
+        return data
+
     def create_new_gate(self, group, name, request):
         if not name or '.' in name:
             raise ServiceNameNotValid
@@ -44,15 +56,8 @@ class MongoConnect:
             data['document_version'] = 2.2
             data['name'] = name.strip()
             data['group'] = group.strip()
-            data['environments'] = dict()
-            for env in request['environments']:
-                env = env.strip()
-                data['environments'][env] = dict()
-                data['environments'][env]['state'] = 'open'
-                data['environments'][env]['state_timestamp'] = self.get_formatted_timestamp()
-                data['environments'][env]['message'] = ''
-                data['environments'][env]['message_timestamp'] = ''
-                data['environments'][env]['queue'] = []
+            data['environments'] = self.get_environment_structure(request['environments'])
+
             self.collection.insert_one(data)
             data.pop('_id')  # do not return _id  
             return data

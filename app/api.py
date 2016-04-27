@@ -133,6 +133,9 @@ def api_update_gate(group, name, environment=None):
             entry["name"] = data["name"]
             blueprint.mongo.update_gate(group, name, entry)
             name = data["name"]
+        if "environments" in data and type(data['environments']) is list:
+            entry["environments"] = blueprint.mongo.get_environment_structure(data["environments"])
+            blueprint.mongo.update_gate(group, name, entry)
 
         if environment:
             if "state" in data:
@@ -140,7 +143,7 @@ def api_update_gate(group, name, environment=None):
             if "message" in data:
                 blueprint.mongo.set_message(group, name, environment, data["message"])
         else:
-            if "environments" in data:
+            if "environments" in data and type(data['environments']) is dict:
                 for env in data["environments"]:
                     if "state" in data["environments"][env]:
                         blueprint.mongo.set_gate(group, name, env, data["environments"][env]["state"])
@@ -148,8 +151,7 @@ def api_update_gate(group, name, environment=None):
                         blueprint.mongo.set_message(group, name, env, data["environments"][env]["message"])
         entry = blueprint.mongo.get_gate(group, name)
         return Response(json.dumps(entry), status=200, mimetype='application/json')
-    except (
-            NotMasterError, ServiceNameNotValid, NotFound, GateStateNotValid, EnvironmentNotFound,
+    except (NotMasterError, ServiceNameNotValid, NotFound, GateStateNotValid, EnvironmentNotFound,
             JsonValidationError,
             JsonStructureError) as error:
         return error_response(error)
