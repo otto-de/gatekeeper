@@ -6,7 +6,7 @@ from delorean import Delorean
 from delorean import parse
 
 import view_util
-from api import check_gate
+from api import gate_is_closed
 import util
 from errors import OperationFailure
 from errors import ConnectionFailure
@@ -39,7 +39,7 @@ def gates():
                         service['environments'][env]['message_age'] = (
                             now - (now - parse(service['environments'][env]['message_timestamp']))).humanize()
 
-                    service['environments'][env]['api_closed'] = check_gate(service, env)
+                    service['environments'][env]['api_closed'] = gate_is_closed(service, env)
 
                     for t in service['environments'][env]["queue"]:
                         t["age"] = (now - (now - parse(t["updated"]))).humanize()

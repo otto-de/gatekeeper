@@ -37,8 +37,8 @@ def api_test_and_set():
             for service, environments in services.iteritems():
                 entry = blueprint.mongo.get_gate(group, service)
                 for env in as_list(environments):
-                    if check_gate(entry, env, ticket_id):
-                        if request.args and request.args['queue']:
+                    if gate_is_closed(entry, env, ticket_id):
+                        if not gate_is_manually_closed(entry, env) and request.args and request.args['queue']:
                             status = "queued"
                             break
                         return Response('{"status": "denied"}', status=200, mimetype='application/json')
@@ -95,8 +95,8 @@ def api_legacy_test_and_set():
         for service in data['services']:
             entry = blueprint.mongo.legacy_get_gate(service)
             for environment in as_list(data['services'][service]):
-                if check_gate(entry, environment, ticket_id):
-                    if request.args and request.args['queue']:
+                if gate_is_closed(entry, environment, ticket_id):
+                    if not gate_is_manually_closed(entry, environment) and request.args and request.args['queue']:
                         status = "queued"
                         break
                     return Response('{"status": "denied"}', status=200, mimetype='application/json')
@@ -166,7 +166,7 @@ def api_get_gate(group, name, environment=None):
             raise EnvironmentNotFound
 
         for env, info in entry['environments'].iteritems():
-            if check_gate(entry, env):
+            if gate_is_closed(entry, env):
                 entry['environments'][env]['state'] = "closed"
 
         if environment:
@@ -234,11 +234,15 @@ def api_release(ticket_id):
         return error_response(error)
 
 
-def check_gate(entry, env, ticket_id=None):
+def gate_is_closed(entry, env, ticket_id=None):
     return env not in entry['environments'] or \
-           entry['environments'][env]['state'] == 'closed' or \
+           gate_is_manually_closed(entry, env) or \
            queue_is_blocked(entry['environments'][env]['queue'], ticket_id) or \
            (env in blueprint.config and not util.are_manual_settings_observed(blueprint.config, env))
+
+
+def gate_is_manually_closed(entry, env):
+    return entry['environments'][env]['state'] == 'closed'
 
 
 def queue_is_blocked(queue, ticket_id=None):

@@ -726,7 +726,17 @@ class TestApi(unittest.TestCase):
         service, group, set_data = self.testdata_helper.prepare_test_and_set_data()
         self.api_helper.close_gate(group, service, "develop")
 
-        response = self.api_helper.set_gate(set_data)
+        response = self.api_helper.set_gate_or_queue_ticket(set_data)
+        self.assertEqual(response['status'], 'denied')
+
+    @mock.patch('app.api.blueprint.mongo.get_expiration_date')
+    def test_legacy_api_test_and_set_queue_denied_if_closed_manually(self, mongo_mock):
+        mongo_mock.return_value = self.an_hour_from_now
+
+        service, group, set_data = self.testdata_helper.prepare_legacy_test_and_set_data()
+        self.api_helper.close_gate(group, service, "develop")
+
+        response = self.api_helper.legacy_set_gate_or_queue_ticket(set_data)
         self.assertEqual(response['status'], 'denied')
 
     def test_api_switch_non_existing_group(self):
