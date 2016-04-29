@@ -18,6 +18,7 @@
       "localhost"
     ],
     "database": "testgatekeeper",
-    "collection": "testgatekeeper"
+    "services_collection": "testgatekeeper",
+    "tickets_collection": "testtickets"
   }
 }

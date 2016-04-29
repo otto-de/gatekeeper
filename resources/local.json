@@ -30,6 +30,7 @@
       "localhost"
     ],
     "database": "gatekeeper",
-    "collection": "gatekeeper"
+    "services_collection": "gatekeeper",
+    "tickets_collection": "tickets"
   }
 }

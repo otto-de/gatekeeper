@@ -38,6 +38,7 @@
   "mongo": {
     "uris": [],
     "database": "",
-    "collection": ""
+    "services_collection": "",
+    "tickets_collection": ""
   }
 }

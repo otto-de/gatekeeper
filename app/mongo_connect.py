@@ -20,8 +20,8 @@ class MongoConnect:
     def __init__(self, config):
         self.client = MongoClient(config['mongo']['uris'])
         self.db = self.client[config['mongo']['database']]
-        self.collection = self.db['services']
-        self.tickets = self.db['tickets']
+        self.collection = self.db[config['mongo']['services_collection']]
+        self.tickets = self.db[config['mongo']['tickets_collection']]
         self.queue = self.db['queue']
         self.d = Delorean()
         self.d = self.d.shift('Europe/Amsterdam')
