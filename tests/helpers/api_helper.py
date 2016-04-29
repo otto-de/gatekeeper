@@ -76,6 +76,11 @@ class ApiHelper:
                                       headers=self.content_json,
                                       data=json.dumps(data)).data)
 
+    def legacy_set_gate_or_queue_ticket(self, data):
+        return load_json(self.api.put('/api/services?queue=true',
+                                      headers=self.content_json,
+                                      data=json.dumps(data)).data)
+
     def delete_ticket(self, ticket_id):
         return load_json(self.api.delete('/api/tickets/' + ticket_id,
                                          headers=self.content_json).data)

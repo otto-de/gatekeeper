@@ -94,7 +94,7 @@ def api_legacy_test_and_set():
 
         for service in data['services']:
             entry = blueprint.mongo.legacy_get_gate(service)
-            for environment in data['services'][service]:
+            for environment in as_list(data['services'][service]):
                 if check_gate(entry, environment, ticket_id):
                     if request.args and request.args['queue']:
                         status = "queued"
@@ -114,7 +114,7 @@ def api_legacy_test_and_set():
                       "link": data["link"] if "link" in data else None}
 
             for service in data['services']:
-                for environment in data['services'][service]:
+                for environment in as_list(data['services'][service]):
                     blueprint.mongo.legacy_add_ticket_link(service, environment, ticket_id)
 
             blueprint.mongo.add_ticket(ticket_id, ticket)
