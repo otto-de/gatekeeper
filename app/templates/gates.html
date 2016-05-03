@@ -47,7 +47,7 @@
                 {% endfor %}
                 </th>
 
-                {% for name, gate in gates.iteritems() %}
+                {% for name, gate in gates.iteritems() | sort %}
                 <tr>
                     <td>{{ gate.name }}</td>
                     {% for env in env_list[group] %}

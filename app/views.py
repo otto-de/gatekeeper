@@ -1,15 +1,13 @@
-import pprint
-
-from flask import Blueprint, render_template
 from collections import OrderedDict
-from delorean import Delorean
-from delorean import parse
 
+import util
 import view_util
 from api import gate_is_closed
-import util
-from errors import OperationFailure
+from delorean import Delorean
+from delorean import parse
 from errors import ConnectionFailure
+from errors import OperationFailure
+from flask import Blueprint, render_template
 
 blueprint = Blueprint('views', __name__, template_folder='templates')
 
@@ -23,11 +21,11 @@ def gates():
         service_list = OrderedDict()
         env_list = dict()
         now = Delorean.now()
-        for group in sorted(blueprint.mongo.get_groups()):
+        for group in blueprint.mongo.get_groups():
             env_list[group] = set()
             service_list[group] = dict()
 
-            for service_name in sorted(blueprint.mongo.get_services_in_group(group)):
+            for service_name in blueprint.mongo.get_services_in_group(group):
                 service = blueprint.mongo.get_gate(group, service_name)
 
                 for env in service['environments']:
