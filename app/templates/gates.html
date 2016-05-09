@@ -25,7 +25,7 @@
         {%- else %}
         {%- set tab = gate_list.keys()[0] %}
         {%- endif %}
-        {% for group in gate_list %}
+        {% for group in gate_list | sort %}
         <li role="presentation" data-group="{{ group }}"
             class="tab-title {% if tab == group %} active {% endif %}">
             <a href="#{{ group }}" name="#{{ group }}" aria-controls="{{ group }}" role="tab"
@@ -37,11 +37,10 @@
 
     <div class="tab-content">
         {% for group, gates in gate_list.iteritems() %}
-
         <div role="tabpanel" class="tab-pane fade {% if tab == group %} active in {% endif %}" id="{{ group }}">
             <table class="table table-condensed">
                 <th>
-                    {% for env in env_list[group] %}
+                {% for env in env_list[group] %}
                 <td>Gate to <b>{{ env }}</b></td>
                 <td></td>
                 {% endfor %}
