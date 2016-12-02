@@ -172,7 +172,7 @@ class MongoConnect:
         if not entry:
             raise NotFound
         if environment not in entry['environments']:
-            raise EnvironmentNotFound
+            raise EnvironmentNotFound(environment)
         if state not in ["open", "closed"]:
             raise GateStateNotValid
 
@@ -181,7 +181,7 @@ class MongoConnect:
         if not entry:
             raise NotFound
         if environment not in entry['environments']:
-            raise EnvironmentNotFound
+            raise EnvironmentNotFound(environment)
         try:
             entry['environments'][environment]['message'] = message
             entry['environments'][environment]['message_timestamp'] = self.get_formatted_timestamp() if message else ""

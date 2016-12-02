@@ -1,19 +1,21 @@
+# -*- coding: utf-8 -*-
 import json
 import uuid
 
+from delorean import Delorean
+from flask import Response, request, Blueprint
+
 import config
 import util
-from delorean import Delorean
 from errors import EnvironmentNotFound
-from errors import ServiceAlreadyExists
-from errors import ServiceNameNotValid
-from errors import NotFound
 from errors import GateStateNotValid
 from errors import JsonStructureError
 from errors import JsonValidationError
+from errors import NotFound
 from errors import NotMasterError
+from errors import ServiceAlreadyExists
+from errors import ServiceNameNotValid
 from errors import TicketNotFound
-from flask import Response, request, Blueprint
 
 blueprint = Blueprint('api', __name__)
 blueprint.mongo = None
@@ -37,11 +39,14 @@ def api_test_and_set():
             for service, environments in services.iteritems():
                 entry = blueprint.mongo.get_gate(group, service)
                 for env in as_list(environments):
-                    if gate_is_closed(entry, env, ticket_id):
-                        if not gate_is_manually_closed(entry, env) and request.args and request.args['queue']:
-                            status = "queued"
-                            break
-                        return Response('{"status": "denied"}', status=200, mimetype='application/json')
+                    if env in entry['environments']:
+                        if gate_is_closed(entry, env, ticket_id):
+                            if not gate_is_manually_closed(entry, env) and request.args and request.args['queue']:
+                                status = "queued"
+                                break
+                            return Response('{"status": "denied"}', status=200, mimetype='application/json')
+                    else:
+                        raise EnvironmentNotFound(env)
         if status == "queued":
             expiration_date = blueprint.mongo.get_expiration_date(config.QUEUED_TICKET_LIFETIME)
         else:
@@ -73,7 +78,7 @@ def api_test_and_set():
         }
         return Response(json.dumps(response), status=200, mimetype='application/json')
     except (NotFound, NotMasterError, ServiceAlreadyExists, ServiceNameNotValid, JsonValidationError,
-            JsonStructureError,
+            JsonStructureError, EnvironmentNotFound,
             TicketNotFound) as error:
         return error_response(error)
 

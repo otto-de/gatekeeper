@@ -54,8 +54,8 @@ class GateStateNotValid(Exception):
 
 
 class EnvironmentNotFound(Exception):
-    def __init__(self):
-        self.message = "Environment not found"
+    def __init__(self, environment):
+        self.message = "Environment " + environment + " not found."
         self.status_code = 404
 
 

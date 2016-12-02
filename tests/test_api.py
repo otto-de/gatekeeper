@@ -1,17 +1,17 @@
-import pprint
 import sys
 import unittest
 import uuid
 
+from delorean import Delorean
+from mock import mock
+
 from app import config
-from app.errors import EnvironmentNotFound, NotFound, ServiceAlreadyExists, ServiceNameNotValid, NotFound, \
+from app.errors import EnvironmentNotFound, ServiceAlreadyExists, ServiceNameNotValid, NotFound, \
     GateStateNotValid, JsonStructureError, TicketNotFound
 from app.util import get_by_list
-from delorean import Delorean
 from helpers.api_helper import ApiHelper
 from helpers.database_helper import DatabaseHelper
 from helpers.testdata_helper import TestDataHelper
-from mock import mock
 
 
 class TestApi(unittest.TestCase):
@@ -23,7 +23,7 @@ class TestApi(unittest.TestCase):
         cls.notFound = NotFound().message
         cls.gateNameNotValid = ServiceNameNotValid().message
         cls.gateStateNotValid = GateStateNotValid().message
-        cls.environmentNotFound = EnvironmentNotFound().message
+        cls.environmentNotFound = EnvironmentNotFound("non_existing_environment").message
         cls.ticketNotFound = TicketNotFound().message
         cls.jsonStructureError = JsonStructureError().message
 
@@ -790,7 +790,7 @@ class TestApi(unittest.TestCase):
     def test_api_check_invalid_environment(self):
         service, group = self.testdata_helper.create_default_gate()
 
-        response = self.api_helper.open_gate(group, service, 'zzzZZZzzz')
+        response = self.api_helper.open_gate(group, service, 'non_existing_environment')
 
         self.assertEqual(response['status'], 'error')
         self.assertEqual(response['reason'], self.environmentNotFound)
@@ -850,9 +850,11 @@ class TestApi(unittest.TestCase):
         original["environments"]["live"]["message"] = ""
         original["environments"]["live"]["message_timestamp"] = ""
         original["environments"]["develop"]["state"] = ""
+        original["environments"]["develop"]["state_timestamp"] = ""
         updated["environments"]["live"]["message"] = ""
         updated["environments"]["live"]["message_timestamp"] = ""
         updated["environments"]["develop"]["state"] = ""
+        updated["environments"]["develop"]["state_timestamp"] = ""
         self.assertDictEqual(original, updated)
 
     def test_api_set_message(self):
@@ -882,7 +884,7 @@ class TestApi(unittest.TestCase):
         service, group = self.testdata_helper.create_default_gate()
 
         message = "This is an impediment"
-        response = self.api_helper.set_message_on(group, service, message, 'dgoshdhgiurhfui')
+        response = self.api_helper.set_message_on(group, service, message, 'non_existing_environment')
 
         self.assertEqual(response['status'], 'error')
         self.assertEqual(response['reason'], self.environmentNotFound)
