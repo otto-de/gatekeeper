@@ -66,18 +66,8 @@ class ApiHelper:
                                       headers=self.content_json,
                                       data=json.dumps(data)).data)
 
-    def legacy_set_gate(self, data):
-        return load_json(self.api.put('/api/services',
-                                      headers=self.content_json,
-                                      data=json.dumps(data)).data)
-
     def set_gate_or_queue_ticket(self, data):
         return load_json(self.api.put('/api/gates?queue=true',
-                                      headers=self.content_json,
-                                      data=json.dumps(data)).data)
-
-    def legacy_set_gate_or_queue_ticket(self, data):
-        return load_json(self.api.put('/api/services?queue=true',
                                       headers=self.content_json,
                                       data=json.dumps(data)).data)
 

@@ -18,17 +18,6 @@ class TestDataHelper:
 
         return service, group, set_data
 
-    def prepare_legacy_test_and_set_data(self):
-        service, group = self.create_default_gate()
-
-        set_data = {
-            "services": {
-                service: ['develop']
-            }
-        }
-
-        return service, group, set_data
-
     def create_service_name(self):
         return 'test-gate_' + str(uuid.uuid4())
 
