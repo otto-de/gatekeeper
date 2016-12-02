@@ -38,7 +38,7 @@ done
 useVirtualEnv() {
   echo -e "\e[1mPreparing VirtualEnv\e[0m"
   python -m pip install --user virtualenv
-  python -m virtualenv venv
+  python -m virtualenv -p python2.7 venv
   source venv/bin/activate
 }
 
