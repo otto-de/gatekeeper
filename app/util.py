@@ -30,14 +30,16 @@ def is_unblocked_by_rule(lt, h, d):
 def test_against_global_rules(rules, env, lt):
     blocking_rules = set()
     unblocking_rules = set()
-    for k, v in rules[env].iteritems():
-        hours = v['hours_range']
-        days = v['days_range']
-        if is_unblocked_by_rule(lt, hours, days):
-            unblocking_rules.add(k)
-        else:
-            blocking_rules.add(k)
-    return unblocking_rules, blocking_rules
+    if env in rules:
+        for k, v in rules[env].iteritems():
+            hours = v['hours_range']
+            days = v['days_range']
+            if is_unblocked_by_rule(lt, hours, days):
+                unblocking_rules.add(k)
+            else:
+                blocking_rules.add(k)
+        return unblocking_rules, blocking_rules
+    return set(), set()
 
 
 def are_manual_settings_observed(config, env):

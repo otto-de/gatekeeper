@@ -588,6 +588,17 @@ class TestApi(unittest.TestCase):
         response = self.api_helper.set_gate_or_queue_ticket(set_data)
         self.assertEqual(response['status'], 'denied')
 
+    @mock.patch('app.api.blueprint.mongo.get_expiration_date')
+    @mock.patch('app.util.are_manual_settings_observed')
+    def test_api_test_and_set_queue_denied_if_gate_is_closed_by_time_rules(self, manual_settings_mock, mongo_mock):
+        manual_settings_mock.return_value = False
+        mongo_mock.return_value = self.an_hour_from_now
+
+        service, group, set_data = self.testdata_helper.prepare_test_and_set_data()
+
+        response = self.api_helper.set_gate_or_queue_ticket(set_data)
+        self.assertEqual(response['status'], 'denied')
+
     def test_api_switch_non_existing_group(self):
         service, group = self.testdata_helper.create_default_gate()
         response = self.api_helper.open_gate('zzzzzZZZZZzzzZZZ', service, 'develop')
