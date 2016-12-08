@@ -32,15 +32,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Fixed ghost tickets
 
 This changelog is inspired by [keepachangelog.com](http://http://keepachangelog.com/de/)
-[Unreleased]: https://github.com/otto-de/gatekeeper/compare/1.0.2...HEAD
-[1.0.1]: https://github.com/otto-de/gatekeeper/compare/1.0.0...1.0.1
+[Unreleased]: https://github.com/otto-de/gatekeeper/compare/2.0.0...HEAD
 [1.0.0]: https://github.com/otto-de/gatekeeper/compare/950359a01244904fa169492e4391e402398f2b17...1.0.0
+[1.0.1]: https://github.com/otto-de/gatekeeper/compare/1.0.0...1.0.1
 [1.0.2]: https://github.com/otto-de/gatekeeper/compare/1.0.1...1.0.2
-<<<<<<< d10b11147e51689e0d032c3e22e3a579215e92e1
 [2.0.0]: https://github.com/otto-de/gatekeeper/compare/1.0.1...2.0.0
-=======
-<<<<<<< 7ab5d2ba33be1af810e83f77abaf196cc8bcfc81
-=======
-[2.0.0]: https://github.com/otto-de/gatekeeper/compare/1.0.1...2.0.0
->>>>>>> 2.0.0
->>>>>>> 2.0.0
