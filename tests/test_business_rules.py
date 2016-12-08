@@ -138,4 +138,4 @@ if __name__ == '__main__':
     unittest.main()
 
 if (__name__ == 'test_business_rules') or (__name__ == 'tests.test_business_rules'):
-    environment = 'local'
+    environment = 'test'

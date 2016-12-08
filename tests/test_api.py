@@ -775,4 +775,4 @@ if __name__ == '__main__':
     unittest.main()
 
 if (__name__ == 'test_api') or (__name__ == 'tests.test_api'):
-    environment = 'local'
+    environment = 'test'
