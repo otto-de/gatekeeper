@@ -67,10 +67,10 @@ Example config file::
       }
     }
 
-Rules
------
+Rules (Build Window)
+--------------------
 The rules define the time when gates can be accessed via API. Outside of these times, the gates will always be closed
-for API calls.
+for API calls and calls for queueing will be answered with 'denied'.
 
 The rules have the following format::
 

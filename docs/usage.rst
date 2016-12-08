@@ -71,6 +71,8 @@ To use the queue feature you can send a put to the ``/api/services`` endpoint wi
 
 The Response holds your ticket with a timestamp and a token.
 
+If the gate is closed manually or closed by rules (aka business time window) Gatekeeper will answer with 'denied'.
+
 **Example**
 
 .. code-block:: guess
