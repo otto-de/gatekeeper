@@ -2,7 +2,7 @@ import unittest
 import time
 import sys
 
-from app.util import test_against_global_rules
+from app.gates import test_against_global_rules
 
 test_rules = {
     "live": {

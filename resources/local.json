@@ -31,6 +31,7 @@
     ],
     "database": "gatekeeper",
     "services_collection": "gatekeeper",
-    "tickets_collection": "tickets"
+    "tickets_collection": "tickets",
+    "holidays_collection": "holidays"
   }
 }

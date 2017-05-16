@@ -3,7 +3,7 @@ from pymongo import MongoClient
 import pymongo.errors
 from delorean import Delorean
 from delorean import epoch
-from datetime import timedelta
+from datetime import timedelta, datetime
 from errors import OperationFailure, GroupNameNotValid
 from errors import ConnectionFailure
 from errors import NotMasterError
@@ -22,6 +22,7 @@ class MongoConnect:
         self.db = self.client[config['mongo']['database']]
         self.collection = self.db[config['mongo']['services_collection']]
         self.tickets = self.db[config['mongo']['tickets_collection']]
+        self.holidays = self.db[config['mongo']['holidays_collection']]
         self.queue = self.db['queue']
         self.d = Delorean()
         self.d = self.d.shift('Europe/Amsterdam')
@@ -177,3 +178,34 @@ class MongoConnect:
 
     def get_formatted_timestamp(self):
         return self.d.now().format_datetime(format='y-MM-dd HH:mm:ssz')
+
+    def get_future_holidays(self):
+        find_params = {'date': {'$gte': self.today()}}
+        return self.holidays.find(find_params).sort('date')
+
+    def clear_holidays(self):
+        self.holidays.delete_many({})
+
+    def add_holiday(self, holiday):
+        data = dict()
+        data['_id'] = str(uuid.uuid4())
+        data['date'] = holiday['date']
+        data['reason'] = holiday['reason']
+        data['environments'] = holiday['environments']
+        self.holidays.insert_one(data)
+
+    @staticmethod
+    def today():
+        return datetime.now().strftime("%Y-%m-%d")
+
+    def get_today_holiday(self, env=None):
+        return self.get_holiday_for(self.today(), env)
+
+    def get_holiday_for(self, date, env=None):
+        if env:
+            holiday = self.holidays.find_one({'date': date,
+                                              'environments': {'$in': [env]}})
+        else:
+            holiday = self.holidays.find_one({'date': date})
+        return holiday["reason"] if holiday else None
+

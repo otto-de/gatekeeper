@@ -1,12 +1,15 @@
 # -*- coding: utf-8 -*-
 import json
 import uuid
+import re
+from datetime import datetime
 
 from delorean import Delorean
 from flask import Response, request, Blueprint
 
 import config
 import util
+import gates
 from errors import EnvironmentNotFound
 from errors import GateStateNotValid
 from errors import JsonStructureError
@@ -43,7 +46,8 @@ def api_test_and_set():
                     want_to_queue = request.args and request.args['queue']
 
                     if env in entry['environments']:
-                        if gate_is_closed(entry, env, ticket_id) or blocked_queue and not want_to_queue:
+                        if gates.gate_is_closed(entry, blueprint.config, env,
+                                                ticket_id) or blocked_queue and not want_to_queue:
                             return Response('{"status": "denied"}', status=200, mimetype='application/json')
                         if want_to_queue and blocked_queue:
                             status = "queued"
@@ -116,7 +120,8 @@ def api_get_gate(group, name, environment=None):
             raise EnvironmentNotFound(environment)
 
         for env, info in entry['environments'].iteritems():
-            if gate_is_closed(entry, env) or queue_is_blocked(entry['environments'][env]['queue'], None):
+            if gates.gate_is_closed(entry, blueprint.config, env) or queue_is_blocked(
+                    entry['environments'][env]['queue'], None):
                 entry['environments'][env]['state'] = "closed"
 
         if environment:
@@ -184,13 +189,24 @@ def api_release(ticket_id):
         return error_response(error)
 
 
-def gate_is_closed(entry, env, ticket_id=None):
-    return gate_is_manually_closed(entry, env) or \
-           not util.are_manual_settings_observed(blueprint.config, env)
+@blueprint.route('/api/holidays/', methods=['POST'])
+def api_replace_holidays():
+    data = util.data_from_request()
+    holidays = data['holidays']
+    try:
+        blueprint.mongo.clear_holidays()
+        for holiday in holidays:
+            blueprint.mongo.add_holiday(holiday)
+        return Response('{"status": "ok"}', status=200, mimetype='application/json')
+    except (NotMasterError, ServiceAlreadyExists, ServiceNameNotValid, JsonValidationError, JsonStructureError,
+            TicketNotFound) as error:
+        return error_response(error)
 
 
-def gate_is_manually_closed(entry, env):
-    return entry['environments'][env]['state'] == 'closed'
+@blueprint.route('/api/holidays/', methods=['GET'])
+def api_get_holidays():
+    return Response(json.dumps({'holidays': list(blueprint.mongo.get_future_holidays())}), status=200,
+                    mimetype='application/json')
 
 
 def queue_is_blocked(queue, ticket_id=None):

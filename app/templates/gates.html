@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% set active_page = "views.gates" %}
+{% set active_page = "views.get_gates" %}
 {% block content %}
 <link href="/static/css/gates.css" rel=stylesheet type="text/css" media=screen>
 
@@ -9,7 +9,12 @@
 <link href="/static/3rd/css/colorbox/colorbox_day.css" rel=stylesheet type="text/css" media=screen>
 {% endif %}
 
-<h2>Gates</h2>
+    <h2>Gates</h2>
+    {% if today_holiday %}
+        <div class="alert alert-info">
+            Today is a Holiday: {{ today_holiday }}
+        </div>
+    {% endif %}
 {% for info in info_list %}
 <div class="alert alert-dismissible alert-danger">
     <strong>{{ info }}</strong>
@@ -18,6 +23,7 @@
 <div id="alert_box"></div>
 <a id="open_new_gate_overlay" href="/gates/new" class="new_gate_button btn btn-primary ajax cboxElement">New
     Gate</a>
+<a id="edit_holidays_overlay" href="/holidays/edit" class="new_gate_button btn btn-primary ajax cboxElement">Edit Holidays</a>
 <div>
     <ul class="nav nav-tabs" role="tablist">
         {%- if parameter.tab %}
