@@ -2,7 +2,7 @@ from collections import OrderedDict
 
 import util
 import view_util
-from api import gate_is_closed
+import gates
 from delorean import Delorean
 from delorean import parse
 from errors import ConnectionFailure
@@ -16,11 +16,12 @@ blueprint = Blueprint('views', __name__, template_folder='templates')
 @blueprint.route('/index')
 @blueprint.route('/gates')
 @blueprint.route('/gates/')
-def gates():
+def get_gates():
     try:
         service_list = OrderedDict()
         env_list = dict()
         now = Delorean.now()
+        today_holiday = blueprint.mongo.get_today_holiday()
         for group in blueprint.mongo.get_groups():
             env_list[group] = set()
             service_list[group] = dict()
@@ -37,7 +38,7 @@ def gates():
                         service['environments'][env]['message_age'] = (
                             now - (now - parse(service['environments'][env]['message_timestamp']))).humanize()
 
-                    service['environments'][env]['api_closed'] = gate_is_closed(service, env)
+                    service['environments'][env]['api_closed'] = gates.gate_is_closed(service, blueprint.config, env)
 
                     for t in service['environments'][env]["queue"]:
                         t["age"] = (now - (now - parse(t["updated"]))).humanize()
@@ -50,15 +51,37 @@ def gates():
                                 'Gates',
                                 env_list=env_list,
                                 gate_list=service_list,
-                                info_list=util.generate_info(blueprint.config))
-    except (ConnectionFailure, OperationFailure) as error:
-        return view_util.error_page(error.message)
+                                info_list=gates.generate_info(blueprint.config),
+                                today_holiday=today_holiday)
+    except (ConnectionFailure, OperationFailure, Exception) as error:
+        print ("error" + str(error))
+        raise
+        # return view_util.error_page(error.message)
 
 
 @blueprint.route('/gates/new')
 @blueprint.route('/gates/new/')
 def new_gate():
     return render_template("new_gate_overlay.html")
+
+
+@blueprint.route('/holidays/edit')
+@blueprint.route('/holidays/edit/')
+def edit_holidays():
+    holidays = list()
+    for holiday in blueprint.mongo.get_future_holidays():
+        holidays.append({
+            'date': util.from_iso_date_string(holiday["date"]),
+            'reason': holiday["reason"],
+            'is_develop': is_environment("develop", holiday),
+            'is_live': is_environment("live", holiday)
+        })
+    return render_template("edit_holidays_overlay.html",
+                           holidays=holidays)
+
+
+def is_environment(environment, holiday):
+    return ("environments" in holiday) and (environment in holiday["environments"])
 
 
 def error_page(error):

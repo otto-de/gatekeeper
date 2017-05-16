@@ -78,5 +78,12 @@ class ApiHelper:
     def get_html(self, page):
         return self.api.get(page, content_type='text/html')
 
+    def set_holiday(self, holidays):
+        return load_json(self.api.post('/api/holidays/', headers=self.headers,
+                                       data=json.dumps(holidays)).data)
+
+    def get_holidays(self):
+        return self.__get__('/api/holidays/')
+
     def __get__(self, query):
         return load_json(self.api.get(query).data)

@@ -2,6 +2,7 @@ import views
 import api
 import status
 import view_util
+import state
 from delorean import Delorean
 
 from flask import Flask
@@ -9,7 +10,7 @@ from mongo_connect import MongoConnect
 import json
 import time
 
-navigation_bar = [('views.gates', 'Gates')]
+navigation_bar = [('views.get_gates', 'Gates')]
 app_name = "Gatekeeper"
 
 
@@ -31,6 +32,7 @@ def create_app(environment, port):
     status.blueprint.start_time = Delorean.now()
 
     mongo = MongoConnect(config)
+    state.mongo = mongo
 
     views.blueprint.mongo = mongo
     views.blueprint.config = config['app']

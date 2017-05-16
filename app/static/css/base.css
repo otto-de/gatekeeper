@@ -30,3 +30,7 @@
     padding-bottom: 12px !important;;
 }
 
+.holiday_warning {
+    color: red;
+    display: none;
+}

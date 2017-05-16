@@ -2,6 +2,7 @@ import sys
 import unittest
 import uuid
 
+from datetime import datetime, timedelta
 from delorean import Delorean
 from mock import mock
 
@@ -589,7 +590,7 @@ class TestApi(unittest.TestCase):
         self.assertEqual(response['status'], 'denied')
 
     @mock.patch('app.api.blueprint.mongo.get_expiration_date')
-    @mock.patch('app.util.are_manual_settings_observed')
+    @mock.patch('app.gates.are_gates_open')
     def test_api_test_and_set_queue_denied_if_gate_is_closed_by_time_rules(self, manual_settings_mock, mongo_mock):
         manual_settings_mock.return_value = False
         mongo_mock.return_value = self.an_hour_from_now
@@ -765,6 +766,48 @@ class TestApi(unittest.TestCase):
 
         self.assertEqual(response['status'], 'error')
         self.assertEqual(response['reason'], self.notFound)
+
+    def test_api_insert_holiday(self):
+        holidays = {'holidays': [{'date': '2037-05-06',
+                                  'reason': 'Bergfest',
+                                  'environments': ['live']}]}
+        response = self.api_helper.set_holiday(holidays)
+        self.assertEqual(response['status'], 'ok')
+
+        holidays = self.api_helper.get_holidays()
+        self.assertEqual(len(holidays['holidays']), 1)
+        self.assertEqual(holidays['holidays'][0]['date'], '2037-05-06')
+        self.assertEqual(holidays['holidays'][0]['reason'], 'Bergfest')
+        self.assertEqual(holidays['holidays'][0]['environments'][0], 'live')
+
+    def test_api_filters_out_old_holidays(self):
+        holidays = {'holidays': [{'date': '1912-05-06',
+                                  'reason': 'Bergfest',
+                                  'environments': ['live']}]}
+        response = self.api_helper.set_holiday(holidays)
+        self.assertEqual(response['status'], 'ok')
+
+        holidays = self.api_helper.get_holidays()
+        self.assertEqual(len(holidays['holidays']), 0)
+
+    def test_api_clear_and_replace_holiday(self):
+        holidays = {'holidays': [{'date': '2037-05-06',
+                                  'reason': 'Bergfest',
+                                  'environments': ['live']}]}
+        response = self.api_helper.set_holiday(holidays)
+        self.assertEqual(response['status'], 'ok')
+
+        holidays = {'holidays': [{'date': '2043-12-06',
+                                  'reason': 'Talfest',
+                                  'environments': ['develop']}]}
+        response = self.api_helper.set_holiday(holidays)
+        self.assertEqual(response['status'], 'ok')
+
+        holidays = self.api_helper.get_holidays()
+        self.assertEqual(len(holidays['holidays']), 1)
+        self.assertEqual(holidays['holidays'][0]['date'], '2043-12-06')
+        self.assertEqual(holidays['holidays'][0]['reason'], 'Talfest')
+        self.assertEqual(holidays['holidays'][0]['environments'][0], 'develop')
 
 
 if __name__ == '__main__':
