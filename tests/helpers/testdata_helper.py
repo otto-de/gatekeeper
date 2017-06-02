@@ -18,10 +18,12 @@ class TestDataHelper:
 
         return service, group, set_data
 
-    def create_service_name(self):
+    @staticmethod
+    def create_service_name():
         return 'test-gate_' + str(uuid.uuid4())
 
-    def create_group_name(self):
+    @staticmethod
+    def create_group_name():
         return 'test-group_' + str(uuid.uuid4())
 
     def create_default_gate(self):

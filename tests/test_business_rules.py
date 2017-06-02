@@ -129,13 +129,3 @@ class TestBusinessRules(unittest.TestCase):
         ur, br = test_against_global_rules(test_rules, "live", time.strptime("13 22 0", "%H %M %w"))
         self.assertFalse(ur)
         self.assertTrue(br)
-
-if __name__ == '__main__':
-    if len(sys.argv) > 1:
-        environment = sys.argv.pop()
-    else:
-        environment = 'local'
-    unittest.main()
-
-if (__name__ == 'test_business_rules') or (__name__ == 'tests.test_business_rules'):
-    environment = 'test'

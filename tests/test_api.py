@@ -1,8 +1,5 @@
-import sys
 import unittest
 import uuid
-
-from datetime import datetime, timedelta
 from delorean import Delorean
 from mock import mock
 
@@ -10,9 +7,9 @@ from app import config
 from app.errors import EnvironmentNotFound, ServiceAlreadyExists, ServiceNameNotValid, NotFound, \
     GateStateNotValid, JsonStructureError, TicketNotFound
 from app.util import get_by_list
-from helpers.api_helper import ApiHelper
-from helpers.database_helper import DatabaseHelper
-from helpers.testdata_helper import TestDataHelper
+from tests.helpers.api_helper import ApiHelper
+from tests.helpers.database_helper import DatabaseHelper
+from tests.helpers.testdata_helper import TestDataHelper
 
 
 class TestApi(unittest.TestCase):
@@ -28,8 +25,8 @@ class TestApi(unittest.TestCase):
         cls.ticketNotFound = TicketNotFound().message
         cls.jsonStructureError = JsonStructureError().message
 
-        cls.api_helper = ApiHelper(environment)  # TODO fix environment?
-        cls.database_helper = DatabaseHelper(environment)  # TODO fix environment?
+        cls.api_helper = ApiHelper('test')
+        cls.database_helper = DatabaseHelper('test')
         cls.testdata_helper = TestDataHelper(cls.api_helper)
 
         cls.keys_develop_state = ['environments', 'develop', 'state']
@@ -808,14 +805,3 @@ class TestApi(unittest.TestCase):
         self.assertEqual(holidays['holidays'][0]['date'], '2043-12-06')
         self.assertEqual(holidays['holidays'][0]['reason'], 'Talfest')
         self.assertEqual(holidays['holidays'][0]['environments'][0], 'develop')
-
-
-if __name__ == '__main__':
-    if len(sys.argv) > 1:
-        environment = sys.argv.pop()
-    else:
-        environment = 'local'
-    unittest.main()
-
-if (__name__ == 'test_api') or (__name__ == 'tests.test_api'):
-    environment = 'test'

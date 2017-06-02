@@ -1,24 +1,21 @@
 # -*- coding: utf-8 -*-
 import json
 import uuid
-import re
-from datetime import datetime
-
 from delorean import Delorean
 from flask import Response, request, Blueprint
 
-import config
-import util
-import gates
-from errors import EnvironmentNotFound
-from errors import GateStateNotValid
-from errors import JsonStructureError
-from errors import JsonValidationError
-from errors import NotFound
-from errors import NotMasterError
-from errors import ServiceAlreadyExists
-from errors import ServiceNameNotValid
-from errors import TicketNotFound
+from app import config
+from app import util
+from app import gates
+from app.errors import EnvironmentNotFound
+from app.errors import GateStateNotValid
+from app.errors import JsonStructureError
+from app.errors import JsonValidationError
+from app.errors import NotFound
+from app.errors import NotMasterError
+from app.errors import ServiceAlreadyExists
+from app.errors import ServiceNameNotValid
+from app.errors import TicketNotFound
 
 blueprint = Blueprint('api', __name__)
 blueprint.mongo = None
@@ -38,8 +35,8 @@ def api_test_and_set():
         if "gates" not in data:
             raise JsonStructureError("Could not find gates")  # TODO extract string into errors
 
-        for group, services in data['gates'].iteritems():
-            for service, environments in services.iteritems():
+        for group, services in data['gates'].items():
+            for service, environments in services.items():
                 entry = blueprint.mongo.get_gate(group, service)
                 for env in as_list(environments):
                     blocked_queue = queue_is_blocked(entry['environments'][env]['queue'], ticket_id)
@@ -66,8 +63,8 @@ def api_test_and_set():
                       "expiration_date": expiration_date,
                       "link": data["link"] if "link" in data else None}
 
-            for group, services in data['gates'].iteritems():
-                for service, environments in services.iteritems():
+            for group, services in data['gates'].items():
+                for service, environments in services.items():
                     for env in as_list(environments):
                         blueprint.mongo.add_ticket_link(group, service, env, ticket_id)
 
@@ -119,7 +116,7 @@ def api_get_gate(group, name, environment=None):
         if environment and environment not in entry['environments']:
             raise EnvironmentNotFound(environment)
 
-        for env, info in entry['environments'].iteritems():
+        for env, info in entry['environments'].items():
             if gates.gate_is_closed(entry, blueprint.config, env) or queue_is_blocked(
                     entry['environments'][env]['queue'], None):
                 entry['environments'][env]['state'] = "closed"

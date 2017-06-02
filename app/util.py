@@ -1,21 +1,22 @@
 import json
 from datetime import datetime
+from functools import reduce
 
-from errors import JsonValidationError
-from flask import request, Blueprint
+from flask import request
+
+from app.errors import JsonValidationError
 
 
 def data_from_request():
     try:
-        data = json.loads(request.data)
+        data = json.loads(request.data.decode())
     except ValueError or TypeError:
         raise JsonValidationError()
     return data
 
 
 def is_unblocked_by_rule(lt, h, d):
-    return (d[0] <= lt[6] <= d[1] and \
-            h[0] <= lt[3] < h[1])
+    return d[0] <= lt[6] <= d[1] and h[0] <= lt[3] < h[1]
 
 
 def get_by_list(dic, keys):

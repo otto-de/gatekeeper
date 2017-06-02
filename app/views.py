@@ -1,13 +1,13 @@
 from collections import OrderedDict
-
-import util
-import view_util
-import gates
 from delorean import Delorean
 from delorean import parse
-from errors import ConnectionFailure
-from errors import OperationFailure
 from flask import Blueprint, render_template
+
+from app import util
+from app import view_util
+from app import gates
+from app.errors import ConnectionFailure
+from app.errors import OperationFailure
 
 blueprint = Blueprint('views', __name__, template_folder='templates')
 
@@ -54,7 +54,7 @@ def get_gates():
                                 info_list=gates.generate_info(blueprint.config),
                                 today_holiday=today_holiday)
     except (ConnectionFailure, OperationFailure, Exception) as error:
-        print ("error" + str(error))
+        print("error" + str(error))
         raise
         # return view_util.error_page(error.message)
 

@@ -2,18 +2,16 @@ import uuid
 from pymongo import MongoClient
 import pymongo.errors
 from delorean import Delorean
-from delorean import epoch
 from datetime import timedelta, datetime
-from errors import OperationFailure, GroupNameNotValid
-from errors import ConnectionFailure
-from errors import NotMasterError
-from errors import ServiceNameNotValid
-from errors import ServiceAlreadyExists
-from errors import NotFound
-from errors import TicketNotFound
-from errors import GateStateNotValid
-from errors import EnvironmentNotFound
-from errors import JsonStructureError
+from app.errors import OperationFailure, GroupNameNotValid
+from app.errors import ConnectionFailure
+from app.errors import NotMasterError
+from app.errors import ServiceNameNotValid
+from app.errors import ServiceAlreadyExists
+from app.errors import NotFound
+from app.errors import GateStateNotValid
+from app.errors import EnvironmentNotFound
+from app.errors import JsonStructureError
 
 
 class MongoConnect:
@@ -85,7 +83,7 @@ class MongoConnect:
         entry = self.check_existence(group, name)
         if not entry:
             raise NotFound
-        for env, info in entry['environments'].iteritems():
+        for env, info in entry['environments'].items():
             tickets = []
             for ticket_id in info['queue']:
                 ticket = self.get_ticket(ticket_id)

@@ -1,10 +1,9 @@
 import json
 import socket
-import time
-from delorean import parse, Delorean
+from delorean import Delorean
 from flask import Response, render_template, request, jsonify, Blueprint
 
-import view_util
+from app import view_util
 
 blueprint = Blueprint('status', __name__)
 

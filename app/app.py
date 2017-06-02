@@ -1,14 +1,13 @@
-import views
-import api
-import status
-import view_util
-import state
+from app import views
+from app import api
+from app import status
+from app import view_util
+from app import state
 from delorean import Delorean
 
 from flask import Flask
-from mongo_connect import MongoConnect
+from app.mongo_connect import MongoConnect
 import json
-import time
 
 navigation_bar = [('views.get_gates', 'Gates')]
 app_name = "Gatekeeper"

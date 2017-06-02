@@ -15,8 +15,9 @@ def render(html, title, **kwargs):
 
 
 def get_url_query():
-    if request.query_string != '':
-        return '?' + request.query_string
+    query = request.query_string.decode()
+    if query != '':
+        return '?' + query
     else:
         return ''
 

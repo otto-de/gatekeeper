@@ -37,12 +37,12 @@ done
 
 useVirtualEnv() {
   echo -e "\e[1mPreparing VirtualEnv\e[0m"
-  python -m pip install --user virtualenv
-  python -m virtualenv -p python2.7 venv
+  python3 -m pip install --user virtualenv
+  python3 -m virtualenv -p python3 venv
   source venv/bin/activate
 }
 
-python get-pip.py --user
+python3 get-pip.py --user
 
 if $VENV; then
   useVirtualEnv
@@ -50,9 +50,9 @@ else
   echo -e "\e[1m\e[31mInstalling packages globally. This may need root privileges.\e[0m"
 fi
 
-python -m pip install -r requirements.txt
+python3 -m pip install -r requirements.txt
 
-if $DOCS_DEPS; then
+if ${DOCS_DEPS}; then
     echo -e "\e[1mInstalling dependencies for docs\e[0m"
-    python -m pip install -r docs/requirements.txt
+    python3 -m pip install -r docs/requirements.txt
 fi

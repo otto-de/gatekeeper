@@ -1,11 +1,7 @@
 import sys
 import unittest
-import uuid
+from mock import mock
 
-from delorean import Delorean
-from mock import mock, MagicMock
-
-from app import config
 from app import views
 
 
@@ -15,6 +11,7 @@ class MongoMock:
         return [{'date': '2037-06-05',
                  'reason': 'Bergfest',
                  'environments': ['live']}]
+
 
 class MongoMockWithTwoHolidays:
     @staticmethod
@@ -54,7 +51,6 @@ class TestViews(unittest.TestCase):
         self.assertEqual(False, firstHoliday['is_develop'])
         self.assertEqual(True, firstHoliday['is_live'])
 
-
     @mock.patch('flask.templating.render_template')
     def test_view_edit_holidays_calls_renders_two_holidays(self, template_mock):
         views.blueprint.mongo = MongoMockWithTwoHolidays()
@@ -74,14 +70,3 @@ class TestViews(unittest.TestCase):
         self.assertEqual('Bergfest', secondHoliday['reason'])
         self.assertEqual(True, secondHoliday['is_develop'])
         self.assertEqual(False, secondHoliday['is_live'])
-
-
-if __name__ == '__main__':
-    if len(sys.argv) > 1:
-        environment = sys.argv.pop()
-    else:
-        environment = 'local'
-    unittest.main()
-
-if (__name__ == 'test_views') or (__name__ == 'tests.test_views'):
-    environment = 'test'

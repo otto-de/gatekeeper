@@ -42,7 +42,7 @@
 
 
     <div class="tab-content">
-        {% for group, gates in gate_list.iteritems() %}
+        {% for group, gates in gate_list.items() %}
         <div role="tabpanel" class="tab-pane fade {% if tab == group %} active in {% endif %}" id="{{ group }}">
             <table class="table table-condensed">
                 <th>
@@ -52,7 +52,7 @@
                 {% endfor %}
                 </th>
 
-                {% for name, gate in gates.iteritems() | sort %}
+                {% for name, gate in gates.items() | sort %}
                 <tr>
                     <td>{{ gate.name }}</td>
                     {% for env in env_list[group] %}

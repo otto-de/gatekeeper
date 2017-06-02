@@ -5,7 +5,7 @@ from app.app import create_app
 
 def load_json(data):
     try:
-        return json.loads(data)
+        return json.loads(data.decode())
     except Exception as err:
         print(data)
         raise err
@@ -40,7 +40,7 @@ class ApiHelper:
         return load_json(self.api.delete('/api/gates/' + group + "/" + name).data)
 
     def get_gate(self, group, name):
-        return self.__get__('/api/gates/' + group + "/" + name)
+        return load_json(self.api.get('/api/gates/' + group + "/" + name).data)
 
     def open_gate(self, group, service, environment):
         return self.set_state(group, service, environment, 'open')
@@ -83,7 +83,4 @@ class ApiHelper:
                                        data=json.dumps(holidays)).data)
 
     def get_holidays(self):
-        return self.__get__('/api/holidays/')
-
-    def __get__(self, query):
-        return load_json(self.api.get(query).data)
+        return load_json(self.api.get('/api/holidays/').data)
