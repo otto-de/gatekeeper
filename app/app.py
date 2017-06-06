@@ -1,13 +1,14 @@
+import json
+from flask import Flask
+from delorean import Delorean
+
 from app import views
 from app import api
 from app import status
 from app import view_util
 from app import state
-from delorean import Delorean
-
-from flask import Flask
+from eliza.config import ConfigLoader
 from app.mongo_connect import MongoConnect
-import json
 
 navigation_bar = [('views.get_gates', 'Gates')]
 app_name = "Gatekeeper"
@@ -17,9 +18,9 @@ def create_app(environment, port):
     flask = Flask(__name__)
     flask.config.from_pyfile('config.py')
 
-    config = load_config(environment)
-    with open('info.json', 'r') as configFile:
-        info = json.loads(configFile.read())
+    config_loader = ConfigLoader(verify=False)
+    info = config_loader.load_application_info("./")
+    config = config_loader.load_config("resources/", environment)
 
     view_util.navigation_bar = navigation_bar
     view_util.app_name = info['name']
@@ -42,12 +43,3 @@ def create_app(environment, port):
     flask.register_blueprint(views.blueprint)
     flask.register_blueprint(api.blueprint)
     return flask
-
-
-def load_config(environment):
-    with open('./resources/default.json', 'r') as configFile:
-        config = json.loads(configFile.read())
-    with open('./resources/' + environment + '.json', 'r') as configFile:
-        env_config = json.loads(configFile.read())
-    config.update(env_config)
-    return config

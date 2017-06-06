@@ -1,10 +1,6 @@
-import sys
 import unittest
 
 from app import gates
-from app import state
-from app.app import load_config
-from app.mongo_connect import MongoConnect
 from tests.helpers.database_helper import DatabaseHelper
 
 test_rules = {
@@ -29,7 +25,6 @@ class TestGates(unittest.TestCase):
         cls.maxDiff = None
         cls.database_helper = DatabaseHelper('test')
         cls.database_helper.clear_database()
-        state.mongo = MongoConnect(load_config('test'))
 
     @classmethod
     def tearDown(cls):

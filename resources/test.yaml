@@ -1,0 +1,24 @@
+app:
+  live:
+    no_restriction:
+      hours_range:
+      - 0
+      - 24
+      days_range:
+      - 0
+      - 6
+  develop:
+    no_restriction:
+      hours_range:
+      - 0
+      - 24
+      days_range:
+      - 0
+      - 6
+mongo:
+  uris:
+  - localhost
+  database: testgatekeeper
+  services_collection: testgatekeeper
+  tickets_collection: testtickets
+  holidays_collection: testholidays

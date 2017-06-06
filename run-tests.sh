@@ -6,4 +6,4 @@ if [ -d ./venv ]; then
 else
   PYTHON=python3
 fi
-${VENV}nosetests
+${PYTHON} -m unittest discover -s /home/jens/otto/gatekeeper/tests -t /home/jens/otto/gatekeeper
