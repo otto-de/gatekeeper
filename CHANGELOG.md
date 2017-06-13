@@ -5,12 +5,19 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 This changelog is inspired by [keepachangelog.com](http://http://keepachangelog.com/de/)
 
-## [Unreleased](https://github.com/otto-de/gatekeeper/compare/3.0.0...HEAD)
+## [Unreleased](https://github.com/otto-de/gatekeeper/compare/4.0.0...HEAD)
+
+## [4.0.0](https://github.com/otto-de/gatekeeper/compare/3.0.0...4.0.0) - 2017-06-13
+
+### Changed
+- Update to python 3.
+- Change config file to enable the use of vault secrets (eliza).
+
 
 ## [3.0.0](https://github.com/otto-de/gatekeeper/compare/2.0.0...3.0.0) - 2016-12-08
 
 ### Changed
-- If pipeline is closed by rules (aka build windows), gatekeeper will answer with 'denied'
+- If pipeline is closed by rules (aka build windows), gatekeeper will answer with 'denied'.
 
 ## [2.0.0](https://github.com/otto-de/gatekeeper/compare/1.0.1...2.0.0) - 2016-12-08
 
