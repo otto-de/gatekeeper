@@ -36,7 +36,7 @@ to let the pipelines just roll.
 - Run gatekeeper:
 
 ````bash
-    $ ./run.sh [OPTIONS]
+    $ ./run.py [OPTIONS]
     
     Options:
         -p <port>      Port to access UI. Default is 8080

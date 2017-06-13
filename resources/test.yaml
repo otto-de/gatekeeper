@@ -16,8 +16,10 @@ app:
       - 0
       - 6
 mongo:
+  username: ''
+  password: ''
   uris:
-  - localhost
+    - localhost
   database: testgatekeeper
   services_collection: testgatekeeper
   tickets_collection: testtickets

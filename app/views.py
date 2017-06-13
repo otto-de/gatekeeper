@@ -56,7 +56,6 @@ def get_gates():
     except (ConnectionFailure, OperationFailure, Exception) as error:
         print("error" + str(error))
         raise
-        # return view_util.error_page(error.message)
 
 
 @blueprint.route('/gates/new')

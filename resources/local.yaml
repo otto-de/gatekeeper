@@ -2,11 +2,18 @@ app:
   live:
     business_time_mo_to_do:
       hours_range:
-      - 0
-      - 24
+      - 8
+      - 16
       days_range:
       - 0
-      - 6
+      - 3
+    business_time_fr:
+      hours_range:
+      - 8
+      - 14
+      days_range:
+      - 4
+      - 4
   develop:
     no_restriction:
       hours_range:
@@ -16,8 +23,10 @@ app:
       - 0
       - 6
 mongo:
+  username: ''
+  password: ''
   uris:
-  - localhost
+    - localhost
   database: gatekeeper
   services_collection: gatekeeper
   tickets_collection: tickets

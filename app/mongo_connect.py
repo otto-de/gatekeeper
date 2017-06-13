@@ -16,7 +16,7 @@ from app.errors import JsonStructureError
 
 class MongoConnect:
     def __init__(self, config):
-        self.client = MongoClient(config['mongo']['uris'])
+        self.client = MongoClient(self.build_uris(config))
         self.db = self.client[config['mongo']['database']]
         self.collection = self.db[config['mongo']['services_collection']]
         self.tickets = self.db[config['mongo']['tickets_collection']]
@@ -24,6 +24,25 @@ class MongoConnect:
         self.queue = self.db['queue']
         self.d = Delorean()
         self.d = self.d.shift('Europe/Amsterdam')
+
+        self.check_connection()
+
+    @staticmethod
+    def build_uris(config):
+        if config['mongo']['username'] and config['mongo']['password']:
+            return ['mongodb://' + config['mongo']['username'] + ':' + config['mongo']['password'] + '@' + db for db in
+                    config['mongo']['uris']]
+        else:
+            return config['mongo']['uris']
+
+    def check_connection(self):
+        try:
+            self.client.server_info()
+        except pymongo.errors.OperationFailure as error:
+            raise OperationFailure(error.details)
+        except pymongo.errors.ServerSelectionTimeoutError as error:
+            raise ConnectionFailure(error.details)
+        print("\n\x1b[32mDatabase connection up and running\x1b[0m")
 
     def get_environment_structure(self, environment_list):
         data = dict()
@@ -61,7 +80,7 @@ class MongoConnect:
             data.pop('_id')  # do not return _id  
             return data
         except pymongo.errors.NotMasterError as error:
-            raise NotMasterError(error.message)
+            raise NotMasterError(error.details)
 
     def remove_gate(self, group, name):
         if not self.check_existence(group, name):
@@ -69,15 +88,15 @@ class MongoConnect:
         try:
             self.collection.remove({"name": name, "group": group})
         except pymongo.errors.NotMasterError as error:
-            raise NotMasterError(error.message)
+            raise NotMasterError(error.details)
 
     def update_gate(self, group, name, entry):
         try:
             self.collection.update({"name": name, "group": group}, {'$set': entry}, upsert=False)
-        except pymongo.errors.ConnectionFailure as error:
-            raise ConnectionFailure(error.message)
+        except pymongo.errors.ConnectionFailure:
+            raise ConnectionFailure("Connection failure while gate update")
         except pymongo.errors.OperationFailure as error:
-            raise OperationFailure(error.message)
+            raise OperationFailure(error.details)
 
     def get_gate(self, group, name):
         entry = self.check_existence(group, name)
@@ -104,7 +123,7 @@ class MongoConnect:
                 entry['environments'][environment]['state_timestamp'] = self.get_formatted_timestamp()
                 return self.collection.update({'name': name, 'group': group}, {'$set': entry}, upsert=False)
         except pymongo.errors.NotMasterError as error:
-            raise NotMasterError(error.message)
+            raise NotMasterError(error.details)
 
     @staticmethod
     def get_expiration_date(minutes_delta):
@@ -124,7 +143,7 @@ class MongoConnect:
         try:
             self.tickets.update({"_id": ticket_id}, ticket, upsert=True)
         except pymongo.errors.NotMasterError as error:
-            raise NotMasterError(error.message)
+            raise NotMasterError(error.details)
         return ticket
 
     def get_ticket(self, ticket_id):
@@ -163,7 +182,7 @@ class MongoConnect:
             entry['environments'][environment]['message_timestamp'] = self.get_formatted_timestamp() if message else ""
             return self.collection.update({"name": name, "group": group}, {'$set': entry}, upsert=False)
         except pymongo.errors.NotMasterError as error:
-            raise NotMasterError(error.message)
+            raise NotMasterError(error.details)
 
     def check_existence(self, group, name):
         return self.collection.find_one({"name": name, "group": group}, {'_id': False})
@@ -206,4 +225,3 @@ class MongoConnect:
         else:
             holiday = self.holidays.find_one({'date': date})
         return holiday["reason"] if holiday else None
-
