@@ -33,39 +33,29 @@ Example Configuration
 
 Example config file::
 
-    {
-      "app": {
-        "live": {
-          "business_time_mo_to_do": {
-            "hours_range": [
-              8,
-              16
-            ],
-            "days_range": [
-              0,
-              3
-            ]
-          },
-          "business_time_fr": {
-            "hours_range": [
-              8,
-              14
-            ],
-            "days_range": [
-              4,
-              4
-            ]
-          }
-        }
-      },
-      "mongo": {
-        "uris": [
-            "mongodb://usename:password@somedbmaschine/database"
-        ],
-        "database": "database",
-        "collection": "gatekeeper"
-      }
-    }
+app:
+  live:
+    business_time_mo_to_do:
+      hours_range:
+      - 8
+      - 16
+      days_range:
+      - 0
+      - 3
+    business_time_fr:
+      hours_range:
+      - 8
+      - 14
+      days_range:
+      - 4
+      - 4
+mongo:
+  username: usename
+  password: password
+  uris:
+    - somedbmaschine/database
+  database: database
+  collection: gatekeeper
 
 Rules (Build Window)
 --------------------
@@ -74,21 +64,14 @@ for API calls and calls for queueing will be answered with 'denied'.
 
 The rules have the following format::
 
-    {
-      "app": {
-        "<environment>": {
-          "<rule name>: {
-            "hours_range": [
-              <start>,
-              <end>
-            ],
-            "days_range": [
-              <start>,
-              <end>
-            ]
-          }
-        }
-      }
-    }
+    app:
+        <environment>:
+        <rule name>:
+            hours_range:
+                - <start>
+                - <end>
+            days_range:
+                - <start>
+                - <end>
 
 
