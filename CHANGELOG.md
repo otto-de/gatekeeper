@@ -6,6 +6,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This changelog is inspired by [keepachangelog.com](http://http://keepachangelog.com/de/)
 
 ## [Unreleased](https://github.com/otto-de/gatekeeper/compare/3.0.0...HEAD)
+- react frontend
+- Gate component
 
 ## [3.0.0](https://github.com/otto-de/gatekeeper/compare/2.0.0...3.0.0) - 2016-12-08
 
