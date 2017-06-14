@@ -65,6 +65,13 @@ exports[`Gate component should contain all components 1`] = `
             className=""
           >
             ticket 1
+            <a
+              onClick={[Function]}
+            >
+              <span
+                className="glyphicon glyphicon-trash"
+              />
+            </a>
           </div>
         </div>
         <div
@@ -74,6 +81,13 @@ exports[`Gate component should contain all components 1`] = `
             className=""
           >
             ticket 2
+            <a
+              onClick={[Function]}
+            >
+              <span
+                className="glyphicon glyphicon-trash"
+              />
+            </a>
           </div>
         </div>
       </div>

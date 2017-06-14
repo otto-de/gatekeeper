@@ -2,7 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import R from 'ramda';
 import {connect} from 'react-redux';
-import {Button, Label, FormGroup, FormControl, Grid, Row, Col} from 'react-bootstrap';
+import {
+    Button,
+    Label,
+    FormGroup,
+    FormControl,
+    Grid,
+    Row,
+    Col,
+    Glyphicon} from 'react-bootstrap';
+import {removeTicket} from './reducers/gates';
 
 export function ManuelState({isOpen}) {
     return <Button bsStyle={isOpen ? 'success' : 'danger'}>{isOpen ? 'Open' : 'Closed'}</Button>
@@ -20,11 +29,11 @@ export function Comment({comment}) {
     );
 }
 
-export function Tickets({tickets}) {
+export function Tickets({tickets, onTicketClick}) {
     return (
         <Grid>
             {tickets.map(ticket => {
-                return <Row key={ticket}><Col>{ticket}</Col></Row>
+                return <Row key={ticket}><Col>{ticket}<a onClick={() => onTicketClick(ticket)}><Glyphicon glyph='trash' /></a></Col></Row>
             })}
         </Grid>
     );
@@ -32,7 +41,7 @@ export function Tickets({tickets}) {
 
 export class Gate extends React.Component {
     render() {
-        const {manual_state, auto_state, comment, tickets} = this.props;
+        const {manual_state, auto_state, comment, tickets, onTicketClick} = this.props;
         return (
             <Grid>
                 <Row>
@@ -49,7 +58,7 @@ export class Gate extends React.Component {
                     </Col>
                 </Row>
                 <Row>
-                    <Col><Tickets tickets={tickets}/></Col>
+                    <Col><Tickets tickets={tickets} onTicketClick={onTicketClick}/></Col>
                 </Row>
             </Grid>
         );
@@ -85,4 +94,12 @@ const mapStateToProps = (state, initialProps) => {
     return R.mergeAll([defaultValues, initialProps, gate_from_state]);
 };
 
-export default connect(mapStateToProps)(Gate);
+const mapDispatchToProps = (dispatch, initialProps) => {
+    return {
+        onTicketClick: (id) => {
+            dispatch(removeTicket(initialProps.group, initialProps.service, id))
+        }
+    }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Gate);
