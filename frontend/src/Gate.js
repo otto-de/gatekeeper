@@ -97,7 +97,7 @@ const mapStateToProps = (state, initialProps) => {
 const mapDispatchToProps = (dispatch, initialProps) => {
     return {
         onTicketClick: (id) => {
-            dispatch(removeTicket(initialProps.group, initialProps.service, id))
+            dispatch(removeTicket(initialProps.group, initialProps.service, initialProps.environment, id))
         }
     }
 };

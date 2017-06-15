@@ -2,7 +2,15 @@ import {createStore} from "redux";
 import reducer from './reducers'
 
 const initialState = {
-    gates: {}
+    gates: {
+        group: {
+            service: {
+                environment: {
+                    tickets: ['ticket 1', 'ticket 2']
+                }
+            }
+        }
+    }
 };
 
 const middleware = window.devToolsExtension ? window.devToolsExtension() : f => f;
