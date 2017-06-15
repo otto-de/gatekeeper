@@ -16,4 +16,3 @@ export default function reducer(state = {}, action = {}) {
 export function removeTicket(group, service, env, ticketId) {
     return {type: REMOVE_TICKET, group, service, env, ticketId};
 }
-}
