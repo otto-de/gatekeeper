@@ -46,7 +46,7 @@ export class Gate extends React.Component {
         return (
             <Grid>
                 <Row>
-                    <Col xs={4} md={2}>
+                    <Col xs={2} md={2}>
                         <Row>
                             <ManuelState isOpen={manual_state} onManualStateClick={onManualStateClick}/>
                         </Row>
@@ -54,7 +54,7 @@ export class Gate extends React.Component {
                             <AutoState isOpen={auto_state}/>
                         </Row>
                     </Col>
-                    <Col xs={2} md={4}>
+                    <Col xs={10} md={10}>
                         <Comment comment={comment}/>
                     </Col>
                 </Row>
