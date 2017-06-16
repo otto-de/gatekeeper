@@ -54,5 +54,4 @@ describe('Gate component', () => {
         expect(tickets.at(0).text()).toEqual('ticket 1');
         expect(tickets.at(1).text()).toEqual('ticket 2');
     });
-
 });

@@ -34,7 +34,7 @@ export function Tickets({tickets, onTicketRemoveClick}) {
     return (
         <Grid>
             {tickets.map(ticket => {
-                return <Row key={ticket}><Col>{ticket}<a onClick={() => onTicketRemoveClick(ticket)}><Glyphicon glyph='trash' /></a></Col></Row>
+                return <Row key={ticket}><Col>{ticket}<a onClick={() => onTicketRemoveClick(ticket)}><Glyphicon glyph='trash'/></a></Col></Row>
             })}
         </Grid>
     );

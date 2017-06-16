@@ -7,6 +7,7 @@ const initialState = {
             service: {
                 environment: {
                     manual_state: true,
+                    auto_state: true,
                     tickets: ['ticket 1', 'ticket 2']
                 }
             }

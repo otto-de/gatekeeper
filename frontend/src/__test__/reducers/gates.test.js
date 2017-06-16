@@ -1,4 +1,4 @@
-import reducer, {removeTicket, addTicket, setManualState} from '../../reducers/gates';
+import reducer, {removeTicket, addTicket, setManualState, setAutoState} from '../../reducers/gates';
 
 describe('Gates reducer', () => {
 
@@ -35,5 +35,17 @@ describe('Gates reducer', () => {
         let actionSetManualState = setManualState('ftX', 'gatekeeper', 'test', true);
         let withNewManualState = reducer(state, actionSetManualState);
         expect(withNewManualState.ftX.gatekeeper.test.manual_state).toBeTruthy();
+    });
+
+    it('should set the auto_state', () => {
+        let actionSetAutoState = setAutoState('ftX', 'gatekeeper', 'test', false);
+        let withNewAutoState = reducer(state, actionSetAutoState);
+        expect(withNewAutoState.ftX.gatekeeper.test.auto_state).toBeFalsy();
+    });
+
+    it('should keep the auto_state', () => {
+        let actionSetAutoState = setAutoState('ftX', 'gatekeeper', 'test', true);
+        let withNewAutoState = reducer(state, actionSetAutoState);
+        expect(withNewAutoState.ftX.gatekeeper.test.auto_state).toBeTruthy();
     });
 });
