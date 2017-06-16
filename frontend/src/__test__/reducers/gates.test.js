@@ -1,4 +1,4 @@
-import reducer, {removeTicket, addTicket, setManualState, setAutoState, setComment} from '../../reducers/gates';
+import reducer, {removeTicket, addTicket, setManualState, setAutoState, setComment, setLastModified} from '../../reducers/gates';
 
 describe('Gates reducer', () => {
 
@@ -53,5 +53,11 @@ describe('Gates reducer', () => {
         let actionSetComment = setComment('ftX', 'gatekeeper', 'test', 'some comment');
         let withNewComment = reducer(state, actionSetComment);
         expect(withNewComment.ftX.gatekeeper.test.comment).toEqual('some comment');
+    });
+
+    it('should set last modified', () => {
+        let actionSetLastModified = setLastModified('ftX', 'gatekeeper', 'test', 'now');
+        let withNewLastModified = reducer(state, actionSetLastModified);
+        expect(withNewLastModified.ftX.gatekeeper.test.last_modified).toEqual('now')
     });
 });

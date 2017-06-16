@@ -1,5 +1,5 @@
 import React from 'react';
-import ConnectedGate, {Gate, ManuelState, AutoState, Comment, Tickets}  from '../Gate';
+import ConnectedGate, {Gate, ManuelState, AutoState, Comment, Tickets, LastModified}  from '../Gate';
 import renderer from 'react-test-renderer';
 import {mount} from 'enzyme';
 import {MockStore} from './mockStore';
@@ -15,8 +15,7 @@ describe('Gate component', () => {
                                                 manual_state={true}
                                                 auto_state={true}
                                                 tickets={['ticket 1', 'ticket 2']}
-                                                last_modified_state='some time ago'
-                                                last_modified_comment='a while ago'/>);
+                                                last_modified='some time ago'/>);
         let tree = component.toJSON();
         expect(tree).toMatchSnapshot();
     });
@@ -57,6 +56,11 @@ describe('Gate component', () => {
         expect(tickets.at(0).text()).toEqual('ticket 1');
         expect(tickets.at(1).text()).toEqual('ticket 2');
     });
+
+    it('should display last modified', ()=> {
+       const component = mount(<LastModified last_modified='now'/>);
+        expect(component.text()).toEqual('now')
+    });
 });
 
 describe('load from state', () => {
@@ -73,8 +77,7 @@ describe('load from state', () => {
                             manual_state: false,
                             auto_state: true,
                             tickets: ['ticket 1'],
-                            last_modified_state: 'now',
-                            last_modified_comment: 'some hours ago'
+                            last_modified: 'now'
                         }
                     }
                 }

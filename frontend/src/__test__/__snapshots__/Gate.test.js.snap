@@ -25,6 +25,13 @@ exports[`Gate component should contain all components 1`] = `
       <div
         className="row"
       >
+        <div>
+          some time ago
+        </div>
+      </div>
+      <div
+        className="row"
+      >
         <h4>
           <span
             className="label label-success"
@@ -118,6 +125,13 @@ exports[`load from state should load the state correctly 1`] = `
         >
           Closed
         </button>
+      </div>
+      <div
+        className="row"
+      >
+        <div>
+          now
+        </div>
       </div>
       <div
         className="row"

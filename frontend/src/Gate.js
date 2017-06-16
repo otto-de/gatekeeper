@@ -18,6 +18,10 @@ export function ManuelState({isOpen, onManualStateClick}) {
     return <Button bsStyle={isOpen ? 'success' : 'danger'} onClick={() => onManualStateClick(!isOpen)}>{isOpen ? 'Open' : 'Closed'}</Button>
 }
 
+export function LastModified({last_modified}) {
+    return <div>{last_modified}</div>
+}
+
 export function AutoState({isOpen}) {
     return <h4><Label bsStyle={isOpen ? 'success' : 'danger'}>{isOpen ? 'Open' : 'Closed'}</Label></h4>
 }
@@ -42,13 +46,16 @@ export function Tickets({tickets, onTicketRemoveClick}) {
 
 export class Gate extends React.Component {
     render() {
-        const {manual_state, auto_state, comment, tickets, onTicketRemoveClick, onManualStateClick} = this.props;
+        const {manual_state, auto_state, comment, tickets, last_modified, onTicketRemoveClick, onManualStateClick} = this.props;
         return (
             <Grid>
                 <Row>
                     <Col xs={2} md={2}>
                         <Row>
                             <ManuelState isOpen={manual_state} onManualStateClick={onManualStateClick}/>
+                        </Row>
+                        <Row>
+                            <LastModified last_modified={last_modified} />
                         </Row>
                         <Row>
                             <AutoState isOpen={auto_state}/>
@@ -74,8 +81,7 @@ Gate.propTypes = {
     manual_state: PropTypes.bool,
     auto_state: PropTypes.bool,
     tickets: PropTypes.array,
-    last_modified_state: PropTypes.string,
-    last_modified_comment: PropTypes.string
+    last_modified: PropTypes.string
 };
 
 const defaultValues = {
@@ -86,8 +92,7 @@ const defaultValues = {
     manual_state: true,
     auto_state: true,
     tickets: [],
-    last_modified_state: '',
-    last_modified_comment: ''
+    last_modified: 'now',
 };
 
 const mapStateToProps = (state, initialProps) => {
