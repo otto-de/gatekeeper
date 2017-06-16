@@ -1,7 +1,10 @@
 import React from 'react';
-import {Gate, ManuelState, AutoState, Comment, Tickets}  from '../Gate';
+import ConnectedGate, {Gate, ManuelState, AutoState, Comment, Tickets}  from '../Gate';
 import renderer from 'react-test-renderer';
 import {mount} from 'enzyme';
+import {MockStore} from './mockStore';
+import {Provider} from 'react-redux';
+
 
 describe('Gate component', () => {
     it('should contain all components', () => {
@@ -53,5 +56,37 @@ describe('Gate component', () => {
         expect(tickets.length).toEqual(2);
         expect(tickets.at(0).text()).toEqual('ticket 1');
         expect(tickets.at(1).text()).toEqual('ticket 2');
+    });
+});
+
+describe('load from state', () => {
+    it('should load the state correctly', () => {
+        const storeMock = MockStore({
+            'gates': {
+                'ftx': {
+                    'gatekeeper': {
+                        'test': {
+                            group: 'ftx',
+                            service: 'gatekeeper',
+                            environment: 'test',
+                            comment: 'some comment',
+                            manual_state: false,
+                            auto_state: true,
+                            tickets: ['ticket 1'],
+                            last_modified_state: 'now',
+                            last_modified_comment: 'some hours ago'
+                        }
+                    }
+                }
+            }
+        });
+
+        const subject = (
+            <Provider store={storeMock}>
+                <ConnectedGate group='ftx' service='gatekeeper' environment="test"/>
+            </Provider>);
+        const component = renderer.create(subject);
+        const tree = component.toJSON();
+        expect(tree).toMatchSnapshot();
     });
 });

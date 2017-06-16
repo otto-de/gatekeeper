@@ -96,3 +96,84 @@ exports[`Gate component should contain all components 1`] = `
   </div>
 </div>
 `;
+
+exports[`load from state should load the state correctly 1`] = `
+<div
+  className="container"
+>
+  <div
+    className="row"
+  >
+    <div
+      className="col-md-2 col-xs-4"
+    >
+      <div
+        className="row"
+      >
+        <button
+          className="btn btn-danger"
+          disabled={false}
+          onClick={[Function]}
+          type="button"
+        >
+          Closed
+        </button>
+      </div>
+      <div
+        className="row"
+      >
+        <h4>
+          <span
+            className="label label-success"
+          >
+            Open
+          </span>
+        </h4>
+      </div>
+    </div>
+    <div
+      className="col-md-4 col-xs-2"
+    >
+      <div
+        className="form-group"
+      >
+        <textarea
+          className="form-control"
+          id="formControlsTextarea"
+          placeholder=""
+          type={undefined}
+          value="some comment"
+        />
+      </div>
+    </div>
+  </div>
+  <div
+    className="row"
+  >
+    <div
+      className=""
+    >
+      <div
+        className="container"
+      >
+        <div
+          className="row"
+        >
+          <div
+            className=""
+          >
+            ticket 1
+            <a
+              onClick={[Function]}
+            >
+              <span
+                className="glyphicon glyphicon-trash"
+              />
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
