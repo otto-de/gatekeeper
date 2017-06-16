@@ -4,11 +4,13 @@ const ADD_TICKET = 'gatekeeper/gate/ticket/ADD';
 const REMOVE_TICKET = 'gatekeeper/gate/ticket/REMOVE';
 const SET_MANUAL_GATE_STATE = 'gatekeeper/gate/manual_gate/SET';
 const SET_AUTO_GATE_STATE = 'gatekeeper/gate/auto_gate/SET';
+const SET_COMMENT = 'gatekeeper/gate/comment/SET';
 
 export default function reducer(state = {}, action = {}) {
     let ticketPath = R.lensPath([action.group, action.service, action.env, 'tickets']);
     let manualStatePath = R.lensPath([action.group, action.service, action.env, 'manual_state']);
     let autoStatePath = R.lensPath([action.group, action.service, action.env, 'auto_state']);
+    let commentPath = R.lensPath([action.group, action.service, action.env, 'comment']);
     let tickets = R.view(ticketPath, state);
     switch (action.type) {
         case ADD_TICKET:
@@ -19,6 +21,8 @@ export default function reducer(state = {}, action = {}) {
             return R.set(manualStatePath, action.state, state);
         case SET_AUTO_GATE_STATE:
             return R.set(autoStatePath, action.state, state);
+        case SET_COMMENT:
+            return R.set(commentPath, action.comment, state);
         default:
             return state;
     }
@@ -38,4 +42,8 @@ export function setManualState(group, service, env, state) {
 
 export function setAutoState(group, service, env, state) {
     return {type: SET_AUTO_GATE_STATE, group, service, env, state};
+}
+
+export function setComment(group, service, env, comment) {
+    return {type: SET_COMMENT, group, service, env, comment};
 }
