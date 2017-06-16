@@ -23,17 +23,17 @@ export function AutoState({isOpen}) {
 
 export function Comment({comment}) {
     return (
-        <FormGroup controlId="formControlsTextarea">
-            <FormControl componentClass="textarea" placeholder="" value={comment}/>
+        <FormGroup controlId='formControlsTextarea'>
+            <FormControl componentClass='textarea' placeholder="" value={comment}/>
         </FormGroup>
     );
 }
 
-export function Tickets({tickets, onTicketClick}) {
+export function Tickets({tickets, onTicketRemoveClick}) {
     return (
         <Grid>
             {tickets.map(ticket => {
-                return <Row key={ticket}><Col>{ticket}<a onClick={() => onTicketClick(ticket)}><Glyphicon glyph='trash' /></a></Col></Row>
+                return <Row key={ticket}><Col>{ticket}<a onClick={() => onTicketRemoveClick(ticket)}><Glyphicon glyph='trash' /></a></Col></Row>
             })}
         </Grid>
     );
@@ -41,7 +41,7 @@ export function Tickets({tickets, onTicketClick}) {
 
 export class Gate extends React.Component {
     render() {
-        const {manual_state, auto_state, comment, tickets, onTicketClick} = this.props;
+        const {manual_state, auto_state, comment, tickets, onTicketRemoveClick} = this.props;
         return (
             <Grid>
                 <Row>
@@ -58,7 +58,7 @@ export class Gate extends React.Component {
                     </Col>
                 </Row>
                 <Row>
-                    <Col><Tickets tickets={tickets} onTicketClick={onTicketClick}/></Col>
+                    <Col><Tickets tickets={tickets} onTicketRemoveClick={onTicketRemoveClick}/></Col>
                 </Row>
             </Grid>
         );
@@ -85,8 +85,8 @@ const defaultValues = {
     manual_state: true,
     auto_state: true,
     tickets: [],
-    last_modified_state: "",
-    last_modified_comment: ""
+    last_modified_state: '',
+    last_modified_comment: ''
 };
 
 const mapStateToProps = (state, initialProps) => {
@@ -96,7 +96,7 @@ const mapStateToProps = (state, initialProps) => {
 
 const mapDispatchToProps = (dispatch, initialProps) => {
     return {
-        onTicketClick: (id) => {
+        onTicketRemoveClick: (id) => {
             dispatch(removeTicket(initialProps.group, initialProps.service, initialProps.environment, id))
         }
     }

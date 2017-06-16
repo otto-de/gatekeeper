@@ -3,10 +3,10 @@ import {connect} from 'react-redux';
 import Gate from './Gate';
 import './App.css';
 
-class App extends Component {
+export class App extends Component {
     render() {
         return (
-            <Gate group="wow" service="such" comment="dog" environment="asd"/>
+            <Gate group="group" service="service" environment="environment"/>
         );
     }
 }
