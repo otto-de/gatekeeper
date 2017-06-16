@@ -10,11 +10,12 @@ import {
     Grid,
     Row,
     Col,
-    Glyphicon} from 'react-bootstrap';
-import {removeTicket} from './reducers/gates';
+    Glyphicon
+} from 'react-bootstrap';
+import {removeTicket, setManualState} from './reducers/gates';
 
-export function ManuelState({isOpen}) {
-    return <Button bsStyle={isOpen ? 'success' : 'danger'}>{isOpen ? 'Open' : 'Closed'}</Button>
+export function ManuelState({isOpen, onManualStateClick}) {
+    return <Button bsStyle={isOpen ? 'success' : 'danger'} onClick={() => onManualStateClick(!isOpen)}>{isOpen ? 'Open' : 'Closed'}</Button>
 }
 
 export function AutoState({isOpen}) {
@@ -41,13 +42,13 @@ export function Tickets({tickets, onTicketRemoveClick}) {
 
 export class Gate extends React.Component {
     render() {
-        const {manual_state, auto_state, comment, tickets, onTicketRemoveClick} = this.props;
+        const {manual_state, auto_state, comment, tickets, onTicketRemoveClick, onManualStateClick} = this.props;
         return (
             <Grid>
                 <Row>
                     <Col xs={4} md={2}>
                         <Row>
-                            <ManuelState isOpen={manual_state}/>
+                            <ManuelState isOpen={manual_state} onManualStateClick={onManualStateClick}/>
                         </Row>
                         <Row>
                             <AutoState isOpen={auto_state}/>
@@ -98,6 +99,9 @@ const mapDispatchToProps = (dispatch, initialProps) => {
     return {
         onTicketRemoveClick: (id) => {
             dispatch(removeTicket(initialProps.group, initialProps.service, initialProps.environment, id))
+        },
+        onManualStateClick: (state) => {
+            dispatch(setManualState(initialProps.group, initialProps.service, initialProps.environment, state))
         }
     }
 };

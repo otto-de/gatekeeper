@@ -6,6 +6,7 @@ const initialState = {
         group: {
             service: {
                 environment: {
+                    manual_state: true,
                     tickets: ['ticket 1', 'ticket 2']
                 }
             }

@@ -1,4 +1,4 @@
-import reducer, {removeTicket, addTicket} from '../../reducers/gates';
+import reducer, {removeTicket, addTicket, setManualState} from '../../reducers/gates';
 
 describe('Gates reducer', () => {
 
@@ -6,6 +6,7 @@ describe('Gates reducer', () => {
         ftX: {
             gatekeeper: {
                 test: {
+                    manual_state: true,
                     tickets: ['ticket01', 'ticket02']
                 }
             }
@@ -24,4 +25,15 @@ describe('Gates reducer', () => {
         expect(stateWithTicket.ftX.gatekeeper.test.tickets).toEqual(expect.arrayContaining(['ticket03']))
     });
 
+    it('should set the manual_state', () => {
+        let actionSetManualState = setManualState('ftX', 'gatekeeper', 'test', false);
+        let withNewManualState = reducer(state, actionSetManualState);
+        expect(withNewManualState.ftX.gatekeeper.test.manual_state).toBeFalsy();
+    });
+
+    it('should keep the manual_state', () => {
+        let actionSetManualState = setManualState('ftX', 'gatekeeper', 'test', true);
+        let withNewManualState = reducer(state, actionSetManualState);
+        expect(withNewManualState.ftX.gatekeeper.test.manual_state).toBeTruthy();
+    });
 });
