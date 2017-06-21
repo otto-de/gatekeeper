@@ -9,12 +9,14 @@
     "react-bootstrap": "^0.31.0",
     "react-dom": "^15.5.4",
     "react-redux": "^5.0.5",
-    "redux": "^3.6.0"
+    "redux": "^3.6.0",
+    "redux-form": "^6.8.0"
   },
   "devDependencies": {
-    "react-scripts": "1.0.7",
-    "eslint": "^4.0.0",
+    "sinon": "^2.3.5",
     "enzyme": "^2.8.2",
+    "eslint": "^4.0.0",
+    "react-scripts": "1.0.7",
     "react-test-renderer": "^15.5.4"
   },
   "scripts": {

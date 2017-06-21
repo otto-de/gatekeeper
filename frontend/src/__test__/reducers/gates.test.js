@@ -1,13 +1,13 @@
-import reducer, {removeTicket, addTicket, setManualState, setAutoState, setComment, setLastModified} from '../../reducers/gates';
+import reducer, {removeTicket, addTicket, setManualState, setAutoState, setComment, setLastModified, setCommentEditDialog} from '../../reducers/gates';
 
 describe('Gates reducer', () => {
-
     const state = {
         ftX: {
             gatekeeper: {
                 test: {
                     manual_state: true,
-                    tickets: ['ticket01', 'ticket02']
+                    tickets: ['ticket01', 'ticket02'],
+                    show_comment_edit_dialog: false
                 }
             }
         }
@@ -59,5 +59,11 @@ describe('Gates reducer', () => {
         let actionSetLastModified = setLastModified('ftX', 'gatekeeper', 'test', 'now');
         let withNewLastModified = reducer(state, actionSetLastModified);
         expect(withNewLastModified.ftX.gatekeeper.test.last_modified).toEqual('now')
+    });
+
+    it('should open the comment edit dialog', () => {
+        let actionSetCommentEditDialog = setCommentEditDialog('ftX', 'gatekeeper', 'test', 'now');
+        let withOpenCommentDialog = reducer(state, actionSetCommentEditDialog);
+        expect(withOpenCommentDialog.ftX.gatekeeper.test.show_comment_edit_dialog).toBeTruthy()
     });
 });

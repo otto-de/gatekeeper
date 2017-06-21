@@ -5,6 +5,7 @@ import {mount} from 'enzyme';
 import {MockStore} from './mockStore';
 import {Provider} from 'react-redux';
 
+jest.mock('../CommentDialog');
 
 describe('Gate component', () => {
     it('should contain all components', () => {

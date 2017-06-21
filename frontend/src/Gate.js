@@ -5,40 +5,48 @@ import {connect} from 'react-redux';
 import {
     Button,
     Label,
-    FormGroup,
-    FormControl,
     Grid,
     Row,
     Col,
-    Glyphicon
+    Glyphicon,
+    Panel
 } from 'react-bootstrap';
-import {removeTicket, setManualState} from './reducers/gates';
+import {removeTicket, setManualState, setCommentEditDialog} from './reducers/gates';
+import CommentDialog from './CommentDialog';
 
 export function ManuelState({isOpen, onManualStateClick}) {
-    return <Button bsStyle={isOpen ? 'success' : 'danger'} onClick={() => onManualStateClick(!isOpen)}>{isOpen ? 'Open' : 'Closed'}</Button>
+    return <Button bsStyle={isOpen ? 'success' : 'danger'}
+                   onClick={() => onManualStateClick(!isOpen)}>{isOpen ? 'Open' : 'Closed'}</Button>;
 }
 
 export function LastModified({last_modified}) {
-    return <div>{last_modified}</div>
+    return <div>{last_modified}</div>;
 }
 
 export function AutoState({isOpen}) {
-    return <h4><Label bsStyle={isOpen ? 'success' : 'danger'}>{isOpen ? 'Open' : 'Closed'}</Label></h4>
+    return <h4><Label bsStyle={isOpen ? 'success' : 'danger'}>{isOpen ? 'Open' : 'Closed'}</Label></h4>;
 }
 
-export function Comment({comment}) {
+export function Comment({openCommentEditDialog, comment}) {
     return (
-        <FormGroup controlId='formControlsTextarea'>
-            <FormControl componentClass='textarea' placeholder="" value={comment}/>
-        </FormGroup>
+        <Panel onClick={openCommentEditDialog}>
+            {comment}
+        </Panel>
     );
+}
+
+
+export function EditComment({openCommentEditDialog}) {
+    return <Button bsStyle='info' bsSize='xsmall'
+                   onClick={() => openCommentEditDialog()}>edit comment</Button>;
 }
 
 export function Tickets({tickets, onTicketRemoveClick}) {
     return (
         <Grid>
             {tickets.map(ticket => {
-                return <Row key={ticket}><Col>{ticket}<a onClick={() => onTicketRemoveClick(ticket)}><Glyphicon glyph='trash'/></a></Col></Row>
+                return <Row key={ticket}><Col>{ticket}<a onClick={() => onTicketRemoveClick(ticket)}><Glyphicon
+                    glyph='trash'/></a></Col></Row>;
             })}
         </Grid>
     );
@@ -46,7 +54,7 @@ export function Tickets({tickets, onTicketRemoveClick}) {
 
 export class Gate extends React.Component {
     render() {
-        const {manual_state, auto_state, comment, tickets, last_modified, onTicketRemoveClick, onManualStateClick} = this.props;
+        const {manual_state, auto_state, comment, tickets, last_modified, onTicketRemoveClick, onManualStateClick, openCommentEditDialog, handleSubmit} = this.props;
         return (
             <Grid>
                 <Row>
@@ -55,18 +63,29 @@ export class Gate extends React.Component {
                             <ManuelState isOpen={manual_state} onManualStateClick={onManualStateClick}/>
                         </Row>
                         <Row>
-                            <LastModified last_modified={last_modified} />
+                            <LastModified last_modified={last_modified}/>
                         </Row>
                         <Row>
                             <AutoState isOpen={auto_state}/>
                         </Row>
                     </Col>
                     <Col xs={10} md={10}>
-                        <Comment comment={comment}/>
+                        <Row>
+                            <CommentDialog group={this.props.group}
+                                           service={this.props.service}
+                                           environment={this.props.environment}
+                                           comment={comment}/>
+                            <Comment openCommentEditDialog={openCommentEditDialog} comment={comment}/>
+                        </Row>
+                        <Row>
+                            <EditComment openCommentEditDialog={openCommentEditDialog}/>
+                        </Row>
                     </Col>
                 </Row>
                 <Row>
-                    <Col><Tickets tickets={tickets} onTicketRemoveClick={onTicketRemoveClick}/></Col>
+                    <Col>
+                        <Tickets tickets={tickets} onTicketRemoveClick={onTicketRemoveClick}/>
+                    </Col>
                 </Row>
             </Grid>
         );
@@ -92,7 +111,7 @@ const defaultValues = {
     manual_state: true,
     auto_state: true,
     tickets: [],
-    last_modified: 'now',
+    last_modified: 'now'
 };
 
 const mapStateToProps = (state, initialProps) => {
@@ -103,12 +122,15 @@ const mapStateToProps = (state, initialProps) => {
 const mapDispatchToProps = (dispatch, initialProps) => {
     return {
         onTicketRemoveClick: (id) => {
-            dispatch(removeTicket(initialProps.group, initialProps.service, initialProps.environment, id))
+            dispatch(removeTicket(initialProps.group, initialProps.service, initialProps.environment, id));
         },
         onManualStateClick: (state) => {
-            dispatch(setManualState(initialProps.group, initialProps.service, initialProps.environment, state))
+            dispatch(setManualState(initialProps.group, initialProps.service, initialProps.environment, state));
+        },
+        openCommentEditDialog: () => {
+            dispatch(setCommentEditDialog(initialProps.group, initialProps.service, initialProps.environment, true));
         }
-    }
+    };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Gate);

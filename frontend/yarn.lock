@@ -1727,6 +1727,10 @@ decamelize@^1.0.0, decamelize@^1.1.1, decamelize@^1.1.2:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/decamelize/-/decamelize-1.2.0.tgz#f6534d15148269b20352e7bee26f501f9a191290"
 
+deep-equal@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/deep-equal/-/deep-equal-1.0.1.tgz#f5d260292b660e084eff4cdbc9f08ad3247448b5"
+
 deep-extend@~0.4.0:
   version "0.4.2"
   resolved "https://registry.yarnpkg.com/deep-extend/-/deep-extend-0.4.2.tgz#48b699c27e334bf89f10892be432f6e4c7d34a7f"
@@ -1797,7 +1801,7 @@ detect-node@^2.0.3:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/detect-node/-/detect-node-2.0.3.tgz#a2033c09cc8e158d37748fbde7507832bd6ce127"
 
-diff@^3.2.0:
+diff@^3.1.0, diff@^3.2.0:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/diff/-/diff-3.2.0.tgz#c9ce393a4b7cbd0b058a725c93df299027868ff9"
 
@@ -2014,6 +2018,10 @@ es5-ext@^0.10.14, es5-ext@^0.10.9, es5-ext@~0.10.14:
   dependencies:
     es6-iterator "2"
     es6-symbol "~3.1"
+
+es6-error@^4.0.0:
+  version "4.0.2"
+  resolved "https://registry.yarnpkg.com/es6-error/-/es6-error-4.0.2.tgz#eec5c726eacef51b7f6b73c20db6e1b13b069c98"
 
 es6-iterator@2, es6-iterator@^2.0.1, es6-iterator@~2.0.1:
   version "2.0.1"
@@ -2579,6 +2587,12 @@ form-data@~2.1.1:
     combined-stream "^1.0.5"
     mime-types "^2.1.12"
 
+formatio@1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/formatio/-/formatio-1.2.0.tgz#f3b2167d9068c4698a8d51f4f760a39a54d818eb"
+  dependencies:
+    samsam "1.x"
+
 forwarded@~0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/forwarded/-/forwarded-0.1.0.tgz#19ef9874c4ae1c297bcf078fde63a09b66a84363"
@@ -2841,7 +2855,7 @@ hoek@2.x.x:
   version "2.16.3"
   resolved "https://registry.yarnpkg.com/hoek/-/hoek-2.16.3.tgz#20bb7403d3cea398e91dc4710a8ff1b8274a25ed"
 
-hoist-non-react-statics@^1.0.3:
+hoist-non-react-statics@^1.0.3, hoist-non-react-statics@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/hoist-non-react-statics/-/hoist-non-react-statics-1.2.0.tgz#aa448cf0986d55cc40773b17174b7dd066cb7cfb"
 
@@ -3804,7 +3818,7 @@ locate-path@^2.0.0:
     p-locate "^2.0.0"
     path-exists "^3.0.0"
 
-lodash-es@^4.2.0, lodash-es@^4.2.1:
+lodash-es@^4.17.3, lodash-es@^4.2.0, lodash-es@^4.2.1:
   version "4.17.4"
   resolved "https://registry.yarnpkg.com/lodash-es/-/lodash-es-4.17.4.tgz#dcc1d7552e150a0640073ba9cb31d70f032950e7"
 
@@ -3892,6 +3906,10 @@ lodash.uniq@^4.5.0:
 "lodash@>=3.5 <5", lodash@^4.0.0, lodash@^4.14.0, lodash@^4.15.0, lodash@^4.17.2, lodash@^4.17.3, lodash@^4.17.4, lodash@^4.2.0, lodash@^4.2.1, lodash@^4.3.0:
   version "4.17.4"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.4.tgz#78203a4d1c328ae1d86dca6460e369b57f4055ae"
+
+lolex@^1.6.0:
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/lolex/-/lolex-1.6.0.tgz#3a9a0283452a47d7439e72731b9e07d7386e49f6"
 
 longest@^1.0.1:
   version "1.0.1"
@@ -4085,6 +4103,10 @@ mute-stream@0.0.7:
 nan@^2.3.0:
   version "2.6.2"
   resolved "https://registry.yarnpkg.com/nan/-/nan-2.6.2.tgz#e4ff34e6c95fdfb5aecc08de6596f43605a7db45"
+
+native-promise-only@^0.8.1:
+  version "0.8.1"
+  resolved "https://registry.yarnpkg.com/native-promise-only/-/native-promise-only-0.8.1.tgz#20a318c30cb45f71fe7adfbf7b21c99c1472ef11"
 
 natural-compare@^1.4.0:
   version "1.4.0"
@@ -4475,7 +4497,7 @@ path-to-regexp@0.1.7:
   version "0.1.7"
   resolved "https://registry.yarnpkg.com/path-to-regexp/-/path-to-regexp-0.1.7.tgz#df604178005f522f15eb4490e7247a1bfaa67f8c"
 
-path-to-regexp@^1.0.1:
+path-to-regexp@^1.0.1, path-to-regexp@^1.7.0:
   version "1.7.0"
   resolved "https://registry.yarnpkg.com/path-to-regexp/-/path-to-regexp-1.7.0.tgz#59fde0f435badacba103a84e9d3bc64e96b9937d"
   dependencies:
@@ -4885,7 +4907,7 @@ promise@7.1.1, promise@^7.1.1:
   dependencies:
     asap "~2.0.3"
 
-prop-types@^15.5.10, prop-types@^15.5.4, prop-types@^15.5.6, prop-types@^15.5.7, prop-types@^15.5.8, prop-types@~15.5.7:
+prop-types@^15.5.10, prop-types@^15.5.4, prop-types@^15.5.6, prop-types@^15.5.7, prop-types@^15.5.8, prop-types@^15.5.9, prop-types@~15.5.7:
   version "15.5.10"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.5.10.tgz#2797dfc3126182e3a95e3dfbb2e893ddd7456154"
   dependencies:
@@ -5223,6 +5245,19 @@ reduce-function-call@^1.0.1:
   dependencies:
     balanced-match "^0.4.2"
 
+redux-form@^6.8.0:
+  version "6.8.0"
+  resolved "https://registry.yarnpkg.com/redux-form/-/redux-form-6.8.0.tgz#ff1b590b59f987d7e3ff080d752f7120bfe42af3"
+  dependencies:
+    deep-equal "^1.0.1"
+    es6-error "^4.0.0"
+    hoist-non-react-statics "^1.2.0"
+    invariant "^2.2.2"
+    is-promise "^2.1.0"
+    lodash "^4.17.3"
+    lodash-es "^4.17.3"
+    prop-types "^15.5.9"
+
 redux@^3.6.0:
   version "3.6.0"
   resolved "https://registry.yarnpkg.com/redux/-/redux-3.6.0.tgz#887c2b3d0b9bd86eca2be70571c27654c19e188d"
@@ -5451,6 +5486,10 @@ safe-buffer@^5.1.0:
   version "5.1.0"
   resolved "https://registry.yarnpkg.com/safe-buffer/-/safe-buffer-5.1.0.tgz#fe4c8460397f9eaaaa58e73be46273408a45e223"
 
+samsam@1.x, samsam@^1.1.3:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/samsam/-/samsam-1.2.1.tgz#edd39093a3184370cb859243b2bdf255e7d8ea67"
+
 sane@~1.6.0:
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/sane/-/sane-1.6.0.tgz#9610c452307a135d29c1fdfe2547034180c46775"
@@ -5580,6 +5619,19 @@ shellwords@^0.1.0:
 signal-exit@^3.0.0, signal-exit@^3.0.2:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/signal-exit/-/signal-exit-3.0.2.tgz#b5fdc08f1287ea1178628e415e25132b73646c6d"
+
+sinon@^2.3.5:
+  version "2.3.5"
+  resolved "https://registry.yarnpkg.com/sinon/-/sinon-2.3.5.tgz#9a2fc0ff8d526da716f30953aa2c65d518917f6c"
+  dependencies:
+    diff "^3.1.0"
+    formatio "1.2.0"
+    lolex "^1.6.0"
+    native-promise-only "^0.8.1"
+    path-to-regexp "^1.7.0"
+    samsam "^1.1.3"
+    text-encoding "0.6.4"
+    type-detect "^4.0.0"
 
 slash@^1.0.0:
   version "1.0.0"
@@ -5928,6 +5980,10 @@ test-exclude@^4.1.1:
     read-pkg-up "^1.0.1"
     require-main-filename "^1.0.1"
 
+text-encoding@0.6.4:
+  version "0.6.4"
+  resolved "https://registry.yarnpkg.com/text-encoding/-/text-encoding-0.6.4.tgz#e399a982257a276dae428bb92845cb71bdc26d19"
+
 text-table@0.2.0, text-table@~0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/text-table/-/text-table-0.2.0.tgz#7f5ee823ae805207c00af2df4a84ec3fcfa570b4"
@@ -6015,6 +6071,10 @@ type-check@~0.3.2:
   resolved "https://registry.yarnpkg.com/type-check/-/type-check-0.3.2.tgz#5884cab512cf1d355e3fb784f30804b2b520db72"
   dependencies:
     prelude-ls "~1.1.2"
+
+type-detect@^4.0.0:
+  version "4.0.3"
+  resolved "https://registry.yarnpkg.com/type-detect/-/type-detect-4.0.3.tgz#0e3f2670b44099b0b46c284d136a7ef49c74c2ea"
 
 type-is@~1.6.15:
   version "1.6.15"

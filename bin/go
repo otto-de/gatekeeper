@@ -1,36 +1,49 @@
 #!/usr/bin/env bash
 BASE_DIR="$( dirname "${0}" )"
 
-runTests() {
-   ${BASE_DIR}/../run-tests.sh
-   if [ "$?" -ne 0 ]; then
-        echo -e '\E[30;41m'
+showBuildflag(){
+    if [ "$?" -ne 0 ]; then
+        echo -e '\x1b[30;41m'
         cat $BASE_DIR/buildflags/failed.txt
-        echo -e '\E[0m'
+        echo -e '\x1b[0m'
         exit 1
     else
-        echo -e '\E[30;42m'
+        echo -e '\x1b[30;42m'
         cat $BASE_DIR/buildflags/passed.txt
-        echo -e '\E[0m'
-        exit 0
+        echo -e '\x1b[0m'
     fi
 }
 
-if [ -z "$@" ]; then
-    runTests
-else
-    case "$@" in
-        "run")
-            ${BASE_DIR}/../run.sh -v
-            ;;
-        "check" | "test")
-            runTests
-            ;;
-        "deps")
-            ${BASE_DIR}/../setup.sh
-            ;;
-        "docs")
-            ${BASE_DIR}/../docs/build.sh
-            ;;
-        esac
-fi
+runAllTests() {
+   ${BASE_DIR}/../run-tests.sh
+   showBuildflag
+   cd ${BASE_DIR}/../frontend/
+   export CI=true
+   yarn test
+   showBuildflag
+}
+
+case "$@" in
+    "run")
+        ${BASE_DIR}/../run.py -v WARN
+        ;;
+    "" | "check" | "test")
+        runAllTests
+        ;;
+    "deps" | "setup")
+        ${BASE_DIR}/../setup.sh
+        ;;
+    "docs")
+        ${BASE_DIR}/../docs/build.sh
+        ;;
+    "front run" | "fr")
+        cd ${BASE_DIR}/../frontend/
+        yarn start
+        ;;
+    "front test" | "ft")
+        cd ${BASE_DIR}/../frontend/
+        yarn test
+        ;;
+    esac
+
+

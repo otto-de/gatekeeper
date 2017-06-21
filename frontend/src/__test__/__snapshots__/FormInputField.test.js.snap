@@ -1,0 +1,31 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FormInputField component should contain all components 1`] = `
+<div
+  className="form-group"
+>
+  <label
+    className="control-label"
+    htmlFor="someInputField"
+  >
+    someLabel
+  </label>
+  <div
+    className=""
+  >
+    <input
+      className="form-control"
+      id="someInputField"
+      name="someInputField"
+      onBlur={[Function]}
+      onChange={[Function]}
+      onDragStart={[Function]}
+      onDrop={[Function]}
+      onFocus={[Function]}
+      placeholder="somePlaceholder"
+      type="text"
+      value=""
+    />
+  </div>
+</div>
+`;

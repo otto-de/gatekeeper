@@ -45,15 +45,31 @@ exports[`Gate component should contain all components 1`] = `
       className="col-md-10 col-xs-10"
     >
       <div
-        className="form-group"
+        className="row"
       >
-        <textarea
-          className="form-control"
-          id="formControlsTextarea"
-          placeholder=""
-          type={undefined}
-          value="comment 1"
-        />
+        <div
+          className="panel panel-default"
+          id={undefined}
+          onClick={undefined}
+        >
+          <div
+            className="panel-body"
+          >
+            comment 1
+          </div>
+        </div>
+      </div>
+      <div
+        className="row"
+      >
+        <button
+          className="btn btn-xs btn-info"
+          disabled={false}
+          onClick={[Function]}
+          type="button"
+        >
+          edit comment
+        </button>
       </div>
     </div>
   </div>
@@ -149,15 +165,31 @@ exports[`load from state should load the state correctly 1`] = `
       className="col-md-10 col-xs-10"
     >
       <div
-        className="form-group"
+        className="row"
       >
-        <textarea
-          className="form-control"
-          id="formControlsTextarea"
-          placeholder=""
-          type={undefined}
-          value="some comment"
-        />
+        <div
+          className="panel panel-default"
+          id={undefined}
+          onClick={[Function]}
+        >
+          <div
+            className="panel-body"
+          >
+            some comment
+          </div>
+        </div>
+      </div>
+      <div
+        className="row"
+      >
+        <button
+          className="btn btn-xs btn-info"
+          disabled={false}
+          onClick={[Function]}
+          type="button"
+        >
+          edit comment
+        </button>
       </div>
     </div>
   </div>
