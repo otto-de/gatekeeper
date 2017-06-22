@@ -43,6 +43,11 @@ exports[`Gate component should contain all components 1`] = `
     </div>
     <div
       className="col-md-2 col-xs-2"
+      style={
+        Object {
+          "marginLeft": "-45px",
+        }
+      }
     >
       <div
         className="form-group"
@@ -155,6 +160,11 @@ exports[`load from state should load the state correctly 1`] = `
     </div>
     <div
       className="col-md-2 col-xs-2"
+      style={
+        Object {
+          "marginLeft": "-45px",
+        }
+      }
     >
       <div
         className="form-group"

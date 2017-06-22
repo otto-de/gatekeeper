@@ -89,7 +89,7 @@ export class Gate extends React.Component {
                             <AutoState isOpen={auto_state}/>
                         </Row>
                     </Col>
-                    <Col xs={2} md={2}>
+                    <Col xs={2} md={2} style={{marginLeft: '-45px'}}>
                         <CommentDialog group={this.props.group}
                                        service={this.props.service}
                                        environment={this.props.environment}
