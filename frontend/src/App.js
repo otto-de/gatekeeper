@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import Service from './Service';
+import Group from './Group';
 import './App.css';
 
 export class App extends Component {
     render() {
         return (
-            <Service group="group" service="service"/>
+            <Group group="group"/>
         );
     }
 }

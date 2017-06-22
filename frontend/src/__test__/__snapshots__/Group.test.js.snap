@@ -1,0 +1,39 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Group component render 1`] = `
+<div>
+  <div
+    style={
+      Object {
+        "marginBottom": "20px",
+      }
+    }
+  />
+  <div
+    style={
+      Object {
+        "marginBottom": "20px",
+      }
+    }
+  />
+  <div
+    style={
+      Object {
+        "marginBottom": "20px",
+      }
+    }
+  />
+</div>
+`;
+
+exports[`load from state should load the state correctly 1`] = `
+<div>
+  <div
+    style={
+      Object {
+        "marginBottom": "20px",
+      }
+    }
+  />
+</div>
+`;
