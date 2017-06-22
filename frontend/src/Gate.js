@@ -9,14 +9,18 @@ import {
     Row,
     Col,
     Glyphicon,
-    Panel
+    FormGroup,
+    FormControl
 } from 'react-bootstrap';
 import {removeTicket, setManualState, setCommentEditDialog} from './reducers/gates';
 import CommentDialog from './CommentDialog';
 
 export function ManuelState({isOpen, onManualStateClick}) {
-    return <Button bsStyle={isOpen ? 'success' : 'danger'}
-                   onClick={() => onManualStateClick(!isOpen)}>{isOpen ? 'Open' : 'Closed'}</Button>;
+    return (
+        <Button bsStyle={isOpen ? 'success' : 'danger'} onClick={() => onManualStateClick(!isOpen)}>
+            {isOpen ? 'Open' : 'Closed'}
+        </Button>
+    );
 }
 
 export function LastModified({last_modified}) {
@@ -24,29 +28,45 @@ export function LastModified({last_modified}) {
 }
 
 export function AutoState({isOpen}) {
-    return <h4><Label bsStyle={isOpen ? 'success' : 'danger'}>{isOpen ? 'Open' : 'Closed'}</Label></h4>;
+    return (
+        <h4>
+            <Label bsStyle={isOpen ? 'success' : 'danger'}>
+                {isOpen ? 'Open' : 'Closed'}
+            </Label>
+        </h4>
+    );
 }
 
 export function Comment({openCommentEditDialog, comment}) {
     return (
-        <Panel onClick={openCommentEditDialog}>
-            {comment}
-        </Panel>
+        <FormGroup controlId="formControlsTextarea">
+            <FormControl componentClass="textarea" value={comment} onClick={openCommentEditDialog}/>
+        </FormGroup>
     );
 }
 
-
 export function EditComment({openCommentEditDialog}) {
-    return <Button bsStyle='info' bsSize='xsmall'
-                   onClick={() => openCommentEditDialog()}>edit comment</Button>;
+    return (
+        <Button bsStyle='info' bsSize='xsmall' onClick={() => openCommentEditDialog()}>
+            edit comment
+        </Button>
+    );
 }
 
 export function Tickets({tickets, onTicketRemoveClick}) {
     return (
         <Grid>
             {tickets.map(ticket => {
-                return <Row key={ticket}><Col>{ticket}<a onClick={() => onTicketRemoveClick(ticket)}><Glyphicon
-                    glyph='trash'/></a></Col></Row>;
+                return (
+                    <Row key={ticket}>
+                        <Col>
+                            {ticket}
+                            <a onClick={() => onTicketRemoveClick(ticket)}>
+                                <Glyphicon glyph='trash'/>
+                            </a>
+                        </Col>
+                    </Row>
+                );
             })}
         </Grid>
     );
@@ -54,11 +74,11 @@ export function Tickets({tickets, onTicketRemoveClick}) {
 
 export class Gate extends React.Component {
     render() {
-        const {manual_state, auto_state, comment, tickets, last_modified, onTicketRemoveClick, onManualStateClick, openCommentEditDialog, handleSubmit} = this.props;
+        const {manual_state, auto_state, comment, tickets, last_modified, onTicketRemoveClick, onManualStateClick, openCommentEditDialog} = this.props;
         return (
             <Grid>
                 <Row>
-                    <Col xs={2} md={2}>
+                    <Col xs={1} md={1}>
                         <Row>
                             <ManuelState isOpen={manual_state} onManualStateClick={onManualStateClick}/>
                         </Row>
@@ -69,17 +89,14 @@ export class Gate extends React.Component {
                             <AutoState isOpen={auto_state}/>
                         </Row>
                     </Col>
-                    <Col xs={10} md={10}>
-                        <Row>
-                            <CommentDialog group={this.props.group}
-                                           service={this.props.service}
-                                           environment={this.props.environment}
-                                           comment={comment}/>
-                            <Comment openCommentEditDialog={openCommentEditDialog} comment={comment}/>
-                        </Row>
-                        <Row>
-                            <EditComment openCommentEditDialog={openCommentEditDialog}/>
-                        </Row>
+                    <Col xs={2} md={2}>
+                        <CommentDialog group={this.props.group}
+                                       service={this.props.service}
+                                       environment={this.props.environment}
+                                       comment={comment}/>
+                        <Comment openCommentEditDialog={openCommentEditDialog}
+                                 comment={comment}/>
+                        <EditComment openCommentEditDialog={openCommentEditDialog}/>
                     </Col>
                 </Row>
                 <Row>
