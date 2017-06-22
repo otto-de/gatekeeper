@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import Gate from './Gate';
+import Service from './Service';
 import './App.css';
 
 export class App extends Component {
     render() {
         return (
-            <Gate group="group" service="service" environment="environment"/>
+            <Service group="group" service="service"/>
         );
     }
 }
