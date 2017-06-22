@@ -8,7 +8,7 @@ exports[`Gate component should contain all components 1`] = `
     className="row"
   >
     <div
-      className="col-md-2 col-xs-2"
+      className="col-md-1 col-xs-1"
     >
       <div
         className="row"
@@ -42,35 +42,27 @@ exports[`Gate component should contain all components 1`] = `
       </div>
     </div>
     <div
-      className="col-md-10 col-xs-10"
+      className="col-md-2 col-xs-2"
     >
       <div
-        className="row"
+        className="form-group"
       >
-        <div
-          className="panel panel-default"
-          id={undefined}
-          onClick={undefined}
-        >
-          <div
-            className="panel-body"
-          >
-            comment 1
-          </div>
-        </div>
-      </div>
-      <div
-        className="row"
-      >
-        <button
-          className="btn btn-xs btn-info"
-          disabled={false}
+        <textarea
+          className="form-control"
+          id="formControlsTextarea"
           onClick={[Function]}
-          type="button"
-        >
-          edit comment
-        </button>
+          type={undefined}
+          value="comment 1"
+        />
       </div>
+      <button
+        className="btn btn-xs btn-info"
+        disabled={false}
+        onClick={[Function]}
+        type="button"
+      >
+        edit comment
+      </button>
     </div>
   </div>
   <div
@@ -128,7 +120,7 @@ exports[`load from state should load the state correctly 1`] = `
     className="row"
   >
     <div
-      className="col-md-2 col-xs-2"
+      className="col-md-1 col-xs-1"
     >
       <div
         className="row"
@@ -162,35 +154,27 @@ exports[`load from state should load the state correctly 1`] = `
       </div>
     </div>
     <div
-      className="col-md-10 col-xs-10"
+      className="col-md-2 col-xs-2"
     >
       <div
-        className="row"
+        className="form-group"
       >
-        <div
-          className="panel panel-default"
-          id={undefined}
+        <textarea
+          className="form-control"
+          id="formControlsTextarea"
           onClick={[Function]}
-        >
-          <div
-            className="panel-body"
-          >
-            some comment
-          </div>
-        </div>
+          type={undefined}
+          value="some comment"
+        />
       </div>
-      <div
-        className="row"
+      <button
+        className="btn btn-xs btn-info"
+        disabled={false}
+        onClick={[Function]}
+        type="button"
       >
-        <button
-          className="btn btn-xs btn-info"
-          disabled={false}
-          onClick={[Function]}
-          type="button"
-        >
-          edit comment
-        </button>
-      </div>
+        edit comment
+      </button>
     </div>
   </div>
   <div

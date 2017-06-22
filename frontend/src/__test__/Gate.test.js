@@ -1,11 +1,14 @@
 import React from 'react';
-import ConnectedGate, {Gate, ManuelState, AutoState, Comment, Tickets, LastModified}  from '../Gate';
+import ConnectedGate, {AutoState, Comment, Gate, LastModified, ManuelState, Tickets} from '../Gate';
 import renderer from 'react-test-renderer';
 import {mount} from 'enzyme';
 import {MockStore} from './mockStore';
 import {Provider} from 'react-redux';
 
 jest.mock('../CommentDialog');
+
+function fnDummy() {
+}
 
 describe('Gate component', () => {
     it('should contain all components', () => {
@@ -16,7 +19,10 @@ describe('Gate component', () => {
                                                 manual_state={true}
                                                 auto_state={true}
                                                 tickets={['ticket 1', 'ticket 2']}
-                                                last_modified='some time ago'/>);
+                                                last_modified='some time ago'
+                                                onTicketRemoveClick={fnDummy}
+                                                onManualStateClick={fnDummy}
+                                                openCommentEditDialog={fnDummy}/>);
         let tree = component.toJSON();
         expect(tree).toMatchSnapshot();
     });
@@ -58,9 +64,9 @@ describe('Gate component', () => {
         expect(tickets.at(1).text()).toEqual('ticket 2');
     });
 
-    it('should display last modified', ()=> {
-       const component = mount(<LastModified last_modified='now'/>);
-        expect(component.text()).toEqual('now')
+    it('should display last modified', () => {
+        const component = mount(<LastModified last_modified='now'/>);
+        expect(component.text()).toEqual('now');
     });
 });
 
