@@ -2,6 +2,7 @@
   "name": "gatekeeper",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://localhost:5000",
   "dependencies": {
     "prop-types": "^15.5.10",
     "ramda": "^0.24.1",
