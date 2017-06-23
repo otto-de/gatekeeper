@@ -1,49 +1,60 @@
 #!/usr/bin/env bash
-BASE_DIR="$( dirname "${0}" )"
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 showBuildflag(){
     if [ "$?" -ne 0 ]; then
         echo -e '\x1b[30;41m'
-        cat $BASE_DIR/buildflags/failed.txt
+        cat ${SCRIPT_DIR}/buildflags/failed.txt
         echo -e '\x1b[0m'
         exit 1
     else
         echo -e '\x1b[30;42m'
-        cat $BASE_DIR/buildflags/passed.txt
+        cat ${SCRIPT_DIR}/buildflags/passed.txt
         echo -e '\x1b[0m'
     fi
 }
 
 runAllTests() {
-   ${BASE_DIR}/../run-tests.sh
-   showBuildflag
-   cd ${BASE_DIR}/../frontend/
-   export CI=true
-   yarn test
-   showBuildflag
+    ${SCRIPT_DIR}/../run-tests.sh
+    showBuildflag
+    frontendTests
+    showBuildflag
+}
+
+frontendDir(){
+    cd ${SCRIPT_DIR}/../frontend/
+}
+
+frontendTests(){
+    frontendDir
+    export CI=true
+    yarn test
 }
 
 case "$@" in
     "run")
-        ${BASE_DIR}/../run.py -v WARN
+        ${SCRIPT_DIR}/../run.py -v WARN
         ;;
     "" | "check" | "test")
         runAllTests
         ;;
-    "deps" | "setup")
-        ${BASE_DIR}/../setup.sh
+    "install" | "i")
+        ${SCRIPT_DIR}/../setup.sh
         ;;
     "docs")
-        ${BASE_DIR}/../docs/build.sh
+        ${SCRIPT_DIR}/../docs/build.sh
         ;;
     "front run" | "fr")
-        cd ${BASE_DIR}/../frontend/
+        frontendDir
         yarn start
         ;;
     "front test" | "ft")
-        cd ${BASE_DIR}/../frontend/
-        yarn test
+        frontendTests
         ;;
-    esac
+    "front install" | "fi")
+        frontendDir
+        yarn install
+        ;;
+esac
 
 
