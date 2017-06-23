@@ -8,6 +8,10 @@
   },
   "scripts": {
     "start": "node index.js",
-    "prestart": "cd ../frontend && yarn --production=false && yarn run build"
+    "prestart": "cd ../frontend && yarn --production=false && yarn run build",
+    "test": "jest"
+  },
+  "devDependencies": {
+    "jest-cli": "^20.0.4"
   }
 }
