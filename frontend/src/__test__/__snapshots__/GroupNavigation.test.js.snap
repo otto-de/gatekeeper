@@ -1,0 +1,153 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`GroupNavigation component render 1`] = `
+<div
+  className={undefined}
+  id="controlled"
+  style={undefined}
+>
+  <ul
+    className="nav nav-tabs"
+    role="tablist"
+  >
+    <li
+      className="active"
+      role="presentation"
+      style={undefined}
+    >
+      <a
+        aria-controls="controlled-pane-0"
+        aria-selected={true}
+        href="#"
+        id="controlled-tab-0"
+        onClick={[Function]}
+        onKeyDown={[Function]}
+        role="tab"
+        tabIndex={undefined}
+      >
+        group1
+      </a>
+    </li>
+    <li
+      className=""
+      role="presentation"
+      style={undefined}
+    >
+      <a
+        aria-controls="controlled-pane-1"
+        aria-selected={false}
+        href="#"
+        id="controlled-tab-1"
+        onClick={[Function]}
+        onKeyDown={[Function]}
+        role="tab"
+        tabIndex={-1}
+      >
+        group2
+      </a>
+    </li>
+  </ul>
+  <div
+    className="tab-content"
+  >
+    <div
+      aria-hidden={false}
+      aria-labelledby="controlled-tab-0"
+      className="tab-pane active fade in"
+      id="controlled-pane-0"
+      role="tabpanel"
+    >
+      <Group
+        group="group1"
+      />
+    </div>
+    <div
+      aria-hidden={true}
+      aria-labelledby="controlled-tab-1"
+      className="tab-pane fade"
+      id="controlled-pane-1"
+      role="tabpanel"
+    >
+      <Group
+        group="group2"
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`load from state should load the state correctly 1`] = `
+<div
+  className={undefined}
+  id="controlled"
+  style={undefined}
+>
+  <ul
+    className="nav nav-tabs"
+    role="tablist"
+  >
+    <li
+      className="active"
+      role="presentation"
+      style={undefined}
+    >
+      <a
+        aria-controls="controlled-pane-0"
+        aria-selected={true}
+        href="#"
+        id="controlled-tab-0"
+        onClick={[Function]}
+        onKeyDown={[Function]}
+        role="tab"
+        tabIndex={undefined}
+      >
+        ftx
+      </a>
+    </li>
+    <li
+      className=""
+      role="presentation"
+      style={undefined}
+    >
+      <a
+        aria-controls="controlled-pane-1"
+        aria-selected={false}
+        href="#"
+        id="controlled-tab-1"
+        onClick={[Function]}
+        onKeyDown={[Function]}
+        role="tab"
+        tabIndex={-1}
+      >
+        fty
+      </a>
+    </li>
+  </ul>
+  <div
+    className="tab-content"
+  >
+    <div
+      aria-hidden={false}
+      aria-labelledby="controlled-tab-0"
+      className="tab-pane active fade in"
+      id="controlled-pane-0"
+      role="tabpanel"
+    >
+      <Group
+        group="ftx"
+      />
+    </div>
+    <div
+      aria-hidden={true}
+      aria-labelledby="controlled-tab-1"
+      className="tab-pane fade"
+      id="controlled-pane-1"
+      role="tabpanel"
+    >
+      <Group
+        group="fty"
+      />
+    </div>
+  </div>
+</div>
+`;

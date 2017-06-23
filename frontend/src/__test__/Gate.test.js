@@ -52,7 +52,7 @@ describe('Gate component', () => {
     });
 
     it('the comment field contains the given comment', () => {
-        const component = mount(<Comment comment='some comment'/>);
+        const component = mount(<Comment comment='some comment' openCommentEditDialog={jest.fn()}/>);
         expect(component.text()).toEqual('some comment');
     });
 

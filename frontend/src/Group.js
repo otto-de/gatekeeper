@@ -5,6 +5,7 @@ import {connect} from 'react-redux';
 import Service from './Service';
 
 export function Services({group, services}) {
+    console.log(services)
     return (
         <div key={`${group}`}>
             {R.map((service) => {
@@ -41,6 +42,7 @@ const defaultValues = {
 
 const mapStateToProps = (state, initialProps) => {
     const gate_from_state = R.path(['gates', initialProps.group])(state);
+    console.log("yada:"+gate_from_state)
     const services = {
         services: Object.keys(gate_from_state)
     };
