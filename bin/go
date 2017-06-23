@@ -14,35 +14,48 @@ showBuildflag(){
     fi
 }
 
-runAllTests() {
-    ${SCRIPT_DIR}/../run-tests.sh
-    showBuildflag
-    frontendTests
-    showBuildflag
-}
-
 frontendDir(){
     cd ${SCRIPT_DIR}/../frontend/
 }
 
-frontendTests(){
-    frontendDir
+backendDir(){
+    cd ${SCRIPT_DIR}/../backend/
+}
+
+tests(){
     export CI=true
     yarn test
+    showBuildflag
+}
+
+runAllTests() {
+    frontendDir
+    tests
+    backendDir
+    tests
 }
 
 case "$@" in
-    "run")
-        ${SCRIPT_DIR}/../run.py -v WARN
-        ;;
     "" | "check" | "test")
         runAllTests
         ;;
-    "install" | "i")
-        ${SCRIPT_DIR}/../setup.sh
+    "run")
+        backendDir
+        yarn start
         ;;
-    "docs")
-        ${SCRIPT_DIR}/../docs/build.sh
+    "install" | "i")
+        backendDir
+        yarn install
+        frontendDir
+        yarn install
+        ;;
+    "back test" | "bt")
+        backendDir
+        test
+        ;;
+    "back install" | "bi")
+        backendDir
+        yarn install
         ;;
     "front run" | "fr")
         frontendDir
