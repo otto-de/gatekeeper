@@ -1,6 +1,0 @@
-WTF_CSRF_ENABLED = True
-SECRET_KEY = 'you-will-never-guess'
-
-# In minutes
-CURRENT_TICKET_LIFETIME = 720
-QUEUED_TICKET_LIFETIME = 2
