@@ -28,6 +28,12 @@ tests(){
     showBuildflag
 }
 
+tests-update(){
+    export CI=true
+    yarn test -- -u
+    showBuildflag
+}
+
 runAllTests() {
     frontendDir
     tests
@@ -62,7 +68,12 @@ case "$@" in
         yarn start
         ;;
     "front test" | "ft")
-        frontendTests
+        frontendDir
+        tests
+        ;;
+    "front test update" | "ftu")
+        frontendDir
+        tests-update
         ;;
     "front install" | "fi")
         frontendDir
