@@ -1,0 +1,65 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Header component render 1`] = `
+<nav
+  className="navbar navbar-default"
+>
+  <div
+    className="container"
+  >
+    <div
+      className="navbar-header"
+    >
+      <span
+        className="navbar-brand"
+      >
+        Gatekeeper
+      </span>
+      <ul
+        className="nav navbar-nav"
+        role={null}
+      >
+        <li
+          className=""
+          role="presentation"
+          style={undefined}
+        >
+          <a
+            href="#"
+            onClick={[Function]}
+            role="button"
+          >
+            link1
+          </a>
+        </li>
+        <li
+          className=""
+          role="presentation"
+          style={undefined}
+        >
+          <a
+            href="#"
+            onClick={[Function]}
+            role="button"
+          >
+            link2
+          </a>
+        </li>
+        <li
+          className=""
+          role="presentation"
+          style={undefined}
+        >
+          <a
+            href="#"
+            onClick={[Function]}
+            role="button"
+          >
+            link3
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+`;
