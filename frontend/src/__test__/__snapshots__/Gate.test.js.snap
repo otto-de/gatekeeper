@@ -55,7 +55,8 @@ exports[`Gate component should contain all components 1`] = `
         <textarea
           className="form-control"
           id="formControlsTextarea"
-          onClick={[Function]}
+          onChange={[Function]}
+          onClick="openCommentEditDialog"
           type={undefined}
           value="comment 1"
         />
@@ -172,6 +173,7 @@ exports[`load from state should load the state correctly 1`] = `
         <textarea
           className="form-control"
           id="formControlsTextarea"
+          onChange={[Function]}
           onClick={[Function]}
           type={undefined}
           value="some comment"

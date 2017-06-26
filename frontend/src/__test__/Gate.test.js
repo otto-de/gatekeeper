@@ -7,9 +7,6 @@ import {Provider} from 'react-redux';
 
 jest.mock('../CommentDialog');
 
-function fnDummy() {
-}
-
 describe('Gate component', () => {
     it('should contain all components', () => {
         const component = renderer.create(<Gate group='group'
@@ -20,9 +17,9 @@ describe('Gate component', () => {
                                                 auto_state={true}
                                                 tickets={['ticket 1', 'ticket 2']}
                                                 last_modified='some time ago'
-                                                onTicketRemoveClick={fnDummy}
-                                                onManualStateClick={fnDummy}
-                                                openCommentEditDialog={fnDummy}/>);
+                                                onTicketRemoveClick={'onTicketRemoveClick'}
+                                                onManualStateClick={'onManualStateClick'}
+                                                openCommentEditDialog={'openCommentEditDialog'}/>);
         let tree = component.toJSON();
         expect(tree).toMatchSnapshot();
     });
