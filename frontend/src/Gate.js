@@ -14,6 +14,7 @@ import {
 } from 'react-bootstrap';
 import {removeTicket, setManualState, setCommentEditDialog} from './reducers/gates';
 import CommentDialog from './CommentDialog';
+import './Gate.sass';
 
 export function ManuelState({isOpen, onManualStateClick}) {
     return (
@@ -89,7 +90,7 @@ export class Gate extends React.Component {
                             <AutoState isOpen={auto_state}/>
                         </Row>
                     </Col>
-                    <Col xs={2} md={2} style={{marginLeft: '-45px'}}>
+                    <Col xs={2} md={2} className="gate">
                         <CommentDialog group={this.props.group}
                                        service={this.props.service}
                                        environment={this.props.environment}

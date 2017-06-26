@@ -14,15 +14,18 @@
     "redux-form": "^6.8.0"
   },
   "devDependencies": {
-    "sinon": "^2.3.5",
     "enzyme": "^2.8.2",
     "eslint": "^4.0.0",
+    "node-sass-chokidar": "^0.0.3",
     "react-scripts": "1.0.7",
-    "react-test-renderer": "^15.5.4"
+    "react-test-renderer": "^15.5.4",
+    "sinon": "^2.3.5"
   },
   "scripts": {
+    "build-css": "node-sass-chokidar --include-path ./src --include-path ./node_modules src/ -o src/",
+    "watch-css": "npm run build-css && node-sass-chokidar --include-path ./src --include-path ./node_modules src/ -o src/ --watch --recursive",
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "npm run build-css && react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   }
