@@ -1,0 +1,55 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Toolbar component render 1`] = `
+<div
+  className="btn-toolbar"
+  role="toolbar"
+  style={
+    Object {
+      "margin": "5px",
+    }
+  }
+>
+  <button
+    className="btn btn-info"
+    disabled={false}
+    type="button"
+  >
+    Add Gate
+  </button>
+  <button
+    className="btn btn-info"
+    disabled={false}
+    type="button"
+  >
+    Edit Holidays
+  </button>
+</div>
+`;
+
+exports[`Toolbar load from state should load the state correctly 1`] = `
+<div
+  className="btn-toolbar"
+  role="toolbar"
+  style={
+    Object {
+      "margin": "5px",
+    }
+  }
+>
+  <button
+    className="btn btn-info"
+    disabled={false}
+    type="button"
+  >
+    Add Gate
+  </button>
+  <button
+    className="btn btn-info"
+    disabled={false}
+    type="button"
+  >
+    Edit Holidays
+  </button>
+</div>
+`;

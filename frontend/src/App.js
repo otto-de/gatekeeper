@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 import GroupNavigation from './GroupNavigation';
 import Header from './Header';
 import './App.css';
+import Toolbar from './Toolbar';
 
 export class App extends Component {
     render() {
@@ -10,6 +11,7 @@ export class App extends Component {
         return (
             <div>
                 <Header links={links}/>
+                <Toolbar/>
                 <GroupNavigation/>
             </div>
         );
