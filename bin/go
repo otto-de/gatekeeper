@@ -34,7 +34,7 @@ tests-update(){
     showBuildflag
 }
 
-runAllTests() {
+runAllTests(){
     frontendDir
     tests
     backendDir
@@ -45,22 +45,26 @@ case "$@" in
     "" | "check" | "test")
         runAllTests
         ;;
-    "run")
-        backendDir
-        yarn start
-        ;;
     "install" | "i")
         backendDir
         yarn install
         frontendDir
         yarn install
         ;;
+    "back install" | "bi")
+        backendDir
+        yarn install
+        ;;
     "back test" | "bt")
         backendDir
         test
         ;;
-    "back install" | "bi")
+    "run")
         backendDir
+        yarn start
+        ;;
+    "front install" | "fi")
+        frontendDir
         yarn install
         ;;
     "front run" | "fr")
@@ -75,9 +79,9 @@ case "$@" in
         frontendDir
         tests-update
         ;;
-    "front install" | "fi")
+    "front sass" | "fs")
         frontendDir
-        yarn install
+        yarn build-css
         ;;
 esac
 
