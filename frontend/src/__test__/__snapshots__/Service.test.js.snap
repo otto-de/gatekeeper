@@ -11,6 +11,13 @@ exports[`Service component render 1`] = `
       className="col-md-1 col-xs-1"
     >
       service
+      <a
+        onClick={[Function]}
+      >
+        <span
+          className="glyphicon glyphicon-pencil"
+        />
+      </a>
     </div>
     <div>
       <div
@@ -38,6 +45,13 @@ exports[`load from state should load the state correctly 1`] = `
       className="col-md-1 col-xs-1"
     >
       gatekeeper
+      <a
+        onClick={[Function]}
+      >
+        <span
+          className="glyphicon glyphicon-pencil"
+        />
+      </a>
     </div>
     <div>
       <div

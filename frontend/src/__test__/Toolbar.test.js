@@ -2,11 +2,11 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 import {MockStore} from './mockStore';
 import {Provider} from 'react-redux';
-import Toolbar from '../Toolbar';
+import ConnectedToolbar, {Toolbar} from '../Toolbar';
 
 describe('Toolbar component', () => {
     it('render', () => {
-        const component = renderer.create(<Toolbar/>);
+        const component = renderer.create(<Toolbar openEditGateDialog="openEditGateDialog"/>);
         let tree = component.toJSON();
         expect(tree).toMatchSnapshot();
     });
@@ -27,7 +27,7 @@ describe('Toolbar load from state', () => {
 
         const subject = (
             <Provider store={storeMock}>
-                <Toolbar/>
+                <ConnectedToolbar/>
             </Provider>);
         const component = renderer.create(subject);
         const tree = component.toJSON();

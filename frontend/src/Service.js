@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import R from 'ramda';
 import {connect} from 'react-redux';
-import {Col, Grid, Row} from 'react-bootstrap';
+import {Col, Grid, Row, Glyphicon} from 'react-bootstrap';
+import {openEditServiceDialog} from './reducers/dialog';
 import Gate from './Gate';
 
 export function Gates({group, service, environments}) {
@@ -24,12 +25,15 @@ export function Gates({group, service, environments}) {
 
 export class Service extends React.Component {
     render() {
-        const {group, service, environments} = this.props;
+        const {group, service, environments, openEditServiceDialog} = this.props;
         return (
             <Grid fluid={true}>
                 <Row>
                     <Col xs={1} md={1}>
                         {service}
+                        <a onClick={() => openEditServiceDialog()}>
+                            <Glyphicon glyph='pencil'/>
+                        </a>
                     </Col>
                     <Gates group={group} service={service}
                            environments={environments}/>
@@ -59,4 +63,12 @@ const mapStateToProps = (state, initialProps) => {
     return R.mergeAll([defaultValues, initialProps, environments]);
 };
 
-export default connect(mapStateToProps)(Service);
+const mapDispatchToProps = (dispatch, initialProps) => {
+    return {
+        openEditServiceDialog: () => {
+            dispatch(openEditServiceDialog(initialProps.group, initialProps.service));
+        }
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Service);

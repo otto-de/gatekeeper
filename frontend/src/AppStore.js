@@ -5,6 +5,9 @@ const initialState = {
     tabs: {
         active_tab: 0
     },
+    dialog: {
+
+    },
     gates: {
         group1: {
             service: {

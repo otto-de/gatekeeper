@@ -4,6 +4,7 @@ import GroupNavigation from './GroupNavigation';
 import Header from './Header';
 import './App.css';
 import Toolbar from './Toolbar';
+import EditGateDialog from './EditServiceDialog';
 
 export class App extends Component {
     render() {
@@ -12,6 +13,7 @@ export class App extends Component {
             <div>
                 <Header links={links}/>
                 <Toolbar/>
+                <EditGateDialog/>
                 <GroupNavigation/>
             </div>
         );

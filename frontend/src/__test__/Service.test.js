@@ -12,7 +12,9 @@ describe('Service component', () => {
     it('render', () => {
         const component = renderer.create(<Service group='group'
                                                    service='service'
-                                                   environments={['environment1', 'environment2', 'environment3']}/>);
+                                                   environments={['environment1', 'environment2', 'environment3']}
+                                                   openEditServiceDialog='openEditServiceDialog'
+                                                   setService='setService'/>);
         let tree = component.toJSON();
         expect(tree).toMatchSnapshot();
     });
