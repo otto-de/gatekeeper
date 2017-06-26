@@ -14,7 +14,7 @@ import {
 } from 'react-bootstrap';
 import {removeTicket, setManualState, setCommentEditDialog} from './reducers/gates';
 import CommentDialog from './CommentDialog';
-import './Gate.sass';
+import './Gate.css';
 
 export function ManuelState({isOpen, onManualStateClick}) {
     return (
