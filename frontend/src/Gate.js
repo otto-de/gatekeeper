@@ -40,7 +40,7 @@ export function AutoState({isOpen}) {
 export function Comment({openCommentEditDialog, comment}) {
     return (
         <FormGroup controlId="formControlsTextarea">
-            <FormControl componentClass="textarea" value={comment} onClick={openCommentEditDialog}/>
+            <FormControl componentClass="textarea" value={comment} onClick={openCommentEditDialog} onChange={()=>{}}/>
         </FormGroup>
     );
 }

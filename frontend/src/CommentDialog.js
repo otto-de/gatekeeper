@@ -32,7 +32,8 @@ export class CommentDialog extends React.Component {
         return (
             <Modal show={show_comment_edit_dialog} onHide={() => closeCommentEditDialog()}>
                 <Modal.Body>
-                    {<ConnectedCommentForm onSubmit={setComment} closeCommentEditDialog={closeCommentEditDialog}
+                    {<ConnectedCommentForm onSubmit={setComment}
+                                           closeCommentEditDialog={closeCommentEditDialog}
                                            initialValues={{comment: comment}}/>}
                 </Modal.Body>
             </Modal>
