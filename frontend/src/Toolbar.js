@@ -1,10 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import R from 'ramda';
-import {connect} from 'react-redux';
-import {reduxForm} from 'redux-form';
-import {ButtonToolbar, Button, Modal} from 'react-bootstrap';
-import {FormInputField} from './FormInputField';
+import {ButtonToolbar, Button} from 'react-bootstrap';
 
 export class Toolbar extends React.Component {
     render() {
