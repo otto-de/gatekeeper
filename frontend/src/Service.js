@@ -31,7 +31,8 @@ export class Service extends React.Component {
                 <Row>
                     <Col xs={1} md={1}>
                         {service}
-                        <a onClick={() => openEditServiceDialog()}>
+                        <a className='glyp-button'
+                           onClick={() => openEditServiceDialog()}>
                             <Glyphicon glyph='pencil'/>
                         </a>
                     </Col>

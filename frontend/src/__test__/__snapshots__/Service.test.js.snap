@@ -12,6 +12,7 @@ exports[`Service component render 1`] = `
     >
       service
       <a
+        className="glyp-button"
         onClick={[Function]}
       >
         <span
@@ -46,6 +47,7 @@ exports[`load from state should load the state correctly 1`] = `
     >
       gatekeeper
       <a
+        className="glyp-button"
         onClick={[Function]}
       >
         <span

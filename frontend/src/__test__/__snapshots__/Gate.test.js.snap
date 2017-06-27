@@ -2,111 +2,97 @@
 
 exports[`Gate component should contain all components 1`] = `
 <div
-  className="container"
+  className="gate well well-sm"
 >
-  <div
-    className="row"
-  >
-    <div
-      className="col-md-1 col-xs-1"
+  <div>
+    <span
+      className="text-success glyphicon glyphicon-chevron-right"
+    />
+    <button
+      className="btn btn-success"
+      disabled={false}
+      onBlur={[Function]}
+      onClick={[Function]}
+      onFocus={[Function]}
+      onMouseOut={[Function]}
+      onMouseOver={[Function]}
+      type="button"
     >
-      <div
-        className="row"
-      >
-        <button
-          className="btn btn-success"
-          disabled={false}
-          onClick={[Function]}
-          type="button"
-        >
-          Open
-        </button>
-      </div>
-      <div
-        className="row"
-      >
-        <div>
-          some time ago
-        </div>
-      </div>
-      <div
-        className="row"
-      >
-        <h4>
-          <span
-            className="label label-success"
-          >
-            Open
-          </span>
-        </h4>
-      </div>
-    </div>
+      Open
+    </button>
+    <span
+      className="text-success glyphicon glyphicon-chevron-right"
+    />
     <div
-      className="gate col-md-2 col-xs-2"
+      className="auto-state-button-div"
+      onBlur={[Function]}
+      onClick={null}
+      onFocus={[Function]}
+      onMouseOut={[Function]}
+      onMouseOver={[Function]}
     >
-      <div
-        className="form-group"
-      >
-        <textarea
-          className="form-control"
-          id="formControlsTextarea"
-          onChange={[Function]}
-          onClick="openCommentEditDialog"
-          type={undefined}
-          value="comment 1"
-        />
-      </div>
       <button
-        className="btn btn-xs btn-info"
-        disabled={false}
-        onClick={[Function]}
+        className="auto-state-button btn btn-success"
+        disabled={true}
         type="button"
       >
-        edit comment
+        Open
       </button>
+    </div>
+    <span
+      className="text-success glyphicon glyphicon-chevron-right"
+    />
+  </div>
+  <div>
+    <div
+      className="comment "
+    >
+      comment 1
+      <a
+        className="glyp-button"
+        onClick={[Function]}
+      >
+        <span
+          className="glyphicon glyphicon-pencil"
+        />
+      </a>
     </div>
   </div>
   <div
-    className="row"
+    className="container"
   >
     <div
-      className=""
+      className="row"
     >
       <div
-        className="container"
+        className=""
       >
-        <div
-          className="row"
+        ticket 1
+        <a
+          className="glyp-button"
+          onClick={[Function]}
         >
-          <div
-            className=""
-          >
-            ticket 1
-            <a
-              onClick={[Function]}
-            >
-              <span
-                className="glyphicon glyphicon-trash"
-              />
-            </a>
-          </div>
-        </div>
-        <div
-          className="row"
+          <span
+            className="glyphicon glyphicon-trash"
+          />
+        </a>
+      </div>
+    </div>
+    <div
+      className="row"
+    >
+      <div
+        className=""
+      >
+        ticket 2
+        <a
+          className="glyp-button"
+          onClick={[Function]}
         >
-          <div
-            className=""
-          >
-            ticket 2
-            <a
-              onClick={[Function]}
-            >
-              <span
-                className="glyphicon glyphicon-trash"
-              />
-            </a>
-          </div>
-        </div>
+          <span
+            className="glyphicon glyphicon-trash"
+          />
+        </a>
       </div>
     </div>
   </div>
@@ -115,95 +101,85 @@ exports[`Gate component should contain all components 1`] = `
 
 exports[`load from state should load the state correctly 1`] = `
 <div
-  className="container"
+  className="gate well well-sm"
 >
-  <div
-    className="row"
-  >
-    <div
-      className="col-md-1 col-xs-1"
+  <div>
+    <span
+      className="text-danger glyphicon glyphicon-chevron-right"
+    />
+    <button
+      className="btn btn-danger"
+      disabled={false}
+      onBlur={[Function]}
+      onClick={[Function]}
+      onFocus={[Function]}
+      onMouseOut={[Function]}
+      onMouseOver={[Function]}
+      type="button"
     >
-      <div
-        className="row"
-      >
-        <button
-          className="btn btn-danger"
-          disabled={false}
-          onClick={[Function]}
-          type="button"
-        >
-          Closed
-        </button>
-      </div>
-      <div
-        className="row"
-      >
-        <div>
-          now
-        </div>
-      </div>
-      <div
-        className="row"
-      >
-        <h4>
-          <span
-            className="label label-success"
-          >
-            Open
-          </span>
-        </h4>
-      </div>
-    </div>
+      Closed
+    </button>
+    <span
+      className="text-danger glyphicon glyphicon-chevron-right"
+    />
     <div
-      className="gate col-md-2 col-xs-2"
+      className="auto-state-button-div"
+      onBlur={[Function]}
+      onClick={null}
+      onFocus={[Function]}
+      onMouseOut={[Function]}
+      onMouseOver={[Function]}
     >
-      <div
-        className="form-group"
-      >
-        <textarea
-          className="form-control"
-          id="formControlsTextarea"
-          onChange={[Function]}
-          onClick={[Function]}
-          type={undefined}
-          value="some comment"
-        />
-      </div>
       <button
-        className="btn btn-xs btn-info"
-        disabled={false}
-        onClick={[Function]}
+        className="auto-state-button btn btn-success"
+        disabled={true}
         type="button"
       >
-        edit comment
+        Open
       </button>
+    </div>
+    <span
+      className="text-danger glyphicon glyphicon-chevron-right"
+    />
+  </div>
+  <div
+    className="default-comment"
+  >
+    now
+  </div>
+  <div>
+    <div
+      className="comment "
+    >
+      some comment
+      <a
+        className="glyp-button"
+        onClick={[Function]}
+      >
+        <span
+          className="glyphicon glyphicon-pencil"
+        />
+      </a>
     </div>
   </div>
   <div
-    className="row"
+    className="container"
   >
     <div
-      className=""
+      className="row"
     >
       <div
-        className="container"
+        className=""
       >
-        <div
-          className="row"
+        ticket 1
+        <a
+          className="glyp-button"
+          onClick={[Function]}
         >
-          <div
-            className=""
-          >
-            ticket 1
-            <a
-              onClick={[Function]}
-            >
-              <span
-                className="glyphicon glyphicon-trash"
-              />
-            </a>
-          </div>
-        </div>
+          <span
+            className="glyphicon glyphicon-trash"
+          />
+        </a>
       </div>
     </div>
   </div>

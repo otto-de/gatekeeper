@@ -4,53 +4,73 @@ import R from 'ramda';
 import {connect} from 'react-redux';
 import {
     Button,
-    Label,
+    Popover,
+    OverlayTrigger,
     Grid,
     Row,
     Col,
     Glyphicon,
-    FormGroup,
-    FormControl
+    Well
 } from 'react-bootstrap';
 import {removeTicket, setManualState, setCommentEditDialog} from './reducers/gates';
 import CommentDialog from './CommentDialog';
 import './Gate.css';
 
+const manualStatePopover = (
+    <Popover id="manualStatePopover" title='Manuel State'>
+        "Close or open the gate manually. This state is persistent."
+    </Popover>
+);
+
 export function ManuelState({isOpen, onManualStateClick}) {
     return (
-        <Button bsStyle={isOpen ? 'success' : 'danger'} onClick={() => onManualStateClick(!isOpen)}>
-            {isOpen ? 'Open' : 'Closed'}
-        </Button>
+        <OverlayTrigger placement="bottom" overlay={manualStatePopover}>
+            <Button bsStyle={isOpen ? 'success' : 'danger'} onClick={() => onManualStateClick(!isOpen)}>
+                {isOpen ? 'Open' : 'Closed'}
+            </Button>
+        </OverlayTrigger>
     );
 }
 
-export function LastModified({last_modified}) {
-    return <div>{last_modified}</div>;
+export function LastModified({isOpen, last_modified}) {
+    return isOpen ? null : <div className='default-comment'>{last_modified}</div>;
 }
+
+const autoStatePopover = (
+    <Popover id="autoStatePopover" title='Automatic gate'>
+        "Will be temporally closed if tickets are present, on holidays or outside of business hours."
+    </Popover>
+);
 
 export function AutoState({isOpen}) {
     return (
-        <h4>
-            <Label bsStyle={isOpen ? 'success' : 'danger'}>
-                {isOpen ? 'Open' : 'Closed'}
-            </Label>
-        </h4>
+        <OverlayTrigger placement="bottom" overlay={autoStatePopover}>
+            <div className='auto-state-button-div'>
+                <Button className='auto-state-button' disabled bsStyle={isOpen ? 'success' : 'danger'}>
+                    {isOpen ? 'Open' : 'Closed'}
+                </Button>
+            </div>
+        </OverlayTrigger>
     );
 }
 
-export function Comment({openCommentEditDialog, comment}) {
-    return (
-        <FormGroup controlId="formControlsTextarea">
-            <FormControl componentClass="textarea" value={comment} onClick={openCommentEditDialog} onChange={()=>{}}/>
-        </FormGroup>
-    );
+export function GateArrow({gate_state}) {
+    return <Glyphicon className={gate_state ? 'text-danger' : 'text-success'} glyph='chevron-right'/>;
 }
 
-export function EditComment({openCommentEditDialog}) {
+export function GateButton() {
+
+}
+
+export function Comment({comment, openCommentEditDialog}) {
     return (
-        <Button bsStyle='info' bsSize='xsmall' onClick={() => openCommentEditDialog()}>
-            edit comment
-        </Button>
+        <div className={`comment ${comment ? '' : 'default-comment'}`}>
+            {comment ? comment : 'comment'}
+            <a className='glyp-button'
+               onClick={() => openCommentEditDialog()}>
+                <Glyphicon glyph='pencil'/>
+            </a>
+        </div>
     );
 }
 
@@ -62,7 +82,8 @@ export function Tickets({tickets, onTicketRemoveClick}) {
                     <Row key={ticket}>
                         <Col>
                             {ticket}
-                            <a onClick={() => onTicketRemoveClick(ticket)}>
+                            <a className='glyp-button'
+                               onClick={() => onTicketRemoveClick(ticket)}>
                                 <Glyphicon glyph='trash'/>
                             </a>
                         </Col>
@@ -76,36 +97,27 @@ export function Tickets({tickets, onTicketRemoveClick}) {
 export class Gate extends React.Component {
     render() {
         const {manual_state, auto_state, comment, tickets, last_modified, onTicketRemoveClick, onManualStateClick, openCommentEditDialog} = this.props;
+        const gate_state = !manual_state & auto_state;
         return (
-            <Grid>
-                <Row>
-                    <Col xs={1} md={1}>
-                        <Row>
-                            <ManuelState isOpen={manual_state} onManualStateClick={onManualStateClick}/>
-                        </Row>
-                        <Row>
-                            <LastModified last_modified={last_modified}/>
-                        </Row>
-                        <Row>
-                            <AutoState isOpen={auto_state}/>
-                        </Row>
-                    </Col>
-                    <Col xs={2} md={2} className="gate">
-                        <CommentDialog group={this.props.group}
-                                       service={this.props.service}
-                                       environment={this.props.environment}
-                                       comment={comment}/>
-                        <Comment openCommentEditDialog={openCommentEditDialog}
-                                 comment={comment}/>
-                        <EditComment openCommentEditDialog={openCommentEditDialog}/>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col>
-                        <Tickets tickets={tickets} onTicketRemoveClick={onTicketRemoveClick}/>
-                    </Col>
-                </Row>
-            </Grid>
+            <Well className="gate" bsSize="small">
+                <div>
+                    <GateArrow gate_state={gate_state}/>
+                    <ManuelState isOpen={manual_state} onManualStateClick={onManualStateClick}/>
+                    <GateArrow gate_state={gate_state}/>
+                    <AutoState isOpen={auto_state}/>
+                    <GateArrow gate_state={gate_state}/>
+                </div>
+                <LastModified isOpen={manual_state} last_modified={last_modified}/>
+                <div>
+                    <CommentDialog group={this.props.group}
+                                   service={this.props.service}
+                                   environment={this.props.environment}
+                                   comment={comment}/>
+
+                    <Comment comment={comment} openCommentEditDialog={openCommentEditDialog}/>
+                </div>
+                <Tickets tickets={tickets} onTicketRemoveClick={onTicketRemoveClick}/>
+            </Well>
         );
     }
 }

@@ -39,13 +39,13 @@ describe('Gate component', () => {
     it('the auto gate state should be closed', () => {
         const component = mount(<AutoState isOpen={false}/>);
         expect(component.text()).toEqual('Closed');
-        expect(component.find('Label').props().bsStyle).toEqual('danger');
+        expect(component.find('Button').props().bsStyle).toEqual('danger');
     });
 
     it('the auto gate state should be open', () => {
         const component = mount(<AutoState isOpen={true}/>);
         expect(component.text()).toEqual('Open');
-        expect(component.find('Label').props().bsStyle).toEqual('success');
+        expect(component.find('Button').props().bsStyle).toEqual('success');
     });
 
     it('the comment field contains the given comment', () => {
