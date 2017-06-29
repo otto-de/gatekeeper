@@ -5,22 +5,24 @@ import {connect} from 'react-redux';
 import {reduxForm} from 'redux-form';
 import {Button, Modal} from 'react-bootstrap';
 import {setCommentEditDialog, setComment} from './reducers/gates';
-import {FormInputField} from './FormInputField';
+import FormInputField from './FormInputField';
 
-export const CommentForm = props => {
-    // handleSubmit comes from redux-form and must be passed to form
-    const {handleSubmit, closeCommentEditDialog} = props;
-    return (
-        <form onSubmit={ handleSubmit }>
-            <h4>Edit Comment</h4>
-            <FormInputField name="comment"
-                            inputProps={{type: 'text', component: 'input', autoFocus: true}}
-                            placeholder="enter comment"/>
-            <Button bsStyle="success" type="submit">Save</Button>
-            <Button onClick={() => closeCommentEditDialog()}>Close</Button>
-        </form>
-    );
-};
+export class CommentForm extends React.Component {
+    render() {
+        // handleSubmit comes from redux-form and must be passed to form
+        const {handleSubmit, closeCommentEditDialog} = this.props;
+        return (
+            <form onSubmit={ handleSubmit }>
+                <h4>Edit Comment</h4>
+                <FormInputField name="comment"
+                                inputProps={{type: 'text', component: 'input', autoFocus: true}}
+                                placeholder="enter comment"/>
+                <Button bsStyle="success" type="submit">Save</Button>
+                <Button onClick={() => closeCommentEditDialog()}>Close</Button>
+            </form>
+        );
+    }
+}
 
 const ConnectedCommentForm = reduxForm({
     form: 'comment'

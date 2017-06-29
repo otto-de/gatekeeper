@@ -44,6 +44,12 @@ exports[`Gate component should contain all components 1`] = `
     />
   </div>
   <div>
+    <CommentDialog
+      comment="comment 1"
+      environment="environment"
+      group="group"
+      service="service"
+    />
     <div
       className="comment "
     >
@@ -148,6 +154,12 @@ exports[`load from state should load the state correctly 1`] = `
     now
   </div>
   <div>
+    <CommentDialog
+      comment="some comment"
+      environment="test"
+      group="ftx"
+      service="gatekeeper"
+    />
     <div
       className="comment "
     >

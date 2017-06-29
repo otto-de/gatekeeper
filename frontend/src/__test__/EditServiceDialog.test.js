@@ -7,7 +7,7 @@ import {shallow, mount} from 'enzyme';
 import sinon from 'sinon';
 import ConnectedEditServiceDialog, {EditServiceDialog, ServiceForm}  from '../EditServiceDialog';
 
-jest.mock('../FormInputField');
+jest.mock('../FormInputField', () => 'FormInputField');
 
 describe('EditServiceDialog', () => {
     it('renders', () => {

@@ -5,7 +5,7 @@ import {connect} from 'react-redux';
 import {reduxForm} from 'redux-form';
 import {Button, Modal} from 'react-bootstrap';
 import {closeEditServiceDialog} from './reducers/dialog';
-import {FormInputField} from './FormInputField';
+import FormInputField from './FormInputField';
 
 export const ServiceForm = props => {
     // handleSubmit comes from redux-form and must be passed to form

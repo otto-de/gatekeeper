@@ -3,7 +3,7 @@ import {Field} from 'redux-form';
 import {FormGroup, ControlLabel, Col} from 'react-bootstrap';
 import PropTypes from 'prop-types';
 
-export class FormInputField extends React.Component {
+export default class FormInputField extends React.Component {
     render() {
         let {name, label, placeholder, labelProps, inputColProps, inputProps} = this.props;
         placeholder = placeholder || label;
@@ -14,7 +14,7 @@ export class FormInputField extends React.Component {
                     {label}
                 </Col>
                 <Col {...(inputColProps || {})}>
-                    <Field className="form-control"  id={name} name={name} {...(inputProps || {})}
+                    <Field className="form-control" id={name} name={name} {...(inputProps || {})}
                            placeholder={placeholder}>
                         {this.props.children}
                     </Field>
@@ -23,6 +23,7 @@ export class FormInputField extends React.Component {
         );
     }
 }
+
 
 FormInputField.propTypes = {
     name: PropTypes.string.isRequired,

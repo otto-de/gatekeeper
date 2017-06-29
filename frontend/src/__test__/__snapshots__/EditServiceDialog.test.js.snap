@@ -7,6 +7,38 @@ exports[`EditServiceDialog contact form should render form corretly 1`] = `
   <h4>
     Add Service
   </h4>
+  <FormInputField
+    inputProps={
+      Object {
+        "autoFocus": true,
+        "component": "input",
+        "type": "text",
+      }
+    }
+    label="Name"
+    name="name"
+  />
+  <FormInputField
+    inputProps={
+      Object {
+        "component": "input",
+        "type": "text",
+      }
+    }
+    label="Group"
+    name="group"
+  />
+  <FormInputField
+    inputProps={
+      Object {
+        "component": "input",
+        "type": "text",
+      }
+    }
+    label="Environments"
+    name="environments"
+    placeholder="Env1, Env2, Env3"
+  />
   <button
     className="btn btn-success"
     disabled={false}

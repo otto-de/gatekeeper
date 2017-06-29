@@ -1,5 +1,5 @@
 import React from 'react';
-import {FormInputField}  from '../FormInputField';
+import FormInputField  from '../FormInputField';
 import renderer from 'react-test-renderer';
 import {mount} from 'enzyme';
 import {MockStore} from './mockStore';

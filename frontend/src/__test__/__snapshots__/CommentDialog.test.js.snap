@@ -1,12 +1,23 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`CommentDialog contact form should render form corretly 1`] = `
+exports[`CommentDialog contact form should render form correctly 1`] = `
 <form
   onSubmit={undefined}
 >
   <h4>
     Edit Comment
   </h4>
+  <FormInputField
+    inputProps={
+      Object {
+        "autoFocus": true,
+        "component": "input",
+        "type": "text",
+      }
+    }
+    name="comment"
+    placeholder="enter comment"
+  />
   <button
     className="btn btn-success"
     disabled={false}

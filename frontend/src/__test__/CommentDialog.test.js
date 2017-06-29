@@ -7,7 +7,7 @@ import {Modal, Button} from 'react-bootstrap';
 import {shallow, mount} from 'enzyme';
 import sinon from 'sinon';
 
-jest.mock('../FormInputField');
+jest.mock('../FormInputField', () => 'FormInputField');
 
 describe('CommentDialog', () => {
     it('renders', () => {
@@ -28,7 +28,7 @@ describe('CommentDialog', () => {
         expect(wrapper.find(Modal).prop('show')).toEqual(true);
     });
 
-    it('contact form should render form corretly', () => {
+    it('contact form should render form correctly', () => {
         const component = renderer.create(<CommentForm comment='comment 1'/>);
         let tree = component.toJSON();
         expect(tree).toMatchSnapshot();

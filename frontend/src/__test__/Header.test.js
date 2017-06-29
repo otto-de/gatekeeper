@@ -3,7 +3,7 @@ import renderer from 'react-test-renderer';
 import {mount} from 'enzyme';
 import {Header} from '../Header';
 
-jest.mock('../Gate');
+jest.mock('../Gate', () => 'Gate');
 
 describe('Header component', () => {
     it('render', () => {
