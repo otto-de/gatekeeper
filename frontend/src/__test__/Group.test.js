@@ -6,22 +6,23 @@ import {Provider} from 'react-redux';
 import ConnectedGroup, {Group, Services} from '../Group';
 import Service from '../Service';
 
-jest.mock('../Service');
+jest.mock('../Service', () => 'Service');
 
 describe('Group component', () => {
     it('render', () => {
         const component = renderer.create(<Group group='group'
-                                                 services={['service1', 'service2', 'service3']}/>);
+                                                 services={['service1', 'service2', 'service3']}
+                                                 environments={['environment_1', 'environment_2', 'environment_3']}/>);
         let tree = component.toJSON();
         expect(tree).toMatchSnapshot();
     });
 
     it('should contain all services', () => {
         const component = shallow(<Services group='group'
-                                            services={['service1', 'service2', 'service3']}/>);
+                                            services={['service1', 'service2', 'service3']}
+                                            environments={['environment_1', 'environment_2', 'environment_3']}/>);
         expect(component.find(Service).length).toEqual(3);
     });
-
 });
 
 describe('load from state', () => {

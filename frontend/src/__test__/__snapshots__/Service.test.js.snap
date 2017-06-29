@@ -23,10 +23,31 @@ exports[`Service component render 1`] = `
     <div>
       <div
         className="col-md-2 col-xs-2"
-      />
+      >
+        <Gate
+          environment="environment1"
+          group="group"
+          service="service"
+        />
+      </div>
       <div
         className="col-md-2 col-xs-2"
-      />
+      >
+        <Gate
+          environment="environment2"
+          group="group"
+          service="service"
+        />
+      </div>
+      <div
+        className="col-md-2 col-xs-2"
+      >
+        <Gate
+          environment="environment3"
+          group="group"
+          service="service"
+        />
+      </div>
       <div
         className="col-md-2 col-xs-2"
       />
@@ -55,14 +76,7 @@ exports[`load from state should load the state correctly 1`] = `
         />
       </a>
     </div>
-    <div>
-      <div
-        className="col-md-2 col-xs-2"
-      />
-      <div
-        className="col-md-2 col-xs-2"
-      />
-    </div>
+    <div />
   </div>
 </div>
 `;

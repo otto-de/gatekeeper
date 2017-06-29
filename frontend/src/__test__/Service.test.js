@@ -6,13 +6,14 @@ import {MockStore} from './mockStore';
 import {Provider} from 'react-redux';
 import ConnectedService, {Gates, Service} from '../Service';
 
-jest.mock('../Gate');
+jest.mock('../Gate', () => 'Gate');
 
 describe('Service component', () => {
     it('render', () => {
         const component = renderer.create(<Service group='group'
                                                    service='service'
                                                    environments={['environment1', 'environment2', 'environment3']}
+                                                   environment_order={['environment1', 'environment2', 'environment3', 'environment4']}
                                                    openEditServiceDialog='openEditServiceDialog'
                                                    setService='setService'/>);
         let tree = component.toJSON();
@@ -22,8 +23,9 @@ describe('Service component', () => {
     it('should contain gates for every environment', () => {
         const component = shallow(<Gates group='group'
                                          service='service'
-                                         environments={['environment1', 'environment2', 'environment3']}/>);
-        expect(component.find(Col).length).toEqual(3);
+                                         environments={['environment1', 'environment2', 'environment3']}
+                                         environment_order={['environment1', 'environment2', 'environment3', 'environment4']}/>);
+        expect(component.find(Col).length).toEqual(4);
     });
 
 });

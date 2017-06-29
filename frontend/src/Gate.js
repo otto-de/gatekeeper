@@ -101,11 +101,6 @@ export class Gate extends React.Component {
         return (
             <Well className="gate" bsSize="small">
                 <div>
-                    <b>
-                        {environment}
-                    </b>
-                </div>
-                <div>
                     <GateArrow gate_state={gate_state}/>
                     <ManuelState isOpen={manual_state} onManualStateClick={onManualStateClick}/>
                     <GateArrow gate_state={gate_state}/>

@@ -6,26 +6,29 @@ import {Col, Grid, Row, Glyphicon} from 'react-bootstrap';
 import {openEditServiceDialog} from './reducers/dialog';
 import Gate from './Gate';
 
-export function Gates({group, service, environments}) {
+export function Gates({environment_order, group, service, environments}) {
     return (
-        <div key={`${group}-${service}`}>
-            {R.map((environment) => {
-                return (
-                    <Col xs={2} md={2} key={`col-${group}-${service}-${environment}`}>
-                        <Gate key={`gate-${group}-${service}-${environment}`}
-                              group={group}
-                              service={service}
-                              environment={environment}/>
-                    </Col>
-                );
-            })(environments)}
+        <div key={`col-${group}-${service}`}>
+            {R.map((group_environment) => {
+                if (environments && environments.includes(group_environment)) {
+                    return (
+                        <Col xs={2} md={2} key={`col-${group}-${service}-${group_environment}`}>
+                            <Gate key={`gate-${group}-${service}-${group_environment}`}
+                                  group={group}
+                                  service={service}
+                                  environment={group_environment}/>
+                        </Col>);
+                } else {
+                    return <Col xs={2} md={2} key={`col-${group}-${service}-${group_environment}`}/>;
+                }
+            })(environment_order)}
         </div>
     );
 }
 
 export class Service extends React.Component {
     render() {
-        const {group, service, environments, openEditServiceDialog} = this.props;
+        const {group, service, environments, environment_order, openEditServiceDialog} = this.props;
         return (
             <Grid fluid={true}>
                 <Row>
@@ -36,7 +39,7 @@ export class Service extends React.Component {
                             <Glyphicon glyph='pencil'/>
                         </a>
                     </Col>
-                    <Gates group={group} service={service}
+                    <Gates environment_order={environment_order} group={group} service={service}
                            environments={environments}/>
                 </Row>
             </Grid>
@@ -47,13 +50,15 @@ export class Service extends React.Component {
 Service.propTypes = {
     group: PropTypes.string.isRequired,
     service: PropTypes.string.isRequired,
-    environments: PropTypes.array
+    environment_order: PropTypes.array.isRequired,
+    environments: PropTypes.array,
 };
 
 const defaultValues = {
     group: '',
     service: '',
-    environments: []
+    environment_order: [],
+    environments: [],
 };
 
 const mapStateToProps = (state, initialProps) => {

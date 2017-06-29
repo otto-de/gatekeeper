@@ -3,37 +3,139 @@
 exports[`Group component render 1`] = `
 <div>
   <div
-    style={
-      Object {
-        "marginBottom": "20px",
+    className="container-fluid"
+  >
+    <div
+      className="row"
+    >
+      <div
+        className="col-md-1 col-xs-1"
+      >
+         
+      </div>
+      <div
+        className="col-md-2 col-xs-2"
+      >
+        environment_1
+      </div>
+      <div
+        className="col-md-2 col-xs-2"
+      >
+        environment_2
+      </div>
+      <div
+        className="col-md-2 col-xs-2"
+      >
+        environment_3
+      </div>
+    </div>
+  </div>
+  <div>
+    <div
+      style={
+        Object {
+          "marginBottom": "20px",
+        }
       }
-    }
-  />
-  <div
-    style={
-      Object {
-        "marginBottom": "20px",
+    >
+      <Service
+        environment_order={
+          Array [
+            "environment_1",
+            "environment_2",
+            "environment_3",
+          ]
+        }
+        group="group"
+        service="service1"
+      />
+    </div>
+    <div
+      style={
+        Object {
+          "marginBottom": "20px",
+        }
       }
-    }
-  />
-  <div
-    style={
-      Object {
-        "marginBottom": "20px",
+    >
+      <Service
+        environment_order={
+          Array [
+            "environment_1",
+            "environment_2",
+            "environment_3",
+          ]
+        }
+        group="group"
+        service="service2"
+      />
+    </div>
+    <div
+      style={
+        Object {
+          "marginBottom": "20px",
+        }
       }
-    }
-  />
+    >
+      <Service
+        environment_order={
+          Array [
+            "environment_1",
+            "environment_2",
+            "environment_3",
+          ]
+        }
+        group="group"
+        service="service3"
+      />
+    </div>
+  </div>
 </div>
 `;
 
 exports[`load from state should load the state correctly 1`] = `
 <div>
   <div
-    style={
-      Object {
-        "marginBottom": "20px",
+    className="container-fluid"
+  >
+    <div
+      className="row"
+    >
+      <div
+        className="col-md-1 col-xs-1"
+      >
+         
+      </div>
+      <div
+        className="col-md-2 col-xs-2"
+      >
+        test1
+      </div>
+      <div
+        className="col-md-2 col-xs-2"
+      >
+        test2
+      </div>
+    </div>
+  </div>
+  <div>
+    <div
+      style={
+        Object {
+          "marginBottom": "20px",
+        }
       }
-    }
-  />
+    >
+      <Service
+        environment_order={
+          Array [
+            "test1",
+            "test2",
+          ]
+        }
+        group="ftx"
+        service="gatekeeper"
+      />
+    </div>
+  </div>
 </div>
 `;

@@ -16,11 +16,6 @@ const initialState = {
                     auto_state: true,
                     tickets: ['ticket 1', 'ticket 2']
                 },
-                environment_2: {
-                    manual_state: true,
-                    auto_state: true,
-                    tickets: ['ticket 1', 'ticket 2']
-                },
                 environment_3: {
                     manual_state: true,
                     auto_state: true,
