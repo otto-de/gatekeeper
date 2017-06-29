@@ -96,10 +96,15 @@ export function Tickets({tickets, onTicketRemoveClick}) {
 
 export class Gate extends React.Component {
     render() {
-        const {manual_state, auto_state, comment, tickets, last_modified, onTicketRemoveClick, onManualStateClick, openCommentEditDialog} = this.props;
+        const {environment, manual_state, auto_state, comment, tickets, last_modified, onTicketRemoveClick, onManualStateClick, openCommentEditDialog} = this.props;
         const gate_state = !manual_state & auto_state;
         return (
             <Well className="gate" bsSize="small">
+                <div>
+                    <b>
+                        {environment}
+                    </b>
+                </div>
                 <div>
                     <GateArrow gate_state={gate_state}/>
                     <ManuelState isOpen={manual_state} onManualStateClick={onManualStateClick}/>

@@ -5,6 +5,11 @@ exports[`Gate component should contain all components 1`] = `
   className="gate well well-sm"
 >
   <div>
+    <b>
+      environment
+    </b>
+  </div>
+  <div>
     <span
       className="text-success glyphicon glyphicon-chevron-right"
     />
@@ -103,6 +108,11 @@ exports[`load from state should load the state correctly 1`] = `
 <div
   className="gate well well-sm"
 >
+  <div>
+    <b>
+      test
+    </b>
+  </div>
   <div>
     <span
       className="text-danger glyphicon glyphicon-chevron-right"
