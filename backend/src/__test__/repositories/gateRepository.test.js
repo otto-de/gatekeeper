@@ -2,7 +2,6 @@ const gateRepository = require('../../repositories/gateRepository');
 
 describe('the repository', () => {
     it('should add a new environment to existing', () => {
-
         let currentEnvironments = {
             "live": {
                 "queue": [],
@@ -47,7 +46,6 @@ describe('the repository', () => {
             }
         };
 
-
         expect(updatedEnvironments).toEqual(expectedEnvironments);
     });
 
@@ -87,7 +85,6 @@ describe('the repository', () => {
     });
 
 });
-
 
 describe('the repository', () => {
     it('should update environments in the database', () => {

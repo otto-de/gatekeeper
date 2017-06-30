@@ -4,6 +4,9 @@ jest.mock('../services/gateService', () => {
     return {
         createOrUpdateService: jest.fn(() => {
             console.log('I didnt call the original')
+        }),
+        isOpen: jest.fn(() => {
+            console.log('I didnt call the original')
         })
     }
 });
@@ -44,6 +47,14 @@ describe('the backend server', () => {
                 )
                 .expect(201)
                 .then(() => expect(gateServiceMock.createOrUpdateService).toBeCalledWith('myService', 'myGroup', ['env1', 'env2']));
+        }
+    );
+
+    it('called service with GET on /api/gates/group/service/environment', () => {
+            return request(server)
+                .get('/api/gates/group/service/environment')
+                .expect(200)
+                .then(() => expect(gateServiceMock.isOpen).toBeCalledWith('group', 'service', 'environment'));
         }
     );
 });

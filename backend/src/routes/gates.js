@@ -2,9 +2,11 @@ const express = require('express');
 const router = express.Router();
 const gateService = require('../services/gateService');
 
-/* GET users listing. */
-router.get('/', function(req, res) {
-  res.send('respond with a resource');
+router.get('/:group/:service/:environment', function (req, res) {
+    res.send(req.params);
+    gateService.isOpen(req.params.group, req.params.service, req.params.environment);
+    res.status(200);
+    res.send('Got a GET request');
 });
 
 router.post('/', function (req, res) {

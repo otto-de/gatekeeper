@@ -1,7 +1,6 @@
 const monk = require('monk');
 
 module.exports = {
-
     updateEnvironments: function (currentEnvironments, newEnvironments) {
         let withoutDeletedEnvironments = Object.keys(currentEnvironments)
             .filter((env) => newEnvironments.includes(env))
@@ -46,7 +45,11 @@ module.exports = {
             .then((result) => {
                 console.log(`updated environments: ${result}`)
             });
+    },
 
+    findGate: function(group, service, environment){
+        return {}
+    }
         /*
          let data = {
          "_id": "9d9ea14f-b619-4bf2-a0cc-b87f29062132",
@@ -71,5 +74,4 @@ module.exports = {
          }
          }
          */
-    }
 };
