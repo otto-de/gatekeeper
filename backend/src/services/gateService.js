@@ -4,8 +4,6 @@ module.exports = {
 
     createOrUpdateService: (service, group, environments) => {
         console.log('REAL Gate Service was called');
-        let service = gateRepository.findService(service, group);
-
         gateRepository.createOrUpdateService(service, group, environments);
         return null;
     },
