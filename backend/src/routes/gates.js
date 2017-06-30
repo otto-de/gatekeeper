@@ -10,8 +10,8 @@ router.get('/', function(req, res) {
 router.post('/', function (req, res) {
     console.dir(req.body);
     let {service, group, environments} = req.body;
-    console.log("Calling createGate");
-    gateService.createGate(service, group, environments);
+    console.log("Calling createOrUpdateService");
+    gateService.createOrUpdateService(service, group, environments);
     res.status(201);
     res.send('Got a POST request');
 

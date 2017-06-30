@@ -2,7 +2,7 @@ const request = require('supertest');
 
 jest.mock('../services/gateService', () => {
     return {
-        createGate: jest.fn(() => {
+        createOrUpdateService: jest.fn(() => {
             console.log('I didnt call the original')
         })
     }
@@ -41,7 +41,7 @@ describe('the backend server', () => {
                     }
                 )
                 .expect(201)
-                .then(() => expect(gateServiceMock.createGate).toBeCalledWith('myService', 'myGroup', ['env1', 'env2']));
+                .then(() => expect(gateServiceMock.createOrUpdateService).toBeCalledWith('myService', 'myGroup', ['env1', 'env2']));
             return result;
         }
     );
