@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "license": "MIT",
   "scripts": {
-    "start": "node ./bin/www",
+    "start": "node ./src/bin/www",
     "production": "cd ../frontend && yarn --production=false && yarn run build && yarn start",
     "test": "jest"
   },
@@ -12,7 +12,6 @@
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.3",
     "express": "~4.15.3",
-    "jade": "~1.11.0",
     "morgan": "~1.8.1",
     "serve-favicon": "~2.4.2",
     "supertest": "^3.0.0"
