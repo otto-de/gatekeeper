@@ -49,6 +49,44 @@ describe('the backend server', () => {
                 .then(() => expect(gateServiceMock.createOrUpdateService).toBeCalledWith('myService', 'myGroup', ['env1', 'env2']));
         }
     );
+    it('should return an error on create gate', () => {
+            const error = {
+                "status": 400,
+                "statusText": "Bad Request",
+                "errors": [{
+                    "field": "service",
+                    "location": "body",
+                    "messages": ["\"service\" is not allowed to be empty"],
+                    "types": ["any.empty"]
+                }, {
+                    "field": "group",
+                    "location": "body",
+                    "messages": ["\"group\" is required"],
+                    "types": ["any.required"]
+                }, {
+                    "field": "environments",
+                    "location": "body",
+                    "messages": ["\"environments\" must contain at least 1 items"],
+                    "types": ["array.min"]
+                }]
+            };
+
+            return request(server)
+                .post('/api/gates')
+                .send(
+                    {
+                        service: '',
+                        environments: []
+                    }
+                )
+                .expect(400)
+                .then((res) => {
+                    const response = JSON.parse(res.text);
+                    expect(response).toEqual(error);
+                    console.log(response)
+                })
+        }
+    );
 
     it('called service with GET on /api/gates/group/service/environment', () => {
             return request(server)
