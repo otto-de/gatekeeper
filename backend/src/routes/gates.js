@@ -21,7 +21,6 @@ const createOrUpdateServiceSchema = {
 
 router.post('/', validate(createOrUpdateServiceSchema), function (req, res) {
     let {service, group, environments} = req.body;
-    console.log("Calling createOrUpdateService");
     gateService.createOrUpdateService(service, group, environments);
     res.status(201);
     res.send('Got a POST request');

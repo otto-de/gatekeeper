@@ -2,12 +2,8 @@ const request = require('supertest');
 
 jest.mock('../services/gateService', () => {
     return {
-        createOrUpdateService: jest.fn(() => {
-            console.log('I didnt call the original')
-        }),
-        isOpen: jest.fn(() => {
-            console.log('I didnt call the original')
-        })
+        createOrUpdateService: jest.fn(),
+        isOpen: jest.fn()
     }
 });
 const gateServiceMock = require('../services/gateService');
@@ -83,7 +79,6 @@ describe('the backend server', () => {
                 .then((res) => {
                     const response = JSON.parse(res.text);
                     expect(response).toEqual(error);
-                    console.log(response)
                 })
         }
     );
