@@ -2,13 +2,12 @@ const gateRepository = require('../repositories/gateRepository');
 
 module.exports = {
 
-    createOrUpdateService: (service, group, environments) => {
-        gateRepository.createOrUpdateService(service, group, environments);
-        return null;
+    createOrUpdateService: async (group, service, environments) => {
+        return await gateRepository.createOrUpdateService(group, service, environments);
     },
 
-    isOpen: (group, service, environment) => {
-        const gate = gateRepository.findGate(group, service, environment);
+    isOpen: async (group, service, environment) => {
+        const gate = await gateRepository.findGate(group, service, environment);
         return Boolean(gate) && 'open' === gate.state;
     }
 

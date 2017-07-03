@@ -347,6 +347,10 @@ bser@^2.0.0:
   dependencies:
     node-int64 "^0.4.0"
 
+bson-objectid@^1.1.4, bson-objectid@^1.1.5:
+  version "1.1.5"
+  resolved "https://registry.yarnpkg.com/bson-objectid/-/bson-objectid-1.1.5.tgz#4b9e210a98c1c4eaa9edf63aca0784cb30b79b5e"
+
 bson@~1.0.4:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/bson/-/bson-1.0.4.tgz#93c10d39eaa5b58415cbc4052f3e53e562b0b72c"
@@ -513,7 +517,7 @@ dashdash@^1.12.0:
   dependencies:
     assert-plus "^1.0.0"
 
-debug@*, debug@2.6.7, debug@~2.6.3:
+debug@*, debug@2.6.7, debug@^2.1.3, debug@~2.6.3:
   version "2.6.7"
   resolved "https://registry.yarnpkg.com/debug/-/debug-2.6.7.tgz#92bad1f6d05bbb6bba22cca88bcd0ec894c2861e"
   dependencies:
@@ -1340,6 +1344,12 @@ jest-validate@^20.0.3:
     leven "^2.1.0"
     pretty-format "^20.0.3"
 
+jest@^20.0.4:
+  version "20.0.4"
+  resolved "https://registry.yarnpkg.com/jest/-/jest-20.0.4.tgz#3dd260c2989d6dad678b1e9cc4d91944f6d602ac"
+  dependencies:
+    jest-cli "^20.0.4"
+
 joi@^10.6.0:
   version "10.6.0"
   resolved "https://registry.yarnpkg.com/joi/-/joi-10.6.0.tgz#52587f02d52b8b75cdb0c74f0b164a191a0e1fc2"
@@ -1473,6 +1483,10 @@ locate-path@^2.0.0:
     p-locate "^2.0.0"
     path-exists "^3.0.0"
 
+lodash@^3.6.0:
+  version "3.10.1"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-3.10.1.tgz#5bf45e8e49ba4189e17d482789dfd15bd140b7b6"
+
 lodash@^4.14.0, lodash@^4.2.0, lodash@^4.9.0:
   version "4.17.4"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.4.tgz#78203a4d1c328ae1d86dca6460e369b57f4055ae"
@@ -1560,6 +1574,15 @@ mkdirp@^0.5.1:
   resolved "https://registry.yarnpkg.com/mkdirp/-/mkdirp-0.5.1.tgz#30057438eac6cf7f8c4767f38648d6697d75c903"
   dependencies:
     minimist "0.0.8"
+
+mongo-mock@^2.4.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/mongo-mock/-/mongo-mock-2.4.0.tgz#b14c726f811b7fafece4fe54db8bef8682e8aa78"
+  dependencies:
+    bson-objectid "^1.1.4"
+    debug "^2.1.3"
+    lodash "^3.6.0"
+    sift "^3.1.1"
 
 mongodb-core@2.1.13:
   version "2.1.13"
@@ -2081,6 +2104,10 @@ setprototypeof@1.0.3:
 shellwords@^0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/shellwords/-/shellwords-0.1.0.tgz#66afd47b6a12932d9071cbfd98a52e785cd0ba14"
+
+sift@^3.1.1:
+  version "3.3.11"
+  resolved "https://registry.yarnpkg.com/sift/-/sift-3.3.11.tgz#2ca4984e854e56f89e204cbdc48b51df408edb68"
 
 slash@^1.0.0:
   version "1.0.0"

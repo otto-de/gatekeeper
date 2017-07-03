@@ -1,21 +1,32 @@
 const gateRepository = require('../../repositories/gateRepository');
+const db = require('../../repositories/database');
 
 describe('the repository', () => {
+
+    beforeEach(async () => {
+        const gatekeeperCollection = db.get('gatekeeper');
+        await gatekeeperCollection.drop();
+    });
+
+    afterAll(() => {
+        db.close();
+    });
+
     it('should add a new environment to existing', () => {
         let currentEnvironments = {
-            "live": {
-                "queue": [],
-                "message_timestamp": "",
-                "state": "open",
-                "message": "",
-                "state_timestamp": "2016-04-06 22:17:54+0200"
+            'live': {
+                'queue': [],
+                'message_timestamp': '',
+                'state': 'open',
+                'message': '',
+                'state_timestamp': '2016-04-06 22:17:54+0200'
             },
-            "develop": {
-                "queue": [],
-                "message_timestamp": "",
-                "state": "open",
-                "message": "",
-                "state_timestamp": "2016-04-06 22:17:54+0200"
+            'develop': {
+                'queue': [],
+                'message_timestamp': '',
+                'state': 'open',
+                'message': '',
+                'state_timestamp': '2016-04-06 22:17:54+0200'
             }
         };
         //when
@@ -23,26 +34,26 @@ describe('the repository', () => {
 
         //then
         let expectedEnvironments = {
-            "live": {
-                "queue": [],
-                "message_timestamp": "",
-                "state": "open",
-                "message": "",
-                "state_timestamp": "2016-04-06 22:17:54+0200"
+            'live': {
+                'queue': [],
+                'message_timestamp': '',
+                'state': 'open',
+                'message': '',
+                'state_timestamp': '2016-04-06 22:17:54+0200'
             },
-            "develop": {
-                "queue": [],
-                "message_timestamp": "",
-                "state": "open",
-                "message": "",
-                "state_timestamp": "2016-04-06 22:17:54+0200"
+            'develop': {
+                'queue': [],
+                'message_timestamp': '',
+                'state': 'open',
+                'message': '',
+                'state_timestamp': '2016-04-06 22:17:54+0200'
             },
-            "fit": {
-                "queue": [],
-                "message_timestamp": "",
-                "state": "closed",
-                "message": "",
-                "state_timestamp": ""
+            'fit': {
+                'queue': [],
+                'message_timestamp': '',
+                'state': 'closed',
+                'message': '',
+                'state_timestamp': ''
             }
         };
 
@@ -51,19 +62,19 @@ describe('the repository', () => {
 
     it('should remove existing environments', () => {
         let currentEnvironments = {
-            "live": {
-                "queue": [],
-                "message_timestamp": "",
-                "state": "open",
-                "message": "",
-                "state_timestamp": "2016-04-06 22:17:54+0200"
+            'live': {
+                'queue': [],
+                'message_timestamp': '',
+                'state': 'open',
+                'message': '',
+                'state_timestamp': '2016-04-06 22:17:54+0200'
             },
-            "develop": {
-                "queue": [],
-                "message_timestamp": "",
-                "state": "open",
-                "message": "",
-                "state_timestamp": "2016-04-06 22:17:54+0200"
+            'develop': {
+                'queue': [],
+                'message_timestamp': '',
+                'state': 'open',
+                'message': '',
+                'state_timestamp': '2016-04-06 22:17:54+0200'
             }
         };
 
@@ -72,29 +83,59 @@ describe('the repository', () => {
 
         //then
         let expectedEnvironments = {
-            "develop": {
-                "queue": [],
-                "message_timestamp": "",
-                "state": "open",
-                "message": "",
-                "state_timestamp": "2016-04-06 22:17:54+0200"
+            'develop': {
+                'queue': [],
+                'message_timestamp': '',
+                'state': 'open',
+                'message': '',
+                'state_timestamp': '2016-04-06 22:17:54+0200'
             }
         };
         expect(updatedEnvironments).toEqual(expectedEnvironments);
 
     });
 
-});
-
-describe('the repository', () => {
-    it('should update environments in the database', () => {
+    it('should update environments in the database', async () => {
         //given
-
+        await gateRepository.createOrUpdateService('myGroup', 'myService', ['env1', 'env2']);
 
         //when
-        gateRepository.createOrUpdateService("myService", 'myGroup', ['env1', 'env2']);
+        await gateRepository.createOrUpdateService('myGroup', 'myService', ['env2', 'env3']);
         //then
-        //TODO
+        let gateEnv3 = await gateRepository.findGate('myGroup', 'myService', 'env3');
+        let expectedGate = {
+            'queue': [],
+            'message_timestamp': '',
+            'state': 'closed',
+            'message': '',
+            'state_timestamp': ''
+        };
+        expect(gateEnv3).toEqual(expectedGate);
 
-    })
+
+        let gateEnv1 = await gateRepository.findGate('myGroup', 'myService', 'env1');
+        expect(gateEnv1).toEqual(null);
+    });
+
+
+    it('should create environments in the database', async () => {
+        //given
+
+        //when
+        await gateRepository.createOrUpdateService('myGroup', 'myService', ['env1', 'env2']);
+        //then
+        let gateEnv1 = await gateRepository.findGate('myGroup', 'myService', 'env1');
+
+        let expectedGate = {
+            'queue': [],
+            'message_timestamp': '',
+            'state': 'closed',
+            'message': '',
+            'state_timestamp': ''
+        };
+        expect(gateEnv1).toEqual(expectedGate);
+
+        let gateEnv2 = await gateRepository.findGate('myGroup', 'myService', 'env2');
+        expect(gateEnv2).toEqual(expectedGate);
+    });
 });

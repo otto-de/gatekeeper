@@ -1,15 +1,14 @@
 const express = require('express');
-validate = require('express-validation');
+const validate = require('express-validation');
 const Joi = require('joi');
 const router = express.Router();
 const gateService = require('../services/gateService');
 
-router.get('/:group/:service/:environment', function (req, res) {
-    res.send(req.params);
-    gateService.isOpen(req.params.group, req.params.service, req.params.environment);
+router.get('/:group/:service/:environment', (async (req, res) => {
+    const isOpen = await gateService.isOpen(req.params.group, req.params.service, req.params.environment);
     res.status(200);
-    res.send('Got a GET request');
-});
+    res.json({open: isOpen});
+}));
 
 const createOrUpdateServiceSchema = {
     body: {
@@ -19,11 +18,15 @@ const createOrUpdateServiceSchema = {
     }
 };
 
-router.post('/', validate(createOrUpdateServiceSchema), function (req, res) {
+router.post('/', validate(createOrUpdateServiceSchema), (async (req, res) => {
     let {service, group, environments} = req.body;
-    gateService.createOrUpdateService(service, group, environments);
-    res.status(201);
-    res.send('Got a POST request');
-});
+    try {
+        await gateService.createOrUpdateService(group, service, environments);
+        res.status(201);
+        res.send('Got a POST request');
+    } catch (error) {
+        res.status(500);
+    }
+}));
 
 module.exports = router;

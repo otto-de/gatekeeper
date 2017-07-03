@@ -1,4 +1,5 @@
 const monk = require('monk');
+const db = require('./database');
 
 module.exports = {
     updateEnvironments: function (currentEnvironments, newEnvironments) {
@@ -7,14 +8,14 @@ module.exports = {
             .reduce((acc, env) => {
                 return Object.assign(
                     acc,
-                    {[env]: currentEnvironments[env]})
+                    {[env]: currentEnvironments[env]});
             }, {});
 
-        let withNewEnvironments = newEnvironments
+        return newEnvironments
             .filter((env) => !Object.keys(currentEnvironments).includes(env))
             .reduce((acc, env) => {
-                    return Object.assign(
-                        acc, {
+                return Object.assign(
+                    acc, {
                         [env]: {
                             'queue': [],
                             'message_timestamp': '',
@@ -22,56 +23,38 @@ module.exports = {
                             'message': '',
                             'state_timestamp': ''
                         }
-                    })
-                }
-                , withoutDeletedEnvironments);
-
-        return withNewEnvironments;
+                    });
+            }, withoutDeletedEnvironments);
     },
 
-    createOrUpdateService: function (service, group, environments) {
-        let db = monk('localhost/gatekeeper');
-
+    createOrUpdateService: async function (group, service, environments) {
         const gatekeeperCollection = db.get('gatekeeper');
 
         let byGroupAndService = {group: group, name: service};
 
-        gatekeeperCollection.findOne(byGroupAndService)
-            .then((doc) => {
-                gatekeeperCollection.update({_id: doc._id},
-                    {$set: {environments: this.updateEnvironments(doc.environments, environments)}}
-                );
-            })
-            .then((result) => {
-                console.log(`updated environments: ${result}`)
+        let doc = await gatekeeperCollection.findOne(byGroupAndService);
+
+        if (doc) {
+            return gatekeeperCollection.update({_id: doc._id},
+                {$set: {environments: this.updateEnvironments(doc.environments, environments)}}
+            );
+        } else {
+            return gatekeeperCollection.insert({
+                'group': group,
+                'name': service,
+                'environments': this.updateEnvironments({}, environments)
             });
+        }
     },
 
-    findGate: function(group, service, environment){
-        return {}
+    findGate: async function (group, service, environment) {
+        const gatekeeperCollection = db.get('gatekeeper');
+        let byGroupAndService = {group: group, name: service};
+        let gates = await gatekeeperCollection.findOne(byGroupAndService);
+        if (gates) {
+            return gates.environments[environment] || null;
+        } else {
+            return null;
+        }
     }
-        /*
-         let data = {
-         "_id": "9d9ea14f-b619-4bf2-a0cc-b87f29062132",
-         "document_version": 2.2,
-         "group": "p13n",
-         "name": "p13n",
-         "environments": {
-         "live": {
-         "queue": [],
-         "message_timestamp": "",
-         "state": "open",
-         "message": "",
-         "state_timestamp": "2016-04-06 22:17:54+0200"
-         },
-         "develop": {
-         "queue": [],
-         "message_timestamp": "",
-         "state": "open",
-         "message": "",
-         "state_timestamp": "2016-04-06 22:17:54+0200"
-         }
-         }
-         }
-         */
 };
