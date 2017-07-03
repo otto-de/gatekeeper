@@ -13,6 +13,10 @@ module.exports = {
 
     setGate: async (group, service, environment, open) => {
         return await gateRepository.setGate(group, service, environment, open);
+    },
+
+    enterGate: async (group, service, environment, queue, ticketId) => {
+        const gate = await gateRepository.findGate(group, service, environment);
     }
 
 };
