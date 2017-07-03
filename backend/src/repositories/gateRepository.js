@@ -1,4 +1,3 @@
-const monk = require('monk');
 const db = require('./database');
 
 module.exports = {
