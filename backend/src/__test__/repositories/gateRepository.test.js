@@ -51,7 +51,7 @@ describe('the repository', () => {
             'fit': {
                 'queue': [],
                 'message_timestamp': '',
-                'state': 'closed',
+                'state': 'open',
                 'message': '',
                 'state_timestamp': ''
             }
@@ -106,7 +106,7 @@ describe('the repository', () => {
         let expectedGate = {
             'queue': [],
             'message_timestamp': '',
-            'state': 'closed',
+            'state': 'open',
             'message': '',
             'state_timestamp': ''
         };
@@ -129,7 +129,7 @@ describe('the repository', () => {
         let expectedGate = {
             'queue': [],
             'message_timestamp': '',
-            'state': 'closed',
+            'state': 'open',
             'message': '',
             'state_timestamp': ''
         };
@@ -137,5 +137,19 @@ describe('the repository', () => {
 
         let gateEnv2 = await gateRepository.findGate('myGroup', 'myService', 'env2');
         expect(gateEnv2).toEqual(expectedGate);
+    });
+
+    it('should close the gate', async () => {
+        //when
+        await gateRepository.createOrUpdateService('myGroup', 'myService', ['env1', 'env2']);
+
+        //when
+        let state = await gateRepository.setGate('myGroup', 'myService', 'env1', false);
+
+        //then
+        expect(state).toEqual({state: 'closed'});
+
+        let gate = await gateRepository.findGate('myGroup', 'myService', 'env1');
+        expect(gate.state).toEqual('closed');
     });
 });

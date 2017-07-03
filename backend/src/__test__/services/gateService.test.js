@@ -2,7 +2,8 @@ const gateService = require('../../services/gateService');
 
 jest.mock('../../repositories/gateRepository', () => {
     return {
-        findGate: jest.fn()
+        findGate: jest.fn(),
+        setGate: jest.fn()
     };
 });
 const gateRepositoryMock = require('../../repositories/gateRepository');
@@ -23,6 +24,14 @@ describe('the gate service', () => {
         gateRepositoryMock.findGate.mockReturnValue(null);
         const result = await gateService.isOpen('group', 'service', 'environment');
         expect(result).toBeFalsy();
+    });
+
+    it('should close gate when so requested', async () => {
+        gateRepositoryMock.setGate.mockReturnValue({'state': 'closed'});
+
+        const result = await gateService.setGate('group', 'service', 'environment', false);
+        expect(result).toEqual({state: 'closed'});
+        expect(gateRepositoryMock.setGate).toBeCalledWith('group', 'service', 'environment', false)
     });
 });
 

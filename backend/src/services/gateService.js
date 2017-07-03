@@ -9,6 +9,10 @@ module.exports = {
     isOpen: async (group, service, environment) => {
         const gate = await gateRepository.findGate(group, service, environment);
         return Boolean(gate) && 'open' === gate.state;
+    },
+
+    setGate: async (group, service, environment, open) => {
+        return await gateRepository.setGate(group, service, environment, open);
     }
 
 };

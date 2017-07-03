@@ -19,7 +19,7 @@ module.exports = {
                         [env]: {
                             'queue': [],
                             'message_timestamp': '',
-                            'state': 'closed',
+                            'state': 'open',
                             'message': '',
                             'state_timestamp': ''
                         }
@@ -31,7 +31,6 @@ module.exports = {
         const gatekeeperCollection = db.get('gatekeeper');
 
         let byGroupAndService = {group: group, name: service};
-
         let doc = await gatekeeperCollection.findOne(byGroupAndService);
 
         if (doc) {
@@ -56,5 +55,19 @@ module.exports = {
         } else {
             return null;
         }
+    },
+
+    setGate: async function (group, service, environment, open) {
+        const gatekeeperCollection = db.get('gatekeeper');
+
+        let byGroupAndService = {group: group, name: service};
+        let doc = await gatekeeperCollection.findOne(byGroupAndService);
+
+        let state = open ? 'open' : 'closed';
+        await gatekeeperCollection.update({_id: doc._id},
+            {$set: {['environments.'+environment+'.state']: state}});
+
+        return {state}
     }
+
 };

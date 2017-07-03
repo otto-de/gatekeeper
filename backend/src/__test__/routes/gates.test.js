@@ -3,7 +3,8 @@ const request = require('supertest');
 jest.mock('../../services/gateService', () => {
     return {
         createOrUpdateService: jest.fn(),
-        isOpen: jest.fn()
+        isOpen: jest.fn(),
+        setGate: jest.fn()
     };
 });
 const gateServiceMock = require('../../services/gateService');
@@ -121,5 +122,15 @@ describe('the backend server', () => {
                 .expect(404, 'Gate does not exist');
         }
     );
+
+    it('should close the gate', () => {
+            gateServiceMock.setGate.mockReturnValue({status: 'open'});
+            return request(server)
+                .put('/api/gates/group/service/environment')
+                .send({open: false})
+                .expect(200, {status: 'open'});
+        }
+    );
+
 });
 

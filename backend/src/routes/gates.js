@@ -34,4 +34,22 @@ router.post('/', validate(createOrUpdateServiceSchema), (async (req, res) => {
     }
 }));
 
+const setGateSchema = {
+    body: {
+        open: Joi.boolean().required()
+    }
+};
+
+router.put('/:group/:service/:environment', validate(setGateSchema), (async (req, res) => {
+    const {group, service, environment} = req.params;
+    const {open} = req.body;
+    try {
+        const result = await gateService.setGate(group, service, environment, open);
+        res.status(200);
+        res.json(result);
+    } catch (error) {
+        res.status(500);
+    }
+}));
+
 module.exports = router;
