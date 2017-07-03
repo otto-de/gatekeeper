@@ -113,5 +113,13 @@ describe('the backend server', () => {
                 .then(() => expect(gateServiceMock.isOpen).toBeCalledWith('group', 'service', 'environment'));
         }
     );
+
+    it('should return 404 if gate not exist', () => {
+            gateServiceMock.isOpen.mockReturnValue(null);
+            return request(server)
+                .get('/api/gates/group/service/environment')
+                .expect(404, 'Gate does not exist');
+        }
+    );
 });
 

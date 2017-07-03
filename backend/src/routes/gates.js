@@ -6,8 +6,13 @@ const gateService = require('../services/gateService');
 
 router.get('/:group/:service/:environment', (async (req, res) => {
     const isOpen = await gateService.isOpen(req.params.group, req.params.service, req.params.environment);
-    res.status(200);
-    res.json({open: isOpen});
+    if (isOpen === null) {
+        res.status(404);
+        res.send('Gate does not exist');
+    } else {
+        res.status(200);
+        res.json({open: isOpen});
+    }
 }));
 
 const createOrUpdateServiceSchema = {
