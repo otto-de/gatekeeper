@@ -142,34 +142,5 @@ describe('the backend server', () => {
                 .expect(404, 'Gate not found');
         }
     );
-
-    it('should simply enter the gate without queuing or ticket', () => {
-            gateServiceMock.enterGate.mockReturnValue({status: 'open'});
-            return request(server)
-                .put('/api/gates/enter/group/service/environment')
-                .send()
-                .expect(200, {status: 'open'})
-                .then(() => expect(gateServiceMock.enterGate).toBeCalledWith('group', 'service', 'environment', false, false));
-        }
-    );
-
-    it('should enter the gate with queuing and ticket', () => {
-            gateServiceMock.enterGate.mockReturnValue({status: 'open'});
-            return request(server)
-                .put('/api/gates/enter/group/service/environment')
-                .send({queue: true, ticketId: '0000'})
-                .expect(200, {status: 'open'})
-                .then(() => expect(gateServiceMock.enterGate).toBeCalledWith('group', 'service', 'environment', true, '0000'));
-        }
-    );
-
-    it('on gate enter it should return 404 if gate does not exist', () => {
-            gateServiceMock.enterGate.mockReturnValue(null);
-            return request(server)
-                .put('/api/gates/enter/group/service/environment')
-                .expect(404, 'Gate not found');
-        }
-    );
-
 });
 

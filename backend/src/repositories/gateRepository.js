@@ -64,9 +64,13 @@ module.exports = {
 
         let state = open ? 'open' : 'closed';
         await gatekeeperCollection.update({_id: doc._id},
-            {$set: {['environments.'+environment+'.state']: state}});
+            {$set: {['environments.' + environment + '.state']: state}});
 
-        return {state}
+        return {state};
+    },
+
+    addTicket: async function (group, service, environment, ticketId) {
+        return null;
     }
 
 };

@@ -1,6 +1,14 @@
 const request = require('supertest');
 
-jest.mock('uuid/v4', () => 'mock_uuid');
+jest.mock('../../services/gateService', () => {
+    return {
+        createOrUpdateService: jest.fn(),
+        isOpen: jest.fn(),
+        setGate: jest.fn(),
+        enterGate: jest.fn()
+    };
+});
+const gateServiceMock = require('../../services/gateService');
 
 describe('the tickets route', () => {
     let server;
@@ -12,12 +20,33 @@ describe('the tickets route', () => {
         server.close();
     });
 
-    it('should create a new ticket and pass it when gate is open and no other ticket is queued', () => {
-        return request(server)
-            .post('/api/tickets/group/service/environment')
-            .send()
-            .expect(201, {state: 'passed', ticket: 'mock_uuid'})
-    });
+    it('should simply enter the gate without queuing or ticket', () => {
+            gateServiceMock.enterGate.mockReturnValue({status: 'open'});
+            return request(server)
+                .put('/api/tickets/group/service/environment')
+                .send()
+                .expect(200, {status: 'open'})
+                .then(() => expect(gateServiceMock.enterGate).toBeCalledWith('group', 'service', 'environment', false, false));
+        }
+    );
+
+    it('should enter the gate with queuing and ticket', () => {
+            gateServiceMock.enterGate.mockReturnValue({status: 'open'});
+            return request(server)
+                .put('/api/tickets/group/service/environment')
+                .send({queue: true, ticketId: '0000'})
+                .expect(200, {status: 'open'})
+                .then(() => expect(gateServiceMock.enterGate).toBeCalledWith('group', 'service', 'environment', true, '0000'));
+        }
+    );
+
+    it('on gate enter it should return 404 if gate does not exist', () => {
+            gateServiceMock.enterGate.mockReturnValue(null);
+            return request(server)
+                .put('/api/tickets/group/service/environment')
+                .expect(404, 'Gate not found');
+        }
+    );
 
 });
 

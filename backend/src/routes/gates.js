@@ -57,29 +57,4 @@ router.put('/:group/:service/:environment', validate(setGateSchema), (async (req
     }
 }));
 
-const enterGateSchema = {
-    body: {
-        queue: Joi.boolean(),
-        ticketId: Joi.string()
-    }
-};
-
-router.put('/enter/:group/:service/:environment', validate(enterGateSchema), (async (req, res) => {
-    const {group, service, environment} = req.params;
-    const queue = req.body.queue || false;
-    const ticketId = req.body.ticketId || false;
-    try {
-        const result = await gateService.enterGate(group, service, environment, queue, ticketId);
-        if (result === null) {
-            res.status(404);
-            res.send('Gate not found');
-        } else {
-            res.status(200);
-            res.json(result);
-        }
-    } catch (error) {
-        res.status(500);
-    }
-}));
-
 module.exports = router;
