@@ -10,7 +10,7 @@ jest.mock('../../services/ticketService', () => {
 });
 const ticketServiceMock = require('../../services/ticketService');
 
-describe('the tickets route', () => {
+describe('tickets route', () => {
     let server;
     beforeAll(() => {
         server = require('../../bin/www');

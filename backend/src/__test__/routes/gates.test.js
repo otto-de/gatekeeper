@@ -10,7 +10,7 @@ jest.mock('../../services/gateService', () => {
 });
 const gateServiceMock = require('../../services/gateService');
 
-describe('the backend server', () => {
+describe('gates route', () => {
     let server;
     beforeAll(() => {
         server = require('../../bin/www');
@@ -25,19 +25,6 @@ describe('the backend server', () => {
     afterAll(() => {
         server.close();
     });
-
-    it('responds to /', () => {
-        return request(server)
-            .get('/')
-            .expect(200);
-    });
-
-    it('returns 404 on unknown paths', () => {
-            return request(server)
-                .get('/foo/gates')
-                .expect(404);
-        }
-    );
 
     it('called service on POST on /api/gates', () => {
             return request(server)
