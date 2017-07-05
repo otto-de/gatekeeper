@@ -5,6 +5,10 @@ const LOCKED = 'locked';
 
 module.exports = {
 
+    findGate: async (group, service, environments) => {
+        return await gateRepository.findGate(group, service, environments);
+    },
+
     checkGate: (gate, ticketId = false) => {
         if (gate.state === CLOSED) {
             return CLOSED;

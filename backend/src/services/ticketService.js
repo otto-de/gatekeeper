@@ -1,4 +1,5 @@
-const gateRepository = require('../repositories/gateRepository');
+const gateService = require('../services/gateService');
+const ticketRepository = require('../repositories/ticketRepository');
 const uuidv4 = require('uuid/v4');
 const OPEN = 'open';
 const CLOSED = 'closed';
@@ -23,7 +24,7 @@ module.exports = {
     },
 
     enterGate: async function (group, service, environment, queue, ticketId) {
-        const gate = await gateRepository.findGate(group, service, environment);
+        const gate = await gateService.findGate(group, service, environment);
         const state = this.checkGate(gate, ticketId);
         if (state === CLOSED) {
             return {state: state};
@@ -40,7 +41,7 @@ module.exports = {
             return {state: state, ticketId: ticketId};
         }
         const ticket = uuidv4();
-        await gateRepository.addTicket(group, service, environment, ticket);
+        await ticketRepository.addTicket(group, service, environment, ticket);
         return {state: state, ticketId: ticket};
     },
 

@@ -2,7 +2,7 @@ const express = require('express');
 const validate = require('express-validation');
 const Joi = require('joi');
 const router = express.Router();
-const gateService = require('../services/gateService');
+const ticketService = require('../services/ticketService');
 
 
 const getTicket = {
@@ -17,7 +17,7 @@ router.put('/:group/:service/:environment', validate(getTicket), (async (req, re
     const queue = req.body.queue || false;
     const ticketId = req.body.ticketId || false;
     try {
-        const result = await gateService.enterGate(group, service, environment, queue, ticketId);
+        const result = await ticketService.enterGate(group, service, environment, queue, ticketId);
         if (result === null) {
             res.status(404);
             res.send('Gate not found');

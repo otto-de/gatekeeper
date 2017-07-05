@@ -67,10 +67,5 @@ module.exports = {
             {$set: {['environments.' + environment + '.state']: state}});
 
         return {state};
-    },
-
-    addTicket: async function (group, service, environment, ticketId) {
-        return null;
     }
-
 };

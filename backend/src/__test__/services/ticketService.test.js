@@ -1,6 +1,6 @@
 const ticketService = require('../../services/ticketService');
 
-jest.mock('../../repositories/gateRepository', () => {
+jest.mock('../../services/gateService', () => {
     return {
         findGate: jest.fn(),
         setGate: jest.fn(),
@@ -8,73 +8,83 @@ jest.mock('../../repositories/gateRepository', () => {
         addTicket: jest.fn()
     };
 });
-const gateRepositoryMock = require('../../repositories/gateRepository');
+const gateServiceMock = require('../../services/gateService');
+
+jest.mock('../../repositories/ticketRepository', () => {
+    return {
+        findGate: jest.fn(),
+        setGate: jest.fn(),
+        checkGate: jest.fn(),
+        addTicket: jest.fn()
+    };
+});
+const ticketRepositoryMock = require('../../repositories/ticketRepository');
 
 jest.mock('uuid/v4');
 const uuidMock = require('uuid/v4');
 
 describe('enterGate', () => {
     beforeEach(() => {
-        gateRepositoryMock.findGate.mockReset();
-        gateRepositoryMock.addTicket.mockReset();
+        gateServiceMock.findGate.mockReset();
+        ticketRepositoryMock.addTicket.mockReset();
     });
 
     it('simple: should let you enter the gate if its open', async () => {
-        gateRepositoryMock.findGate.mockReturnValue({state: ticketService.OPEN, queue: []});
+        gateServiceMock.findGate.mockReturnValue({state: ticketService.OPEN, queue: []});
         uuidMock.mockReturnValue('ticket1');
 
         const result = await ticketService.enterGate('group', 'service', 'environment', false, false);
         expect(result).toEqual({state: ticketService.OPEN, ticketId: 'ticket1'});
-        expect(gateRepositoryMock.addTicket).toBeCalledWith('group', 'service', 'environment', 'ticket1');
+        expect(ticketRepositoryMock.addTicket).toBeCalledWith('group', 'service', 'environment', 'ticket1');
     });
 
     it('simple: should let you not enter the gate if its closed', async () => {
-        gateRepositoryMock.findGate.mockReturnValue({state: ticketService.CLOSED, queue: []});
+        gateServiceMock.findGate.mockReturnValue({state: ticketService.CLOSED, queue: []});
 
         const result = await ticketService.enterGate('group', 'service', 'environment', false, false);
         expect(result).toEqual({state: ticketService.CLOSED});
-        expect(gateRepositoryMock.addTicket).not.toBeCalled();
+        expect(ticketRepositoryMock.addTicket).not.toBeCalled();
     });
 
     it('simple: should let you not enter the gate if there is a ticket', async () => {
-        gateRepositoryMock.findGate.mockReturnValue({state: ticketService.OPEN, queue: ['ticket1']});
+        gateServiceMock.findGate.mockReturnValue({state: ticketService.OPEN, queue: ['ticket1']});
 
         const result = await ticketService.enterGate('group', 'service', 'environment', false, false);
         expect(result).toEqual({state: ticketService.CLOSED});
-        expect(gateRepositoryMock.addTicket).not.toBeCalled();
+        expect(ticketRepositoryMock.addTicket).not.toBeCalled();
     });
 
     it('queue: should give you a ticket if the gate is locked', async () => {
-        gateRepositoryMock.findGate.mockReturnValue({state: ticketService.OPEN, queue: ['ticket1']});
+        gateServiceMock.findGate.mockReturnValue({state: ticketService.OPEN, queue: ['ticket1']});
         uuidMock.mockReturnValue('ticket2');
 
         const result = await ticketService.enterGate('group', 'service', 'environment', true, false);
         expect(result).toEqual({state: ticketService.LOCKED, ticketId: 'ticket2'});
-        expect(gateRepositoryMock.addTicket).toBeCalledWith('group', 'service', 'environment', 'ticket2');
+        expect(ticketRepositoryMock.addTicket).toBeCalledWith('group', 'service', 'environment', 'ticket2');
     });
 
     it('queue: should let you enter if your ticket is the first in queue', async () => {
-        gateRepositoryMock.findGate.mockReturnValue({state: ticketService.OPEN, queue: ['ticket1']});
+        gateServiceMock.findGate.mockReturnValue({state: ticketService.OPEN, queue: ['ticket1']});
 
         const result = await ticketService.enterGate('group', 'service', 'environment', true, 'ticket1');
         expect(result).toEqual({state: ticketService.OPEN, ticketId: 'ticket1'});
-        expect(gateRepositoryMock.addTicket).not.toBeCalled();
+        expect(ticketRepositoryMock.addTicket).not.toBeCalled();
     });
 
     it('queue: should let you not enter if your ticket is in the queue but is not the first', async () => {
-        gateRepositoryMock.findGate.mockReturnValue({state: ticketService.OPEN, queue: ['ticket1', 'ticket2']});
+        gateServiceMock.findGate.mockReturnValue({state: ticketService.OPEN, queue: ['ticket1', 'ticket2']});
 
         const result = await ticketService.enterGate('group', 'service', 'environment', true, 'ticket2');
         expect(result).toEqual({state: ticketService.LOCKED, ticketId: 'ticket2'});
-        expect(gateRepositoryMock.addTicket).not.toBeCalled();
+        expect(ticketRepositoryMock.addTicket).not.toBeCalled();
     });
 
     it('queue: should let you not enter if your ticket not in the queue', async () => {
-        gateRepositoryMock.findGate.mockReturnValue({state: ticketService.OPEN, queue: ['ticket1']});
+        gateServiceMock.findGate.mockReturnValue({state: ticketService.OPEN, queue: ['ticket1']});
 
         const result = await ticketService.enterGate('group', 'service', 'environment', true, 'ticket2');
         expect(result).toEqual({state: ticketService.CLOSED});
-        expect(gateRepositoryMock.addTicket).not.toBeCalled();
+        expect(ticketRepositoryMock.addTicket).not.toBeCalled();
     });
 });
 

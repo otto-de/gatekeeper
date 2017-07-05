@@ -1,7 +1,7 @@
 const gateRepository = require('../../repositories/gateRepository');
 const db = require('../../repositories/database');
 
-describe('the repository', () => {
+describe('gateRepository', () => {
 
     beforeEach(async () => {
         const gatekeeperCollection = db.get('gatekeeper');
@@ -152,4 +152,5 @@ describe('the repository', () => {
         let gate = await gateRepository.findGate('myGroup', 'myService', 'env1');
         expect(gate.state).toEqual('closed');
     });
+
 });
