@@ -58,4 +58,20 @@ router.put('/:group/:service/:environment', validate(setGateSchema), (async (req
     }
 }));
 
+router.delete('/:group/:service', (async (req, res) => {
+    const {group, service} = req.params;
+    try {
+        const result = await gateService.deleteService(group, service);
+        if (result === null) {
+            res.status(404);
+            res.send('Service not found');
+        } else {
+            res.status(204);
+            res.json(result);
+        }
+    } catch (error) {
+        res.status(500);
+    }
+}));
+
 module.exports = router;

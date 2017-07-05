@@ -67,5 +67,13 @@ module.exports = {
             {$set: {['environments.' + environment + '.state']: state}});
 
         return {state};
+    },
+
+    deleteService: async function (group, service) {
+        const gatekeeperCollection = db.get('gatekeeper');
+        let byGroupAndService = {group: group, name: service};
+
+        let gates = await gatekeeperCollection.remove(byGroupAndService);
+        return gates.result.n >= 1;
     }
 };

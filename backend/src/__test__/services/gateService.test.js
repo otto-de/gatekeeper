@@ -4,6 +4,7 @@ jest.mock('../../repositories/gateRepository', () => {
     return {
         findGate: jest.fn(),
         setGateState: jest.fn(),
+        deleteService: jest.fn(),
     };
 });
 const gateRepositoryMock = require('../../repositories/gateRepository');
@@ -13,6 +14,7 @@ describe('the gate service', () => {
     beforeEach(() => {
         gateRepositoryMock.findGate.mockReset();
         gateRepositoryMock.setGateState.mockReset();
+        gateRepositoryMock.deleteService.mockReset();
     });
 
     it('get gate', () => {
@@ -33,6 +35,14 @@ describe('the gate service', () => {
         const result = await gateService.setGateState('group', 'service', 'environment', false);
         expect(result).toEqual({state: gateService.CLOSED});
         expect(gateRepositoryMock.setGateState).toBeCalledWith('group', 'service', 'environment', false);
+    });
+
+    it('delete service', async () => {
+        gateRepositoryMock.deleteService.mockReturnValue(true);
+
+        const result = await gateService.deleteService('group', 'service');
+        expect(result).toEqual(true);
+        expect(gateRepositoryMock.deleteService).toBeCalledWith('group', 'service');
     });
 
 });

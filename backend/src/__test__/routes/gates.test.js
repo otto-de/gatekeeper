@@ -5,7 +5,7 @@ jest.mock('../../services/gateService', () => {
         createOrUpdateService: jest.fn(),
         findGate: jest.fn(),
         setGateState: jest.fn(),
-        enterGate: jest.fn()
+        deleteService: jest.fn()
     };
 });
 const gateServiceMock = require('../../services/gateService');
@@ -20,6 +20,7 @@ describe('gates route', () => {
         gateServiceMock.createOrUpdateService.mockReset();
         gateServiceMock.findGate.mockReset();
         gateServiceMock.setGateState.mockReset();
+        gateServiceMock.deleteService.mockReset();
     });
 
     afterAll(() => {
@@ -126,6 +127,23 @@ describe('gates route', () => {
                 .put('/api/gates/group/service/environment')
                 .send({open: false})
                 .expect(404, 'Gate not found');
+        }
+    );
+
+    it('DELETE: should delete a service on DELETE /api/gates/group/service', () => {
+            gateServiceMock.deleteService.mockReturnValue(true);
+            return request(server)
+                .del('/api/gates/group/service')
+                .expect(204)
+                .then(() => expect(gateServiceMock.deleteService).toBeCalledWith('group', 'service'));
+        }
+    );
+
+    it('DELETE: should return 404 if gate not exist', () => {
+            gateServiceMock.deleteService.mockReturnValue(null);
+            return request(server)
+                .del('/api/gates/group/service')
+                .expect(404, 'Service not found');
         }
     );
 });

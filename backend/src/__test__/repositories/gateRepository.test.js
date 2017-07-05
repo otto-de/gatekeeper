@@ -153,4 +153,18 @@ describe('gateRepository', () => {
         expect(gate.state).toEqual('closed');
     });
 
+    it('should delete a service', async () => {
+        //given
+        await gateRepository.createOrUpdateService('myGroup', 'myService', ['env1', 'env2']);
+
+        //when
+        let state = await gateRepository.deleteService('myGroup', 'myService');
+
+        //then
+        expect(state).toEqual(true);
+
+        let result = await gateRepository.findGate('myGroup', 'myService', 'env1');
+        expect(result).toEqual(null);
+    });
+
 });

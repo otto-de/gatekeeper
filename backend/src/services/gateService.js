@@ -31,5 +31,9 @@ module.exports = {
 
     setGateState: async (group, service, environment, open) => {
         return await gateRepository.setGateState(group, service, environment, open);
+    },
+
+    deleteService: async (group, service) => {
+        return await gateRepository.deleteService(group, service);
     }
 };
