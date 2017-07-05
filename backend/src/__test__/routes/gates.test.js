@@ -3,8 +3,8 @@ const request = require('supertest');
 jest.mock('../../services/gateService', () => {
     return {
         createOrUpdateService: jest.fn(),
-        isOpen: jest.fn(),
-        setGate: jest.fn(),
+        findGate: jest.fn(),
+        setGateState: jest.fn(),
         enterGate: jest.fn()
     };
 });
@@ -18,13 +18,30 @@ describe('gates route', () => {
 
     beforeEach(() => {
         gateServiceMock.createOrUpdateService.mockReset();
-        gateServiceMock.isOpen.mockReset();
-        gateServiceMock.setGate.mockReset();
+        gateServiceMock.findGate.mockReset();
+        gateServiceMock.setGateState.mockReset();
     });
 
     afterAll(() => {
         server.close();
     });
+
+    it('should return a gate with GET on /api/gates/group/service/environment', () => {
+            gateServiceMock.findGate.mockReturnValue({gate: 'gate'});
+            return request(server)
+                .get('/api/gates/group/service/environment')
+                .expect(200, {gate: 'gate'})
+                .then(() => expect(gateServiceMock.findGate).toBeCalledWith('group', 'service', 'environment'));
+        }
+    );
+
+    it('should return 404 if gate not exist', () => {
+            gateServiceMock.findGate.mockReturnValue(null);
+            return request(server)
+                .get('/api/gates/group/service/environment')
+                .expect(404, 'Gate not found');
+        }
+    );
 
     it('called service on POST on /api/gates', () => {
             return request(server)
@@ -42,7 +59,6 @@ describe('gates route', () => {
     );
 
     it('returns 500 when gate cannot be created', () => {
-            gateServiceMock.isOpen.mockReturnValue(null);
             return request(server)
                 .post('/api/gates')
                 .send(
@@ -95,25 +111,8 @@ describe('gates route', () => {
         }
     );
 
-    it('called service with GET on /api/gates/group/service/environment', () => {
-            gateServiceMock.isOpen.mockReturnValue(true);
-            return request(server)
-                .get('/api/gates/group/service/environment')
-                .expect(200, {open: true})
-                .then(() => expect(gateServiceMock.isOpen).toBeCalledWith('group', 'service', 'environment'));
-        }
-    );
-
-    it('should return 404 if gate not exist', () => {
-            gateServiceMock.isOpen.mockReturnValue(null);
-            return request(server)
-                .get('/api/gates/group/service/environment')
-                .expect(404, 'Gate not found');
-        }
-    );
-
     it('should close the gate', () => {
-            gateServiceMock.setGate.mockReturnValue({status: 'open'});
+            gateServiceMock.setGateState.mockReturnValue({status: 'open'});
             return request(server)
                 .put('/api/gates/group/service/environment')
                 .send({open: false})
@@ -122,7 +121,7 @@ describe('gates route', () => {
     );
 
     it('should return 404 if user tries to close a gate that does not exist', () => {
-            gateServiceMock.setGate.mockReturnValue(null);
+            gateServiceMock.setGateState.mockReturnValue(null);
             return request(server)
                 .put('/api/gates/group/service/environment')
                 .send({open: false})

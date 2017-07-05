@@ -4,7 +4,7 @@ jest.mock('../../services/ticketService', () => {
     return {
         createOrUpdateService: jest.fn(),
         isOpen: jest.fn(),
-        setGate: jest.fn(),
+        setGateState: jest.fn(),
         enterGate: jest.fn()
     };
 });

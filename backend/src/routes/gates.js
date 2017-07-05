@@ -5,13 +5,14 @@ const router = express.Router();
 const gateService = require('../services/gateService');
 
 router.get('/:group/:service/:environment', (async (req, res) => {
-    const isOpen = await gateService.isOpen(req.params.group, req.params.service, req.params.environment);
-    if (isOpen === null) {
+    const {group, service, environment} = req.params;
+    const gate = await gateService.findGate(group, service, environment);
+    if (gate === null) {
         res.status(404);
         res.send('Gate not found');
     } else {
         res.status(200);
-        res.json({open: isOpen});
+        res.json(gate);
     }
 }));
 
@@ -44,7 +45,7 @@ router.put('/:group/:service/:environment', validate(setGateSchema), (async (req
     const {group, service, environment} = req.params;
     const {open} = req.body;
     try {
-        const result = await gateService.setGate(group, service, environment, open);
+        const result = await gateService.setGateState(group, service, environment, open);
         if (result === null) {
             res.status(404);
             res.send('Gate not found');

@@ -29,12 +29,7 @@ module.exports = {
         return await gateRepository.createOrUpdateService(group, service, environments);
     },
 
-    isOpen: async (group, service, environment) => {
-        const gate = await gateRepository.findGate(group, service, environment);
-        return Boolean(gate) && OPEN === gate.state;
-    },
-
-    setGate: async (group, service, environment, open) => {
-        return await gateRepository.setGate(group, service, environment, open);
+    setGateState: async (group, service, environment, open) => {
+        return await gateRepository.setGateState(group, service, environment, open);
     }
 };

@@ -144,7 +144,7 @@ describe('gateRepository', () => {
         await gateRepository.createOrUpdateService('myGroup', 'myService', ['env1', 'env2']);
 
         //when
-        let state = await gateRepository.setGate('myGroup', 'myService', 'env1', false);
+        let state = await gateRepository.setGateState('myGroup', 'myService', 'env1', false);
 
         //then
         expect(state).toEqual({state: 'closed'});

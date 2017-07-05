@@ -3,7 +3,7 @@ const ticketService = require('../../services/ticketService');
 jest.mock('../../services/gateService', () => {
     return {
         findGate: jest.fn(),
-        setGate: jest.fn(),
+        setGateState: jest.fn(),
         checkGate: jest.fn(),
         addTicket: jest.fn()
     };
@@ -13,7 +13,7 @@ const gateServiceMock = require('../../services/gateService');
 jest.mock('../../repositories/ticketRepository', () => {
     return {
         findGate: jest.fn(),
-        setGate: jest.fn(),
+        setGateState: jest.fn(),
         checkGate: jest.fn(),
         addTicket: jest.fn()
     };

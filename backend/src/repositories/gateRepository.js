@@ -56,7 +56,7 @@ module.exports = {
         }
     },
 
-    setGate: async function (group, service, environment, open) {
+    setGateState: async function (group, service, environment, open) {
         const gatekeeperCollection = db.get('gatekeeper');
 
         let byGroupAndService = {group: group, name: service};
