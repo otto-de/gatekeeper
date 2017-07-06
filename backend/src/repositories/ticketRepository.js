@@ -17,5 +17,22 @@ module.exports = {
             );
         }
         return null;
+    },
+
+    deleteTicket: async (group, service, environment, ticketId) => {
+        const gatekeeperCollection = db.get('gatekeeper');
+
+        let byGroupAndService = {group: group, name: service};
+        let doc = await gatekeeperCollection.findOne(byGroupAndService);
+        if (doc) {
+            return gatekeeperCollection.update({_id: doc._id},
+                {
+                    $pull: {
+                        ['environments.' + environment + '.queue']: ticketId
+                    }
+                }
+            );
+        }
+        return null;
     }
 };

@@ -23,7 +23,7 @@ module.exports = {
         return OPEN;
     },
 
-    enterGate: async function (group, service, environment, queue, ticketId) {
+    lockGate: async function (group, service, environment, queue, ticketId) {
         const gate = await gateService.findGate(group, service, environment);
         const state = this.checkGate(gate, ticketId);
         if (state === CLOSED) {
@@ -43,6 +43,10 @@ module.exports = {
         const ticket = uuidv4();
         await ticketRepository.addTicket(group, service, environment, ticket);
         return {state: state, ticketId: ticket};
+    },
+
+    unlockGate: async (group, service, environment, ticketId) => {
+        return await ticketRepository.deleteTicket(group, service, environment, ticketId);
     },
 
     OPEN,

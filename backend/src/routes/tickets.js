@@ -17,7 +17,7 @@ router.put('/:group/:service/:environment', validate(getTicket), (async (req, re
     const queue = req.body.queue || false;
     const ticketId = req.body.ticketId || false;
     try {
-        const result = await ticketService.enterGate(group, service, environment, queue, ticketId);
+        const result = await ticketService.lockGate(group, service, environment, queue, ticketId);
         if (result === null) {
             res.status(404);
             res.send('Gate not found');
@@ -25,6 +25,17 @@ router.put('/:group/:service/:environment', validate(getTicket), (async (req, re
             res.status(200);
             res.json(result);
         }
+    } catch (error) {
+        res.status(500);
+    }
+}));
+
+router.delete('/:group/:service/:environment/:ticketId', (async (req, res) => {
+    const {group, service, environment, ticketId} = req.params;
+    try {
+        const result = await ticketService.unlockGate(group, service, environment, ticketId);
+        res.status(204);
+        res.send();
     } catch (error) {
         res.status(500);
     }
