@@ -51,29 +51,40 @@ module.exports = {
         let gates = await gatekeeperCollection.findOne(byGroupAndService);
         if (gates) {
             return gates.environments[environment] || null;
-        } else {
-            return null;
         }
+        return null;
+
     },
 
-    setGateState: async function (group, service, environment, open) {
+    setGate: async function (group, service, environment, state, timestamp, message) {
         const gatekeeperCollection = db.get('gatekeeper');
+
+        let gateUpdate = {};
+        if (state) {
+            gateUpdate.state = state;
+        }
+        if (timestamp) {
+            gateUpdate.timestamp = timestamp;
+        }
+        if (message) {
+            gateUpdate.message = message;
+        }
 
         let byGroupAndService = {group: group, name: service};
         let doc = await gatekeeperCollection.findOne(byGroupAndService);
-
-        let state = open ? 'open' : 'closed';
-        await gatekeeperCollection.update({_id: doc._id},
-            {$set: {['environments.' + environment + '.state']: state}});
-
-        return {state};
+        if (doc) {
+            const result = await gatekeeperCollection.update({_id: doc._id},
+                {$set: {['environments.' + environment]: gateUpdate}});
+            return result.n >= 1;
+        }
+        return null;
     },
 
     deleteService: async function (group, service) {
         const gatekeeperCollection = db.get('gatekeeper');
         let byGroupAndService = {group: group, name: service};
 
-        let gates = await gatekeeperCollection.remove(byGroupAndService);
-        return gates.result.n >= 1;
+        const result = await gatekeeperCollection.remove(byGroupAndService);
+        return result.result.n >= 1;
     }
 };

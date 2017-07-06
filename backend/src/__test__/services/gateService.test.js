@@ -3,17 +3,26 @@ const gateService = require('../../services/gateService');
 jest.mock('../../repositories/gateRepository', () => {
     return {
         findGate: jest.fn(),
-        setGateState: jest.fn(),
+        setGate: jest.fn(),
         deleteService: jest.fn(),
     };
 });
 const gateRepositoryMock = require('../../repositories/gateRepository');
 
+let constDate = new Date('2017-06-13T04:41:20');
+/*eslint no-global-assign:off*/
+Date = class extends Date {
+    constructor() {
+        super();
+        return constDate;
+    }
+};
+
 describe('the gate service', () => {
 
     beforeEach(() => {
         gateRepositoryMock.findGate.mockReset();
-        gateRepositoryMock.setGateState.mockReset();
+        gateRepositoryMock.setGate.mockReset();
         gateRepositoryMock.deleteService.mockReset();
     });
 
@@ -29,12 +38,20 @@ describe('the gate service', () => {
         expect(result).toBeFalsy();
     });
 
-    it('should close gate when so requested', async () => {
-        gateRepositoryMock.setGateState.mockReturnValue({'state': gateService.CLOSED});
+    it('should gate set gate state and generate timestamp', async () => {
+        gateRepositoryMock.setGate.mockReturnValue(true);
 
-        const result = await gateService.setGateState('group', 'service', 'environment', false);
-        expect(result).toEqual({state: gateService.CLOSED});
-        expect(gateRepositoryMock.setGateState).toBeCalledWith('group', 'service', 'environment', false);
+        const result = await gateService.setGate('group', 'service', 'environment', 'open');
+        expect(result).toEqual(true);
+        expect(gateRepositoryMock.setGate).toBeCalledWith('group', 'service', 'environment', 'open', constDate.getTime(), undefined);
+    });
+
+    it('should gate set gate message', async () => {
+        gateRepositoryMock.setGate.mockReturnValue(true);
+
+        const result = await gateService.setGate('group', 'service', 'environment', undefined, 'a message');
+        expect(result).toEqual(true);
+        expect(gateRepositoryMock.setGate).toBeCalledWith('group', 'service', 'environment', undefined, undefined, 'a message');
     });
 
     it('delete service', async () => {

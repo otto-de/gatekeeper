@@ -139,18 +139,33 @@ describe('gateRepository', () => {
         expect(gateEnv2).toEqual(expectedGate);
     });
 
-    it('should close the gate', async () => {
-        //when
+    it('should set the gate state', async () => {
+        //given
         await gateRepository.createOrUpdateService('myGroup', 'myService', ['env1', 'env2']);
 
         //when
-        let state = await gateRepository.setGateState('myGroup', 'myService', 'env1', false);
+        let state = await gateRepository.setGate('myGroup', 'myService', 'env1', 'closed', 'NOW', undefined);
 
         //then
-        expect(state).toEqual({state: 'closed'});
+        expect(state).toEqual(true);
 
         let gate = await gateRepository.findGate('myGroup', 'myService', 'env1');
         expect(gate.state).toEqual('closed');
+        expect(gate.timestamp).toEqual('NOW');
+    });
+
+    it('should set the gate message', async () => {
+        //given
+        await gateRepository.createOrUpdateService('myGroup', 'myService', ['env1', 'env2']);
+
+        //when
+        let state = await gateRepository.setGate('myGroup', 'myService', 'env1', undefined, undefined, 'a message');
+
+        //then
+        expect(state).toEqual(true);
+
+        let gate = await gateRepository.findGate('myGroup', 'myService', 'env1');
+        expect(gate.message).toEqual('a message');
     });
 
     it('should delete a service', async () => {

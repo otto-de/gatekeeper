@@ -3,7 +3,7 @@ const request = require('supertest');
 jest.mock('../../services/ticketService', () => {
     return {
         createOrUpdateService: jest.fn(),
-        setGateState: jest.fn(),
+        setGate: jest.fn(),
         unlockGate: jest.fn(),
         lockGate: jest.fn()
     };
@@ -22,7 +22,7 @@ describe('tickets route', () => {
 
     beforeEach(() => {
         ticketServiceMock.createOrUpdateService.mockReset();
-        ticketServiceMock.setGateState.mockReset();
+        ticketServiceMock.setGate.mockReset();
         ticketServiceMock.unlockGate.mockReset();
         ticketServiceMock.lockGate.mockReset();
     });

@@ -4,7 +4,7 @@ jest.mock('../../services/gateService', () => {
     return {
         createOrUpdateService: jest.fn(),
         findGate: jest.fn(),
-        setGateState: jest.fn(),
+        setGate: jest.fn(),
         deleteService: jest.fn()
     };
 });
@@ -19,7 +19,7 @@ describe('gates route', () => {
     beforeEach(() => {
         gateServiceMock.createOrUpdateService.mockReset();
         gateServiceMock.findGate.mockReset();
-        gateServiceMock.setGateState.mockReset();
+        gateServiceMock.setGate.mockReset();
         gateServiceMock.deleteService.mockReset();
     });
 
@@ -27,7 +27,7 @@ describe('gates route', () => {
         server.close();
     });
 
-    it('should return a gate with GET on /api/gates/group/service/environment', () => {
+    it('GET: should return a gate with GET on /api/gates/group/service/environment', () => {
             gateServiceMock.findGate.mockReturnValue({gate: 'gate'});
             return request(server)
                 .get('/api/gates/group/service/environment')
@@ -36,7 +36,7 @@ describe('gates route', () => {
         }
     );
 
-    it('should return 404 if gate not exist', () => {
+    it('GET: should return 404 if gate not exist', () => {
             gateServiceMock.findGate.mockReturnValue(null);
             return request(server)
                 .get('/api/gates/group/service/environment')
@@ -44,7 +44,7 @@ describe('gates route', () => {
         }
     );
 
-    it('called service on POST on /api/gates', () => {
+    it('POST: create a gate', () => {
             return request(server)
                 .post('/api/gates')
                 .send(
@@ -59,7 +59,7 @@ describe('gates route', () => {
         }
     );
 
-    it('returns 500 when gate cannot be created', () => {
+    it('POST: returns 500 when gate cannot be created', () => {
             return request(server)
                 .post('/api/gates')
                 .send(
@@ -74,7 +74,7 @@ describe('gates route', () => {
         }
     );
 
-    it('should return an error on create gate', () => {
+    it('POST: should return an error on create gate', () => {
             const error = {
                 'status': 400,
                 'statusText': 'Bad Request',
@@ -112,20 +112,58 @@ describe('gates route', () => {
         }
     );
 
-    it('should close the gate', () => {
-            gateServiceMock.setGateState.mockReturnValue({status: 'open'});
-            return request(server)
-                .put('/api/gates/group/service/environment')
-                .send({open: false})
-                .expect(200, {status: 'open'});
-        }
-    );
+    it('PUT: set the gate state to open', () => {
+        gateServiceMock.setGate.mockReturnValue(true);
 
-    it('should return 404 if user tries to close a gate that does not exist', () => {
-            gateServiceMock.setGateState.mockReturnValue(null);
+        return request(server)
+            .put('/api/gates/group/service/environment')
+            .send({state: 'open'})
+            .expect(204);
+    });
+
+    it('PUT: the API should reject invalid gate states', () => {
+        gateServiceMock.setGate.mockReturnValue(null);
+
+        const error = {
+            'status': 400,
+            'statusText': 'Bad Request',
+            'errors': [
+                {
+                    'field': 'state',
+                    'location': 'body',
+                    'messages': [
+                        '\"state\" must be one of [open, closed]'
+                    ],
+                    'types': [
+                        'any.allowOnly'
+                    ],
+                }
+            ],
+        };
+
+        return request(server)
+            .put('/api/gates/group/service/environment')
+            .send({state: 'dog'})
+            .expect(400)
+            .then((res) => {
+                const response = JSON.parse(res.text);
+                expect(response).toEqual(error);
+            });
+    });
+
+    it('PUT: set the gate message', () => {
+        gateServiceMock.setGate.mockReturnValue(true);
+        return request(server)
+            .put('/api/gates/group/service/environment')
+            .send({message: 'wip: should not go live jet'})
+            .expect(204);
+    });
+
+    it('PUT: should return 404 the gate that does not exist', () => {
+            gateServiceMock.setGate.mockReturnValue(null);
             return request(server)
                 .put('/api/gates/group/service/environment')
-                .send({open: false})
+                .send({state: 'closed'})
                 .expect(404, 'Gate not found');
         }
     );
@@ -147,4 +185,3 @@ describe('gates route', () => {
         }
     );
 });
-

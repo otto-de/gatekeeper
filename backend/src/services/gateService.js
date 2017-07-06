@@ -10,8 +10,12 @@ module.exports = {
         return await gateRepository.createOrUpdateService(group, service, environments);
     },
 
-    setGateState: async (group, service, environment, open) => {
-        return await gateRepository.setGateState(group, service, environment, open);
+    setGate: async (group, service, environment, state, message) => {
+        let timestamp;
+        if (state) {
+            timestamp = new Date().getTime();
+        }
+        return await gateRepository.setGate(group, service, environment, state, timestamp, message);
     },
 
     deleteService: async (group, service) => {

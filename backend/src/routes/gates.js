@@ -29,32 +29,36 @@ router.post('/', validate(createOrUpdateServiceSchema), (async (req, res) => {
     try {
         await gateService.createOrUpdateService(group, service, environments);
         res.status(201);
-        res.send('Got a POST request');
+        res.send('');
     } catch (error) {
         res.status(500);
+        res.send(error);
     }
 }));
 
 const setGateSchema = {
     body: {
-        open: Joi.boolean().required()
+        state: Joi.any().valid(['open', 'closed']),
+        message: Joi.string()
     }
 };
 
 router.put('/:group/:service/:environment', validate(setGateSchema), (async (req, res) => {
     const {group, service, environment} = req.params;
-    const {open} = req.body;
+    const {state, message} = req.body;
     try {
-        const result = await gateService.setGateState(group, service, environment, open);
+        const result = await gateService.setGate(group, service, environment, state, message);
         if (result === null) {
             res.status(404);
             res.send('Gate not found');
         } else {
-            res.status(200);
-            res.json(result);
+
+            res.status(204);
+            res.send('');
         }
     } catch (error) {
         res.status(500);
+        res.send(error);
     }
 }));
 
@@ -71,6 +75,7 @@ router.delete('/:group/:service', (async (req, res) => {
         }
     } catch (error) {
         res.status(500);
+        res.send(error);
     }
 }));
 
