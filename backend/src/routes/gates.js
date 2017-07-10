@@ -3,6 +3,18 @@ const validate = require('express-validation');
 const Joi = require('joi');
 const router = express.Router();
 const gateService = require('../services/gateService');
+const sse = require('../routes/sse');
+
+router.get('/', (async (req, res) => {
+    const gate = await gateService.getAllGates();
+    if (gate === null) {
+        res.status(404);
+        res.send('Gate not found');
+    } else {
+        res.status(200);
+        res.json(gate);
+    }
+}));
 
 router.get('/:group/:service/:environment', (async (req, res) => {
     const {group, service, environment} = req.params;
@@ -30,6 +42,7 @@ router.post('/', validate(createOrUpdateServiceSchema), (async (req, res) => {
         await gateService.createOrUpdateService(group, service, environments);
         res.status(201);
         res.send('');
+        await sse.notifyStateChange();
     } catch (error) {
         res.status(500);
         res.send(error);
@@ -52,9 +65,9 @@ router.put('/:group/:service/:environment', validate(setGateSchema), (async (req
             res.status(404);
             res.send('Gate not found');
         } else {
-
             res.status(204);
             res.send('');
+            await sse.notifyStateChange();
         }
     } catch (error) {
         res.status(500);
@@ -72,6 +85,7 @@ router.delete('/:group/:service', (async (req, res) => {
         } else {
             res.status(204);
             res.json(result);
+            await sse.notifyStateChange();
         }
     } catch (error) {
         res.status(500);

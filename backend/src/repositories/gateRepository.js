@@ -1,6 +1,10 @@
 const db = require('./database');
 
 module.exports = {
+    getAll: async () => {
+        const gatekeeperCollection = db.get('gatekeeper');
+        return await gatekeeperCollection.find({});
+    },
     updateEnvironments: function (currentEnvironments, newEnvironments) {
         let withoutDeletedEnvironments = Object.keys(currentEnvironments)
             .filter((env) => newEnvironments.includes(env))

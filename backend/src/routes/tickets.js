@@ -3,7 +3,7 @@ const validate = require('express-validation');
 const Joi = require('joi');
 const router = express.Router();
 const ticketService = require('../services/ticketService');
-
+const sse = require('../routes/sse');
 
 const getTicket = {
     body: {
@@ -24,21 +24,23 @@ router.put('/:group/:service/:environment', validate(getTicket), (async (req, re
         } else {
             res.status(200);
             res.json(result);
+            await sse.notifyStateChange();
         }
     } catch (error) {
         res.status(500);
     }
 }));
 
-router.delete('/:group/:service/:environment/:ticketId', (async (req, res) => {
+router.delete('/:group/:service/:environment/:ticketId', async (req, res) => {
     const {group, service, environment, ticketId} = req.params;
     try {
-        const result = await ticketService.unlockGate(group, service, environment, ticketId);
+        await ticketService.unlockGate(group, service, environment, ticketId);
         res.status(204);
         res.send();
+        await sse.notifyStateChange();
     } catch (error) {
         res.status(500);
     }
-}));
+});
 
 module.exports = router;

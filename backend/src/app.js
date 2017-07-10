@@ -8,6 +8,7 @@ const bodyParser = require('body-parser');
 const index = require('./routes/index');
 const gates = require('./routes/gates');
 const tickets = require('./routes/tickets');
+const sse = require('./routes/sse');
 
 const app = express();
 
@@ -22,6 +23,7 @@ app.use(express.static(path.join(__dirname, '..', '..', 'frontend/build')));
 app.use('/', index);
 app.use('/api/gates', gates);
 app.use('/api/tickets', tickets);
+app.use('/stream', sse.router);
 
 
 // catch 404 and forward to error handler
