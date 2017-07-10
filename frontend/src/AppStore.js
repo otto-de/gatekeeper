@@ -1,5 +1,6 @@
-import {createStore} from 'redux';
+import { createStore, applyMiddleware, compose} from 'redux';
 import reducer from './reducers';
+import sse from './enhancers/sse'
 
 const initialState = {
     tabs: {
@@ -62,6 +63,7 @@ const initialState = {
     }
 };
 
-const middleware = window.devToolsExtension ? window.devToolsExtension() : f => f;
+const devToolsExtension = window.devToolsExtension ? window.devToolsExtension() : f => f;
 
-export const createGatekeeperStore = () => createStore(reducer, initialState, middleware);
+export const createGatekeeperStore = () => createStore(reducer, initialState, compose(applyMiddleware(sse),
+devToolsExtension));

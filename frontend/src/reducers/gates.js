@@ -1,4 +1,5 @@
 import R from 'ramda'
+import { RECEIVE_STATE } from '../enhancers/sse';
 
 const ADD_TICKET = 'gatekeeper/gate/ticket/ADD';
 const REMOVE_TICKET = 'gatekeeper/gate/ticket/REMOVE';
@@ -30,7 +31,9 @@ export default function reducer(state = {}, action = {}) {
         case SET_LAST_MODIFIED:
             return R.set(lastModifiedPath, action.last_modified, state);
         case SET_EDIT_COMMENT_DIALOG:
-            return R.set(editCommentDialogPath, action.show_comment_edit_dialog, state);
+            return R.set(editCommentDialogPath, action.show_comment_edit_dialog, state)
+        case RECEIVE_STATE:
+            return {...action.state.gates}
         default:
             return state;
     }
