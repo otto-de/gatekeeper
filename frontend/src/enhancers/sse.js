@@ -12,7 +12,7 @@ export default function middleware({ getState, dispatch }) {
                 eventSource = new EventSource(action.path);
                 eventSource.addEventListener('state', function(e) {
                     dispatch(receiveCompleteState(JSON.parse(e.data)));
-                }, false)
+                }, false);
                 eventSource.onerror = (e) => dispatch(handleError(e));
                 break;
             case DISCONNECT:

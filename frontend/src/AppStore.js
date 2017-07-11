@@ -1,6 +1,6 @@
 import { createStore, applyMiddleware, compose} from 'redux';
 import reducer from './reducers';
-import sse from './enhancers/sse'
+import sse from './enhancers/sse';
 
 const initialState = {
     tabs: {
