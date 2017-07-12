@@ -2,9 +2,8 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 import {MockStore} from './mockStore';
 import {Provider} from 'react-redux';
-import {Modal, Button} from 'react-bootstrap';
+import {Modal} from 'react-bootstrap';
 import {shallow, mount} from 'enzyme';
-import sinon from 'sinon';
 import ConnectedEditServiceDialog, {EditServiceDialog, ServiceForm}  from '../EditServiceDialog';
 
 jest.mock('../FormInputField', () => 'FormInputField');
@@ -36,12 +35,6 @@ describe('EditServiceDialog', () => {
         expect(tree).toMatchSnapshot();
     });
 
-    it('close button', () => {
-        const buttonSpy = sinon.spy();
-        const component = shallow(<ServiceForm closeEditServiceDialog={buttonSpy}/>);
-        component.find(Button).at(1).simulate('click');
-        expect(buttonSpy.calledOnce).toBeTruthy();
-    });
 });
 
 describe('load from state', () => {

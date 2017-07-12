@@ -4,9 +4,6 @@ exports[`EditServiceDialog contact form should render form corretly 1`] = `
 <form
   onSubmit={undefined}
 >
-  <h4>
-    Add Service
-  </h4>
   <FormInputField
     inputProps={
       Object {
@@ -40,19 +37,27 @@ exports[`EditServiceDialog contact form should render form corretly 1`] = `
     placeholder="Env1, Env2, Env3"
   />
   <button
-    className="btn btn-success"
+    className="btn btn-danger"
     disabled={false}
-    type="submit"
-  >
-    Save
-  </button>
-  <button
-    className="btn btn-default"
-    disabled={false}
-    onClick={[Function]}
+    onClick={undefined}
     type="button"
   >
-    Close
+    Delete
   </button>
+  <div
+    style={
+      Object {
+        "float": "right",
+      }
+    }
+  >
+    <button
+      className="btn btn-success"
+      disabled={false}
+      type="submit"
+    >
+      Save
+    </button>
+  </div>
 </form>
 `;

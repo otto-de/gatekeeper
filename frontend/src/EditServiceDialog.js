@@ -5,14 +5,14 @@ import {connect} from 'react-redux';
 import {reduxForm} from 'redux-form';
 import {Button, Modal} from 'react-bootstrap';
 import {closeEditServiceDialog} from './reducers/dialog';
+import { deleteServiceRequest } from './enhancers/api';
 import FormInputField from './FormInputField';
 
 export const ServiceForm = props => {
     // handleSubmit comes from redux-form and must be passed to form
-    const {handleSubmit, closeEditServiceDialog} = props;
+    const {handleSubmit, deleteService} = props;
     return (
         <form onSubmit={ handleSubmit }>
-            <h4>Add Service</h4>
             <FormInputField label="Name"
                             name="name"
                             inputProps={{type: 'text', component: 'input', autoFocus: true}}/>
@@ -23,8 +23,11 @@ export const ServiceForm = props => {
                             name="environments"
                             inputProps={{type: 'text', component: 'input'}}
                             placeholder="Env1, Env2, Env3"/>
-            <Button bsStyle="success" type="submit">Save</Button>
-            <Button onClick={() => closeEditServiceDialog()}>Close</Button>
+            <Button bsStyle="danger" onClick={deleteService}>Delete</Button>
+            <div style={{float: "right"}}>
+                <Button bsStyle="success" type="submit">Save</Button>
+            </div>
+
         </form>
     );
 };
@@ -35,11 +38,16 @@ const ConnectedServiceForm = reduxForm({
 
 export class EditServiceDialog extends React.Component {
     render() {
-        const {service, group, environments, show, setService, closeEditServiceDialog} = this.props;
+        const {service, group, environments, show, setService, deleteService, closeEditServiceDialog} = this.props;
+        console.log(this.props);
         return (
             <Modal show={show} onHide={() => closeEditServiceDialog()}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Add Service</Modal.Title>
+                </Modal.Header>
                 <Modal.Body>
                     {<ConnectedServiceForm onSubmit={setService}
+                                           deleteService={() => deleteService(group, service)}
                                            closeEditServiceDialog={closeEditServiceDialog}
                                            initialValues={{name: service, group: group, environments: environments}}/>}
                 </Modal.Body>
@@ -86,6 +94,10 @@ const mapDispatchToProps = (dispatch, initialProps) => {
         setService: (input) => {
             console.log(input);
             // dispatch(setComment(initialProps.group, initialProps.service, initialProps.environment, input.comment));
+            dispatch(closeEditServiceDialog());
+        },
+        deleteService: (group, service) => {
+            dispatch(deleteServiceRequest(group, service));
             dispatch(closeEditServiceDialog());
         }
     };
