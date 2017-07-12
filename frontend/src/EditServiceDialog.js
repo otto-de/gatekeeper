@@ -39,7 +39,6 @@ const ConnectedServiceForm = reduxForm({
 export class EditServiceDialog extends React.Component {
     render() {
         const {service, group, environments, show, setService, deleteService, closeEditServiceDialog} = this.props;
-        console.log(this.props);
         return (
             <Modal show={show} onHide={() => closeEditServiceDialog()}>
                 <Modal.Header closeButton>
