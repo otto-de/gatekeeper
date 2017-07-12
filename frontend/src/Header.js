@@ -15,7 +15,7 @@ export class Header extends React.Component {
     render() {
         const {links} = this.props;
         return (
-            <Navbar>
+            <Navbar fluid>
                 <Navbar.Header>
                     <Navbar.Brand>
                         Gatekeeper
