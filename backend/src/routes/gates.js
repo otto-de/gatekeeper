@@ -81,15 +81,15 @@ router.delete('/:group/:service', (async (req, res) => {
         const result = await gateService.deleteService(group, service);
         if (result === null) {
             res.status(404);
-            res.send('Service not found');
+            res.json({status: 'error', message: `unknown service: ${group}/${service}`});
         } else {
             res.status(204);
-            res.json(result);
+            res.end();
             await sse.notifyStateChange();
         }
     } catch (error) {
         res.status(500);
-        res.send(error);
+        res.json({status: 'error', message: error.message});
     }
 }));
 

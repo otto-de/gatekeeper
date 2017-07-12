@@ -181,7 +181,7 @@ describe('gates route', () => {
             gateServiceMock.deleteService.mockReturnValue(null);
             return request(server)
                 .del('/api/gates/group/service')
-                .expect(404, 'Service not found');
+                .expect(404, '{"status":"error","message":"unknown service: group/service"}');
         }
     );
 });
