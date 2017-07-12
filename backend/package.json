@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "license": "MIT",
   "scripts": {
-    "start": "node ./src/bin/www",
-    "production": "cd ../frontend && yarn --production=false && yarn run build && yarn start",
-    "test": "jest"
+    "start": "cd ../frontend && yarn --production=false && yarn run build && cd ../backend && node ./src/bin/www",
+    "test": "jest",
+    "dev": "PORT=5000 node ./src/bin/www"
   },
   "dependencies": {
     "body-parser": "~1.17.1",
