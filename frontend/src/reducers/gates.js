@@ -1,5 +1,5 @@
 import R from 'ramda';
-import { RECEIVE_STATE } from '../enhancers/sse';
+import { RECEIVE_STATE, RECEIVE_DELETE_SERVICE } from '../enhancers/sse';
 
 const ADD_TICKET = 'gatekeeper/gate/ticket/ADD';
 const REMOVE_TICKET = 'gatekeeper/gate/ticket/REMOVE';
@@ -34,6 +34,17 @@ export default function reducer(state = {}, action = {}) {
             return R.set(editCommentDialogPath, action.show_comment_edit_dialog, state);
         case RECEIVE_STATE:
             return {...action.state.gates};
+        case RECEIVE_DELETE_SERVICE:
+            let newState = {...state};
+            let group = newState[action.group];
+            let serviceNames = Object.keys(group);
+            let groupWithServiceRemoved = R.pick(R.without([action.service], serviceNames), group);
+            if(Object.keys(groupWithServiceRemoved).length === 0) {
+                delete newState[action.group];
+            } else {
+                newState[action.group] = groupWithServiceRemoved;
+            }
+            return newState;
         default:
             return state;
     }

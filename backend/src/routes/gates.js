@@ -85,7 +85,7 @@ router.delete('/:group/:service', (async (req, res) => {
         } else {
             res.status(204);
             res.end();
-            await sse.notifyStateChange();
+            sse.notifyDeleteService(group, service);
         }
     } catch (error) {
         res.status(500);

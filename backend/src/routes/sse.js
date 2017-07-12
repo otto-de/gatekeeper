@@ -17,12 +17,20 @@ router.get('/', async (req, res) => {
     });
 });
 
-async function notifyStateChange() {
-    const gates = await gateService.getAllGates();
+function send(event, message) {
     connections.forEach(con => {
         console.log('notify connection: ' + con.id);
-        con.res.sse.sendEvent('state', gates)
+        con.res.sse.sendEvent(event, message)
     });
 }
 
-module.exports = { router, notifyStateChange };
+async function notifyStateChange() {
+    const gates = await gateService.getAllGates();
+    send('state', gates);
+}
+
+function notifyDeleteService(group, service) {
+    send('deleteService', {group, service});
+}
+
+module.exports = { router, notifyStateChange, notifyDeleteService };
