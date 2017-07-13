@@ -1,0 +1,53 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`GroupIndex component render 1`] = `
+<div>
+  <Link
+    activeClassName="active"
+    to="/"
+  >
+    Home
+  </Link>
+  <Link
+    to="/group/group1"
+  >
+    group1
+  </Link>
+  <Link
+    to="/group/group2"
+  >
+    group2
+  </Link>
+  <Link
+    to="/about"
+  >
+    About
+  </Link>
+</div>
+`;
+
+exports[`load from state should load the state correctly 1`] = `
+<div>
+  <Link
+    activeClassName="active"
+    to="/"
+  >
+    Home
+  </Link>
+  <Link
+    to="/group/ftx"
+  >
+    ftx
+  </Link>
+  <Link
+    to="/group/fty"
+  >
+    fty
+  </Link>
+  <Link
+    to="/about"
+  >
+    About
+  </Link>
+</div>
+`;

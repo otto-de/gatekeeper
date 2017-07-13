@@ -1,15 +1,12 @@
-import { createStore, applyMiddleware, compose} from 'redux';
+import {createStore, applyMiddleware, compose} from 'redux';
+import {routerMiddleware} from 'react-router-redux';
+import createHistory from 'history/createBrowserHistory';
 import reducer from './reducers';
 import sse from './enhancers/sse';
 import api from './enhancers/api';
 
 const initialState = {
-    tabs: {
-        active_tab: 0
-    },
-    dialog: {
-
-    },
+    dialog: {},
     gates: {
         group1: {
             service: {
@@ -63,8 +60,10 @@ const initialState = {
         }
     }
 };
+export const history = createHistory();
+const router = routerMiddleware(history);
 
 const devToolsExtension = window.devToolsExtension ? window.devToolsExtension() : f => f;
 
-export const createGatekeeperStore = () => createStore(reducer, initialState, compose(applyMiddleware(sse, api),
-devToolsExtension));
+export const createGatekeeperStore = () => createStore(reducer, initialState, compose(applyMiddleware(sse, api, router),
+    devToolsExtension));

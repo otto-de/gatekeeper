@@ -4,12 +4,16 @@
   "private": true,
   "proxy": "http://localhost:5000",
   "dependencies": {
+    "history": "^4.6.3",
     "prop-types": "^15.5.10",
     "ramda": "^0.24.1",
     "react": "^15.5.4",
     "react-bootstrap": "^0.31.0",
     "react-dom": "^15.5.4",
     "react-redux": "^5.0.5",
+    "react-router": "^4.1.1",
+    "react-router-dom": "^4.1.1",
+    "react-router-redux": "next",
     "redux": "^3.6.0",
     "redux-form": "^6.8.0"
   },

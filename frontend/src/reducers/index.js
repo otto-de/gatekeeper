@@ -1,12 +1,12 @@
-import { combineReducers } from 'redux';
+import {combineReducers} from 'redux';
 import gates from './gates';
-import tabs from './tabs';
 import dialog from './dialog';
-import { reducer as formReducer } from 'redux-form';
+import {reducer as formReducer} from 'redux-form';
+import {routerReducer} from 'react-router-redux';
 
 export default combineReducers({
     gates,
-    tabs,
     dialog,
-    form: formReducer
-})
+    form: formReducer,
+    router: routerReducer
+});

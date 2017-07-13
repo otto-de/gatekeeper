@@ -27,7 +27,6 @@ export const ServiceForm = props => {
             <div style={{float: "right"}}>
                 <Button bsStyle="success" type="submit">Save</Button>
             </div>
-
         </form>
     );
 };
