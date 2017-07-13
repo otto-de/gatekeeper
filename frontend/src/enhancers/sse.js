@@ -24,6 +24,7 @@ export default function middleware({getState, dispatch}) {
             case DISCONNECT:
                 if (eventSource) {
                     eventSource.close();
+                    eventSource = undefined;
                 }
                 break;
             default:
@@ -37,6 +38,10 @@ export function connect(path = '/stream') {
     return {type: CONNECT, path};
 }
 
+export function disconnect() {
+    return {type: DISCONNECT};
+}
+
 export function receiveCompleteState(state) {
     return {type: RECEIVE_STATE, state};
 }
@@ -45,6 +50,6 @@ export function handleError(error) {
     return {type: ERROR, error};
 }
 
-function receiveDeleteService(serviceInfo) {
-    return {type: RECEIVE_DELETE_SERVICE, ...serviceInfo}
+function receiveDeleteService({group, service}) {
+    return {type: RECEIVE_DELETE_SERVICE, group, service}
 }
