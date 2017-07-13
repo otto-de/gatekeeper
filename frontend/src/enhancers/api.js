@@ -11,7 +11,7 @@ export default function backendRequests({ getState, dispatch }) {
                     method: 'delete'
                 }).then(function (response) {
                     if(response.status === 204) {
-                        dispatch(deleteServiceResponse());
+                        dispatch(deleteServiceResponse(group, service));
                     } else if(response.status === 404) {
                         dispatch(handleDeleteServiceError(`unknown service: ${group}/${service}`));
                     } else {
@@ -32,8 +32,9 @@ export function deleteServiceRequest(group, service) {
     return {type: DELETE_SERVICE_REQUEST, group, service};
 }
 
-export function deleteServiceResponse() {
-    return {type: DELETE_SERVICE_REQUEST };
+export function deleteServiceResponse(group, service) {
+    return {type: DELETE_SERVICE_REQUEST, group, service};
+}
 }
 
 export function handleDeleteServiceError(error) {
