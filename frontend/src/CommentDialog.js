@@ -15,7 +15,7 @@ export class CommentForm extends React.Component {
             <form onSubmit={ handleSubmit }>
                 <h4>Edit Comment</h4>
                 <FormInputField name="comment"
-                                inputProps={{type: 'text', component: 'input', autoFocus: true}}
+                                autoFocus={true}
                                 placeholder="enter comment"/>
                 <Button bsStyle="success" type="submit">Save</Button>
                 <Button onClick={() => closeCommentEditDialog()}>Close</Button>

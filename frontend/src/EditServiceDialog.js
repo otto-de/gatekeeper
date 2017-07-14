@@ -15,13 +15,11 @@ export const ServiceForm = props => {
         <form onSubmit={ handleSubmit }>
             <FormInputField label="Name"
                             name="name"
-                            inputProps={{type: 'text', component: 'input', autoFocus: true}}/>
+                            autoFocus={true}/>
             <FormInputField label="Group"
-                            name="group"
-                            inputProps={{type: 'text', component: 'input'}}/>
+                            name="group"/>
             <FormInputField label="Environments"
                             name="environments"
-                            inputProps={{type: 'text', component: 'input'}}
                             placeholder="Env1, Env2, Env3"/>
             <Button bsStyle="danger" onClick={deleteService}>Delete</Button>
             <div style={{float: 'right'}}>

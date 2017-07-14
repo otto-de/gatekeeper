@@ -8,13 +8,7 @@ exports[`CommentDialog contact form should render form correctly 1`] = `
     Edit Comment
   </h4>
   <FormInputField
-    inputProps={
-      Object {
-        "autoFocus": true,
-        "component": "input",
-        "type": "text",
-      }
-    }
+    autoFocus={true}
     name="comment"
     placeholder="enter comment"
   />

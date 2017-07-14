@@ -5,8 +5,9 @@ import PropTypes from 'prop-types';
 
 export default class FormInputField extends React.Component {
     render() {
-        let {name, label, placeholder, labelProps, inputColProps, inputProps} = this.props;
+        let {name, label, placeholder, labelProps, inputColProps, autoFocus} = this.props;
         placeholder = placeholder || label;
+        autoFocus = autoFocus || false;
 
         return (
             <FormGroup controlId={name}>
@@ -14,22 +15,24 @@ export default class FormInputField extends React.Component {
                     {label}
                 </Col>
                 <Col {...(inputColProps || {})}>
-                    <Field className="form-control" id={name} name={name} {...(inputProps || {})}
-                           placeholder={placeholder}>
-                        {this.props.children}
-                    </Field>
+                    <Field id={name}
+                           name={name}
+                           className='form-control'
+                           component='input'
+                           type='text'
+                           autoFocus={autoFocus}
+                           placeholder={placeholder}/>
                 </Col>
             </FormGroup>
         );
     }
 }
 
-
 FormInputField.propTypes = {
     name: PropTypes.string.isRequired,
     label: PropTypes.string,
     placeholder: PropTypes.string,
     labelProps: PropTypes.object,
-    inputColProps: PropTypes.object,
-    inputProps: PropTypes.object
+    autoFocus: PropTypes.bool,
+    inputColProps: PropTypes.object
 };
