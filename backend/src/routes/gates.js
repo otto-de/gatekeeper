@@ -40,12 +40,12 @@ router.post('/', validate(createOrUpdateServiceSchema), (async (req, res) => {
     let {service, group, environments} = req.body;
     try {
         await gateService.createOrUpdateService(group, service, environments);
-        res.status(201);
-        res.send('');
+        res.status(204);
+        res.end();
         await sse.notifyStateChange();
     } catch (error) {
         res.status(500);
-        res.send(error);
+        res.json({status: 'error', message: error.message});
     }
 }));
 

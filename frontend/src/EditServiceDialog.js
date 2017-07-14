@@ -89,10 +89,12 @@ const mapDispatchToProps = (dispatch, initialProps) => {
         closeEditServiceDialog: () => {
             dispatch(closeEditServiceDialog());
         },
-        setService: (input) => {
-            console.log(input);
-            // dispatch(setComment(initialProps.group, initialProps.service, initialProps.environment, input.comment));
-            dispatch(closeEditServiceDialog());
+        setService: ({group, name, environments}) => {
+            let trimmedFormValue = (environments || "").trim();
+            if (trimmedFormValue === "") {
+                return;
+            }
+            dispatch(createOrUpdateServiceRequest(group, name, trimmedFormValue.split(",").map(str => str.trim())));
         },
         deleteService: (group, service) => {
             dispatch(deleteServiceRequest(group, service));

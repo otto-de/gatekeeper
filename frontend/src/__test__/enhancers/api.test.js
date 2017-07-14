@@ -1,4 +1,4 @@
-import enhancer,{deleteServiceRequest} from  '../../enhancers/api';
+import enhancer,{deleteServiceRequest, createOrUpdateServiceRequest } from  '../../enhancers/api';
 
 const mockResponse = (status, statusText, body) => {
     let response = new global.Response(body, {
@@ -22,7 +22,9 @@ const mockFetch = (mockResponse, mockError, pathCB) => {
                 impl(mockResponse);
             }
             return { catch:(implError) => {
-                implError(mockError)
+                if(mockError) {
+                    implError(mockError)
+                }
             }};
         }}
     });
@@ -44,48 +46,90 @@ describe('Api', () => {
         next.mockReset();
     });
 
-    it('delete service with api path', () => {
-        let path;
-        global.fetch = jest.fn().mockImplementation((fetchPath) => {
-            path = fetchPath;
-            return Promise.resolve(mockResponse(204, null, undefined))
+    describe('delete a service', () => {
+        it('api path', () => {
+            let path;
+            global.fetch = jest.fn().mockImplementation((fetchPath) => {
+                path = fetchPath;
+                return Promise.resolve(mockResponse(204, null, undefined))
+            });
+
+            api(deleteServiceRequest('group1','service1'));
+
+            expect(path).toEqual('/api/gates/group1/service1');
         });
 
-        api(deleteServiceRequest('group1','service1'));
+        it('success should trigger response action', () => {
+            global.fetch = mockFetch(mockResponse(204, null, undefined));
 
-        expect(path).toEqual('/api/gates/group1/service1');
+            api(deleteServiceRequest('group2','service2'));
+
+            expect(dispatch).toHaveBeenCalledWith({type: 'gatekeeper/api/service/DELETE', group:'group2', service:'service2' });
+        });
+
+        it('failure with 404 should trigger error action', () => {
+            global.fetch = mockFetch(mockResponse(404, null, '{"message":"error"}'));
+
+            api(deleteServiceRequest('group3','service3'));
+
+            expect(dispatch).toHaveBeenCalledWith({type: 'gatekeeper/api/service/delete/ERROR', error:'unknown service: group3/service3' });
+        });
+
+        it('failure with 5XX should trigger error action', () => {
+            global.fetch = mockFetch(mockResponse(500, null, '{"status": "error", "message": "error-message"}'));
+
+            api(deleteServiceRequest('group3','service3'));
+
+            expect(dispatch).toHaveBeenCalledWith({type: 'gatekeeper/api/service/delete/ERROR', error: {message: "error-message", status: "error"} });
+        });
+
+        it('other failures should trigger error action', () => {
+            global.fetch = mockFetch(undefined, "error!");
+
+            api(deleteServiceRequest('group3','service3'));
+
+            expect(dispatch).toHaveBeenCalledWith({type: 'gatekeeper/api/service/delete/ERROR', error: "error!" });
+        });
     });
 
-    it('delete service success should trigger response action', () => {
-        global.fetch = mockFetch(mockResponse(204, null, undefined));
+    describe('create or edit service', () => {
 
-        api(deleteServiceRequest('group2','service2'));
+        it('api path', () => {
+            let path;
+            global.fetch = jest.fn().mockImplementation((fetchPath) => {
+                path = fetchPath;
+                return Promise.resolve(mockResponse(204, null, undefined))
+            });
 
-        expect(dispatch).toHaveBeenCalledWith({type: 'gatekeeper/api/service/DELETE', group:'group2', service:'service2' });
-    });
+            api(createOrUpdateServiceRequest('group1', 'service1', []));
 
-    it('delete service failure with 404 should trigger error action', () => {
-        global.fetch = mockFetch(mockResponse(404, null, '{"message":"error"}'));
+            expect(path).toEqual('/api/gates');
+        });
 
-        api(deleteServiceRequest('group3','service3'));
+        it('success should trigger response action', () => {
+            global.fetch = mockFetch(mockResponse(204, null, undefined));
 
-        expect(dispatch).toHaveBeenCalledWith({type: 'gatekeeper/api/service/delete/ERROR', error:'unknown service: group3/service3' });
-    });
+            api(createOrUpdateServiceRequest('groupX', 'serviceX', ['live', 'dev']));
 
-    it('delete service failure with 5XX should trigger error action', () => {
-        global.fetch = mockFetch(mockResponse(500, null, '{"status": "error", "message": "error-message"}'));
+            expect(dispatch).toHaveBeenCalledWith({'type': 'gatekeeper/api/service/create/RESPONSE', 'environments': ['live', 'dev'], 'group': 'groupX', 'service': 'serviceX'});
+        });
 
-        api(deleteServiceRequest('group3','service3'));
+        it('failure with 5XX should trigger error action', () => {
+            global.fetch = mockFetch(mockResponse(500, null, '{"status": "error", "message": "error-message"}'));
 
-        expect(dispatch).toHaveBeenCalledWith({type: 'gatekeeper/api/service/delete/ERROR', error: {message: "error-message", status: "error"} });
-    });
+            api(createOrUpdateServiceRequest('groupY', 'serviceY', ['live']));
 
-    it('delete service failure in the network should trigger error action', () => {
-        global.fetch = mockFetch(undefined, "error!");
+            expect(dispatch).toHaveBeenCalledWith({type: 'gatekeeper/api/service/create/ERROR', error: {message: "error-message", status: "error"} });
+        });
 
-        api(deleteServiceRequest('group3','service3'));
+        it('other failures should trigger error action', () => {
+            global.fetch = mockFetch(undefined, "error!");
 
-        expect(dispatch).toHaveBeenCalledWith({type: 'gatekeeper/api/service/delete/ERROR', error: "error!" });
+            api(createOrUpdateServiceRequest('groupZ', 'serviceZ', ['dev']));
+
+            expect(dispatch).toHaveBeenCalledWith({type: 'gatekeeper/api/service/create/ERROR', error: "error!" });
+        });
+
     });
 
 });
