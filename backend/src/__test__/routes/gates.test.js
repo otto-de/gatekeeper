@@ -54,22 +54,7 @@ describe('gates route', () => {
                         environments: ['env1', 'env2']
                     }
                 )
-                .expect(201)
-                .then(() => expect(gateServiceMock.createOrUpdateService).toBeCalledWith('myGroup', 'myService', ['env1', 'env2']));
-        }
-    );
-
-    it('POST: returns 500 when gate cannot be created', () => {
-            return request(server)
-                .post('/api/gates')
-                .send(
-                    {
-                        service: 'myService',
-                        group: 'myGroup',
-                        environments: ['env1', 'env2']
-                    }
-                )
-                .expect(201)
+                .expect(204)
                 .then(() => expect(gateServiceMock.createOrUpdateService).toBeCalledWith('myGroup', 'myService', ['env1', 'env2']));
         }
     );
