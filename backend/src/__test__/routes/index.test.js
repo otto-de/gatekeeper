@@ -16,10 +16,10 @@ describe('index route', () => {
             .expect(200);
     });
 
-    it('returns 404 on unknown paths', () => {
+    it('returns 200 on all paths', () => {
             return request(server)
-                .get('/foo/gates')
-                .expect(404);
+                .get('/group/ftx')
+                .expect(200);
         }
     );
 });

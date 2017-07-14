@@ -4,22 +4,28 @@ import Group from './Group';
 import './App.css';
 import Toolbar from './Toolbar';
 import EditGateDialog from './EditServiceDialog';
-import {history} from './AppStore';
 import R from 'ramda';
+
 
 export class App extends Component {
     render() {
         const {groups} = this.props;
         const target_group = this.props.match.params.groupId;
-        if (!groups.includes(target_group)) {
-            history.push('/');
-            return null;
+
+        let text;
+        let content = true;
+        if (groups.length === 0) {
+            text = 'Loading';
+            content = false;
+        } else if (!groups.includes(target_group)) {
+            text = '404';
+            content = false;
         }
         return (
             <div>
                 <Toolbar/>
                 <EditGateDialog/>
-                <Group group={target_group}/>
+                {content ? <Group group={target_group}/> : <div>{text}</div>}
             </div>
         );
     }

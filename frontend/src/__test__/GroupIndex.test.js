@@ -7,6 +7,8 @@ import ConnectedGroupIndex, {GroupIndex} from '../GroupIndex';
 
 jest.mock('react-router-dom/Link', () => 'Link');
 jest.mock('react-router-dom/NavLink', () => 'NavLink');
+jest.mock('../Toolbar', () => 'Toolbar');
+jest.mock('../EditServiceDialog', () => 'EditServiceDialog');
 
 describe('GroupIndex component', () => {
     it('render', () => {

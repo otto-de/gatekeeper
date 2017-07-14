@@ -2,12 +2,17 @@ import React from 'react';
 import {Link} from 'react-router-dom';
 import {connect} from 'react-redux';
 import R from 'ramda';
+import Toolbar from './Toolbar';
+import EditServiceDialog from './EditServiceDialog';
+
 
 export class GroupIndex extends React.Component {
     render() {
         const {groups} = this.props;
         return (
             <div>
+                <Toolbar/>
+                <EditServiceDialog/>
                 <Link to="/" activeClassName="active">Home</Link>
                 {R.map((group) => {return <Link key={`group-link-${group}`} to={`/group/${group}`}>{group}</Link>})(groups)}
                 <Link to="/about">About</Link>

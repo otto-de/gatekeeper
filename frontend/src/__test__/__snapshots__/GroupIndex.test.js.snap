@@ -2,6 +2,8 @@
 
 exports[`GroupIndex component render 1`] = `
 <div>
+  <Toolbar />
+  <EditServiceDialog />
   <Link
     activeClassName="active"
     to="/"
@@ -28,6 +30,8 @@ exports[`GroupIndex component render 1`] = `
 
 exports[`load from state should load the state correctly 1`] = `
 <div>
+  <Toolbar />
+  <EditServiceDialog />
   <Link
     activeClassName="active"
     to="/"
