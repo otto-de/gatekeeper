@@ -4,9 +4,12 @@ import {MockStore} from './mockStore';
 import {Provider} from 'react-redux';
 import {Modal} from 'react-bootstrap';
 import {shallow, mount} from 'enzyme';
-import ConnectedEditServiceDialog, {EditServiceDialog, ServiceForm}  from '../EditServiceDialog';
+import ConnectedEditServiceDialog, {EditServiceDialog, ServiceForm, mapDispatchToProps}  from '../EditServiceDialog';
 
 jest.mock('../FormInputField', () => 'FormInputField');
+
+const SET_EDIT_SERVICE_DIALOG = 'gatekeeper/dialog/edit_service_dialog/SET';
+const CREATE_OR_UPDATE_SERVICE_REQUEST = 'gatekeeper/api/service/CREATE';
 
 describe('EditServiceDialog', () => {
     it('renders', () => {
@@ -35,6 +38,55 @@ describe('EditServiceDialog', () => {
         expect(tree).toMatchSnapshot();
     });
 
+});
+
+describe('should dispatch the right actions', () => {
+
+    const dispatchMock = jest.fn();
+    const subject = mapDispatchToProps(dispatchMock, {});
+    const closeDialogAction = {
+        "dialog": "editService",
+        "group": "",
+        "service": "",
+        "show": false,
+        "type": SET_EDIT_SERVICE_DIALOG
+    };
+
+    beforeEach(() => {
+        dispatchMock.mockReset();
+    });
+
+    it('closeEditServiceDialog', () => {
+        subject.closeEditServiceDialog();
+        expect(dispatchMock).toBeCalledWith(closeDialogAction);
+    });
+
+    it('setService', () => {
+        subject.setService({group: 'group', name: 'name', environments: ' env1, env2'});
+        expect(dispatchMock.mock.calls[0][0]).toEqual(
+            {
+                "environments": ["env1", "env2"],
+                "group": "group",
+                "service": "name",
+                "type": CREATE_OR_UPDATE_SERVICE_REQUEST
+            });
+        expect(dispatchMock.mock.calls[1][0]).toEqual(closeDialogAction);
+    });
+
+
+    it('deleteService', () => {
+        subject.deleteService({group: 'group', name: 'name', environments: ' env1, env2'});
+        expect(dispatchMock.mock.calls[0][0]).toEqual(
+            {
+                "group": {
+                    "environments": " env1, env2",
+                    "group": "group",
+                    "name": "name"
+                }, "service": undefined, "type": "gatekeeper/api/service/DELETE"
+            }
+        );
+        expect(dispatchMock.mock.calls[1][0]).toEqual(closeDialogAction);
+    });
 });
 
 describe('load from state', () => {

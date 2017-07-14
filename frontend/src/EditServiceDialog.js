@@ -84,7 +84,7 @@ const mapStateToProps = (state, initialProps) => {
     return R.mergeAll([defaultValues, initialProps, dialog_from_state, service]);
 };
 
-const mapDispatchToProps = (dispatch, initialProps) => {
+export const mapDispatchToProps = (dispatch, initialProps) => {
     return {
         closeEditServiceDialog: () => {
             dispatch(closeEditServiceDialog());
