@@ -20,10 +20,10 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '..', '..', 'frontend/build')));
 
-app.use('/', index);
 app.use('/api/gates', gates);
 app.use('/api/tickets', tickets);
 app.use('/stream', sse.router);
+app.use('*', index);
 
 
 // catch 404 and forward to error handler
