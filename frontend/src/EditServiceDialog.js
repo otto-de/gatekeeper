@@ -5,7 +5,7 @@ import {connect} from 'react-redux';
 import {reduxForm} from 'redux-form';
 import {Button, Modal} from 'react-bootstrap';
 import {closeEditServiceDialog} from './reducers/dialog';
-import { deleteServiceRequest } from './enhancers/api';
+import {deleteServiceRequest, createOrUpdateServiceRequest} from './enhancers/api';
 import FormInputField from './FormInputField';
 
 export const ServiceForm = props => {
@@ -24,7 +24,7 @@ export const ServiceForm = props => {
                             inputProps={{type: 'text', component: 'input'}}
                             placeholder="Env1, Env2, Env3"/>
             <Button bsStyle="danger" onClick={deleteService}>Delete</Button>
-            <div style={{float: "right"}}>
+            <div style={{float: 'right'}}>
                 <Button bsStyle="success" type="submit">Save</Button>
             </div>
         </form>
@@ -90,11 +90,11 @@ const mapDispatchToProps = (dispatch, initialProps) => {
             dispatch(closeEditServiceDialog());
         },
         setService: ({group, name, environments}) => {
-            let trimmedFormValue = (environments || "").trim();
-            if (trimmedFormValue === "") {
+            let trimmedFormValue = (environments || '').trim();
+            if (trimmedFormValue === '') {
                 return;
             }
-            dispatch(createOrUpdateServiceRequest(group, name, trimmedFormValue.split(",").map(str => str.trim())));
+            dispatch(createOrUpdateServiceRequest(group, name, trimmedFormValue.split(',').map(str => str.trim())));
         },
         deleteService: (group, service) => {
             dispatch(deleteServiceRequest(group, service));
