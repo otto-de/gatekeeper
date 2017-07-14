@@ -65,7 +65,7 @@ export function deleteServiceRequest(group, service) {
 }
 
 export function deleteServiceResponse(group, service) {
-    return {type: DELETE_SERVICE_REQUEST, group, service};
+    return {type: DELETE_SERVICE_RESPONSE, group, service};
 }
 
 export function handleCreateServiceError(error) {

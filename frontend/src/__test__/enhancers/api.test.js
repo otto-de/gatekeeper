@@ -64,7 +64,7 @@ describe('Api', () => {
 
             api(deleteServiceRequest('group2','service2'));
 
-            expect(dispatch).toHaveBeenCalledWith({type: 'gatekeeper/api/service/DELETE', group:'group2', service:'service2' });
+            expect(dispatch).toHaveBeenCalledWith({type: 'gatekeeper/api/service/delete/RESPONSE', group:'group2', service:'service2' });
         });
 
         it('failure with 404 should trigger error action', () => {
