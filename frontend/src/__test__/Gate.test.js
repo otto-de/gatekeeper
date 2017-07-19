@@ -12,7 +12,7 @@ describe('Gate component', () => {
         const component = renderer.create(<Gate group='group'
                                                 service='service'
                                                 environment='environment'
-                                                comment='comment 1'
+                                                message='comment 1'
                                                 manual_state={true}
                                                 auto_state={true}
                                                 queue={['ticket 1', 'ticket 2']}
@@ -77,7 +77,7 @@ describe('load from state', () => {
                             group: 'ftx',
                             service: 'gatekeeper',
                             environment: 'test',
-                            comment: 'some comment',
+                            message: 'some comment',
                             manual_state: false,
                             auto_state: true,
                             queue: ['ticket 1'],

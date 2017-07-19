@@ -149,7 +149,7 @@ describe('gates route', () => {
             return request(server)
                 .put('/api/gates/group/service/environment')
                 .send({state: 'closed'})
-                .expect(404, 'Gate not found');
+                .expect(404, '{"status":"error","message":"unknown gate: group/service/environment"}');
         }
     );
 

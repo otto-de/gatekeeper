@@ -63,15 +63,15 @@ router.put('/:group/:service/:environment', validate(setGateSchema), (async (req
         const result = await gateService.setGate(group, service, environment, state, message);
         if (result === null) {
             res.status(404);
-            res.send('Gate not found');
+            res.json({status: 'error', message: `unknown gate: ${group}/${service}/${environment}`});
         } else {
             res.status(204);
-            res.send('');
+            res.end();
             await sse.notifyStateChange();
         }
     } catch (error) {
         res.status(500);
-        res.send(error);
+        res.send({status: 'error', message: error.message});
     }
 }));
 

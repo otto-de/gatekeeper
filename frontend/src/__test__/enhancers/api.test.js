@@ -1,4 +1,4 @@
-import enhancer,{deleteServiceRequest, createOrUpdateServiceRequest, deleteTicketRequest } from  '../../enhancers/api';
+import enhancer,{deleteServiceRequest, createOrUpdateServiceRequest, deleteTicketRequest, updateCommentRequest } from  '../../enhancers/api';
 
 const mockResponse = (status, statusText, body) => {
     let response = new global.Response(body, {
@@ -177,6 +177,66 @@ describe('Api', () => {
             api(deleteTicketRequest('group3', 'service3', 'env3', 'ticketId3'));
 
             expect(dispatch).toHaveBeenCalledWith({type: 'gatekeeper/api/tickets/delete/ERROR', error: "error!" });
+        });
+
+    });
+
+    describe('update gate comment', () => {
+
+        it('api path', () => {
+            let path;
+            global.fetch = jest.fn().mockImplementation((fetchPath) => {
+                path = fetchPath;
+                return Promise.resolve(mockResponse(204, null, undefined))
+            });
+
+            api(updateCommentRequest('group1', 'service1', 'env1', 'message!'));
+
+            expect(path).toEqual('/api/gates/group1/service1/env1');
+        });
+
+        it('success should trigger response action', () => {
+            global.fetch = mockFetch(mockResponse(204, null, undefined));
+
+            api(updateCommentRequest('group1', 'service1', 'env1', 'message!'));
+
+            expect(dispatch).toHaveBeenCalledWith({
+                type: 'gatekeeper/api/service/comment/update/RESPONSE',
+                group:'group1',
+                service:'service1',
+                environment:'env1',
+                comment:'message!'
+            });
+        });
+
+        it('failure with 404 should trigger error action', () => {
+            global.fetch = mockFetch(mockResponse(404, null, '{"status": "error", "message": "error-message"}'));
+
+            api(updateCommentRequest('group2', 'service2', 'env2', 'message!'));
+
+            expect(dispatch).toHaveBeenCalledWith({
+                type: 'gatekeeper/api/service/comment/update/ERROR',
+                error: {message: "error-message", status: "error"}
+            });
+        });
+
+        it('failure with 5XX should trigger error action', () => {
+            global.fetch = mockFetch(mockResponse(500, null, '{"status": "error", "message": "error-message"}'));
+
+            api(updateCommentRequest('group2', 'service2', 'env2', 'message!'));
+
+            expect(dispatch).toHaveBeenCalledWith({
+                type: 'gatekeeper/api/service/comment/update/ERROR',
+                error: {message: "error-message", status: "error"}
+            });
+        });
+
+        it('other failures should trigger error action', () => {
+            global.fetch = mockFetch(undefined, "error!");
+
+            api(updateCommentRequest('group3', 'service3', 'env3', 'ticketId3'));
+
+            expect(dispatch).toHaveBeenCalledWith({type: 'gatekeeper/api/service/comment/update/ERROR', error: "error!" });
         });
 
     });

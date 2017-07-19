@@ -2,6 +2,10 @@ export const CREATE_OR_UPDATE_SERVICE_REQUEST = 'gatekeeper/api/service/CREATE';
 export const CREATE_OR_UPDATE_SERVICE_RESPONSE = 'gatekeeper/api/service/create/RESPONSE';
 export const CREATE_OR_UPDATE_SERVICE_ERROR = 'gatekeeper/api/service/create/ERROR';
 
+export const UPDATE_COMMENT_REQUEST = 'gatekeeper/api/service/comment/UPDATE';
+export const UPDATE_COMMENT_RESPONSE = 'gatekeeper/api/service/comment/update/RESPONSE';
+export const UPDATE_COMMENT_ERROR = 'gatekeeper/api/service/comment/update/ERROR';
+
 export const DELETE_SERVICE_REQUEST = 'gatekeeper/api/service/DELETE';
 export const DELETE_SERVICE_RESPONSE = 'gatekeeper/api/service/delete/RESPONSE';
 export const DELETE_SERVICE_ERROR = 'gatekeeper/api/service/delete/ERROR';
@@ -29,6 +33,25 @@ export default function backendRequests({ getState, dispatch }) {
                     }
                 }).catch(function (error) {
                     dispatch(handleCreateServiceError(error));
+                });
+                break;
+            }
+            case UPDATE_COMMENT_REQUEST: {
+                let { group, service, environment, comment } = action;
+                fetch(`/api/gates/${group}/${service}/${environment}`, {
+                    method: 'put',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({message:comment})
+                }).then(function (response) {
+                    if (response.status === 204) {
+                        dispatch(updateCommentResponse(group, service, environment, comment));
+                    } else if (response.status === 404 || response.status === 500) {
+                        dispatch(handleUpdateCommentError(response.json()));
+                    }
+                }).catch(function (error) {
+                    dispatch(handleUpdateCommentError(error));
                 });
                 break;
             }
@@ -105,4 +128,16 @@ export function deleteTicketResponse(group, service, environment, ticketId) {
 
 export function handleDeleteTicketError(error) {
     return {type: DELETE_TICKET_ERROR, error};
+}
+
+export function updateCommentRequest(group, service, environment, comment) {
+    return { type: UPDATE_COMMENT_REQUEST, group, service, environment, comment};
+}
+
+export function updateCommentResponse(group, service, environment, comment) {
+    return { type: UPDATE_COMMENT_RESPONSE, group, service, environment, comment};
+}
+
+export function handleUpdateCommentError(error) {
+    return {type: UPDATE_COMMENT_ERROR, error};
 }

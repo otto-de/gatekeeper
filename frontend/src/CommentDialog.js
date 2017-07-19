@@ -4,7 +4,8 @@ import R from 'ramda';
 import {connect} from 'react-redux';
 import {reduxForm} from 'redux-form';
 import {Button, Modal} from 'react-bootstrap';
-import {setCommentEditDialog, setComment} from './reducers/gates';
+import {setCommentEditDialog} from './reducers/gates';
+import {updateCommentRequest} from './enhancers/api';
 import FormInputField from './FormInputField';
 
 export class CommentForm extends React.Component {
@@ -70,7 +71,7 @@ const mapDispatchToProps = (dispatch, initialProps) => {
             dispatch(setCommentEditDialog(initialProps.group, initialProps.service, initialProps.environment, false));
         },
         setComment: (input) => {
-            dispatch(setComment(initialProps.group, initialProps.service, initialProps.environment, input.comment));
+            dispatch(updateCommentRequest(initialProps.group, initialProps.service, initialProps.environment, input.comment));
             dispatch(setCommentEditDialog(initialProps.group, initialProps.service, initialProps.environment, false));
         }
     };

@@ -97,7 +97,7 @@ export function Tickets({tickets, onTicketRemoveClick}) {
 
 export class Gate extends React.Component {
     render() {
-        const {manual_state, auto_state, comment, queue, last_modified, onTicketRemoveClick, onManualStateClick, openCommentEditDialog} = this.props;
+        const {manual_state, auto_state, message, queue, last_modified, onTicketRemoveClick, onManualStateClick, openCommentEditDialog} = this.props;
         const gate_state = !manual_state & auto_state;
         return (
             <Well className="gate" bsSize="small">
@@ -113,9 +113,9 @@ export class Gate extends React.Component {
                     <CommentDialog group={this.props.group}
                                    service={this.props.service}
                                    environment={this.props.environment}
-                                   comment={comment}/>
+                                   comment={message}/>
 
-                    <Comment comment={comment} openCommentEditDialog={openCommentEditDialog}/>
+                    <Comment comment={message} openCommentEditDialog={openCommentEditDialog}/>
                 </div>
                 <Tickets tickets={queue} onTicketRemoveClick={onTicketRemoveClick}/>
             </Well>
@@ -127,7 +127,7 @@ Gate.propTypes = {
     group: PropTypes.string.isRequired,
     service: PropTypes.string.isRequired,
     environment: PropTypes.string.isRequired,
-    comment: PropTypes.string,
+    message: PropTypes.string,
     manual_state: PropTypes.bool,
     auto_state: PropTypes.bool,
     queue: PropTypes.array,
@@ -138,7 +138,7 @@ const defaultValues = {
     group: '',
     service: '',
     environment: '',
-    comment: '',
+    message: '',
     manual_state: true,
     auto_state: true,
     queue: [],
