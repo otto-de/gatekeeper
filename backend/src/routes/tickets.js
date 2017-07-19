@@ -36,7 +36,7 @@ router.delete('/:group/:service/:environment/:ticketId', async (req, res) => {
     try {
         await ticketService.unlockGate(group, service, environment, ticketId);
         res.status(204);
-        res.send();
+        res.end();
         await sse.notifyStateChange();
     } catch (error) {
         res.status(500);

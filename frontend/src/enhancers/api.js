@@ -6,6 +6,10 @@ export const DELETE_SERVICE_REQUEST = 'gatekeeper/api/service/DELETE';
 export const DELETE_SERVICE_RESPONSE = 'gatekeeper/api/service/delete/RESPONSE';
 export const DELETE_SERVICE_ERROR = 'gatekeeper/api/service/delete/ERROR';
 
+export const DELETE_TICKET_REQUEST = 'gatekeeper/api/tickets/DELETE';
+export const DELETE_TICKET_RESPONSE = 'gatekeeper/api/tickets/delete/RESPONSE';
+export const DELETE_TICKET_ERROR = 'gatekeeper/api/tickets/delete/ERROR';
+
 export default function backendRequests({ getState, dispatch }) {
     return next => action => {
         switch (action.type) {
@@ -45,6 +49,21 @@ export default function backendRequests({ getState, dispatch }) {
                 });
                 break;
             }
+            case DELETE_TICKET_REQUEST: {
+                let { group, service, environment, ticketId } = action;
+                fetch(`/api/tickets/${group}/${service}/${environment}/${ticketId}`, {
+                    method: 'delete'
+                }).then(function (response) {
+                    if(response.status === 204) {
+                        dispatch(deleteTicketResponse(group, service, environment, ticketId));
+                    } else if(response.status === 500) {
+                        dispatch(handleDeleteTicketError(response.json()));
+                    }
+                }).catch(function (error) {
+                    dispatch(handleDeleteTicketError(error));
+                });
+                break;
+            }
             default:
                 break;
         }
@@ -60,6 +79,10 @@ export function createOrUpdateServiceResponse(group, service, environments) {
     return { type: CREATE_OR_UPDATE_SERVICE_RESPONSE, group, service, environments};
 }
 
+export function handleCreateServiceError(error) {
+    return {type: CREATE_OR_UPDATE_SERVICE_ERROR, error};
+}
+
 export function deleteServiceRequest(group, service) {
     return {type: DELETE_SERVICE_REQUEST, group, service};
 }
@@ -68,10 +91,18 @@ export function deleteServiceResponse(group, service) {
     return {type: DELETE_SERVICE_RESPONSE, group, service};
 }
 
-export function handleCreateServiceError(error) {
-    return {type: CREATE_OR_UPDATE_SERVICE_ERROR, error};
-}
-
 export function handleDeleteServiceError(error) {
     return {type: DELETE_SERVICE_ERROR, error};
+}
+
+export function deleteTicketRequest(group, service, environment, ticketId) {
+    return {type: DELETE_TICKET_REQUEST, group, service, environment, ticketId};
+}
+
+export function deleteTicketResponse(group, service, environment, ticketId) {
+    return {type: DELETE_TICKET_RESPONSE, group, service, environment, ticketId};
+}
+
+export function handleDeleteTicketError(error) {
+    return {type: DELETE_TICKET_ERROR, error};
 }

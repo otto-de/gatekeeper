@@ -12,7 +12,8 @@ import {
     Glyphicon,
     Well
 } from 'react-bootstrap';
-import {removeTicket, setManualState, setCommentEditDialog} from './reducers/gates';
+import {setManualState, setCommentEditDialog} from './reducers/gates';
+import {deleteTicketRequest} from './enhancers/api';
 import CommentDialog from './CommentDialog';
 import './Gate.css';
 
@@ -96,7 +97,7 @@ export function Tickets({tickets, onTicketRemoveClick}) {
 
 export class Gate extends React.Component {
     render() {
-        const {environment, manual_state, auto_state, comment, tickets, last_modified, onTicketRemoveClick, onManualStateClick, openCommentEditDialog} = this.props;
+        const {manual_state, auto_state, comment, queue, last_modified, onTicketRemoveClick, onManualStateClick, openCommentEditDialog} = this.props;
         const gate_state = !manual_state & auto_state;
         return (
             <Well className="gate" bsSize="small">
@@ -116,7 +117,7 @@ export class Gate extends React.Component {
 
                     <Comment comment={comment} openCommentEditDialog={openCommentEditDialog}/>
                 </div>
-                <Tickets tickets={tickets} onTicketRemoveClick={onTicketRemoveClick}/>
+                <Tickets tickets={queue} onTicketRemoveClick={onTicketRemoveClick}/>
             </Well>
         );
     }
@@ -129,7 +130,7 @@ Gate.propTypes = {
     comment: PropTypes.string,
     manual_state: PropTypes.bool,
     auto_state: PropTypes.bool,
-    tickets: PropTypes.array,
+    queue: PropTypes.array,
     last_modified: PropTypes.string
 };
 
@@ -140,7 +141,7 @@ const defaultValues = {
     comment: '',
     manual_state: true,
     auto_state: true,
-    tickets: [],
+    queue: [],
     last_modified: 'now'
 };
 
@@ -152,7 +153,7 @@ const mapStateToProps = (state, initialProps) => {
 const mapDispatchToProps = (dispatch, initialProps) => {
     return {
         onTicketRemoveClick: (id) => {
-            dispatch(removeTicket(initialProps.group, initialProps.service, initialProps.environment, id));
+            dispatch(deleteTicketRequest(initialProps.group, initialProps.service, initialProps.environment, id));
         },
         onManualStateClick: (state) => {
             dispatch(setManualState(initialProps.group, initialProps.service, initialProps.environment, state));

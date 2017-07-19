@@ -6,7 +6,7 @@ describe('Gates reducer', () => {
             gatekeeper: {
                 test: {
                     manual_state: true,
-                    tickets: ['ticket01', 'ticket02'],
+                    queue: ['ticket01', 'ticket02'],
                     show_comment_edit_dialog: false
                 }
             }
@@ -16,13 +16,13 @@ describe('Gates reducer', () => {
     it('should remove "ticket01" from array', () => {
         let actionRemoveTicket = removeTicket('ftX', 'gatekeeper', 'test', 'ticket01');
         let stateWithoutATicket = reducer(state, actionRemoveTicket);
-        expect(stateWithoutATicket.ftX.gatekeeper.test.tickets).toEqual(expect.arrayContaining(['ticket02']))
+        expect(stateWithoutATicket.ftX.gatekeeper.test.queue).toEqual(expect.arrayContaining(['ticket02']))
     });
 
     it('should add "ticket 03" to array', () => {
         let actionAddTicket = addTicket('ftX', 'gatekeeper', 'test', 'ticket03');
         let stateWithTicket = reducer(state, actionAddTicket);
-        expect(stateWithTicket.ftX.gatekeeper.test.tickets).toEqual(expect.arrayContaining(['ticket03']))
+        expect(stateWithTicket.ftX.gatekeeper.test.queue).toEqual(expect.arrayContaining(['ticket03']))
     });
 
     it('should set the manual_state', () => {

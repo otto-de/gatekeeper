@@ -10,18 +10,18 @@ const SET_LAST_MODIFIED = 'gatekeeper/gate/last_modified/SET';
 const SET_EDIT_COMMENT_DIALOG = 'gatekeeper/gate/comment_edit_dialog/SET';
 
 export default function reducer(state = {}, action = {}) {
-    let ticketPath = R.lensPath([action.group, action.service, action.env, 'tickets']);
+    let ticketsQueuePath = R.lensPath([action.group, action.service, action.env, 'queue']);
     let manualStatePath = R.lensPath([action.group, action.service, action.env, 'manual_state']);
     let autoStatePath = R.lensPath([action.group, action.service, action.env, 'auto_state']);
     let commentPath = R.lensPath([action.group, action.service, action.env, 'comment']);
     let lastModifiedPath = R.lensPath([action.group, action.service, action.env, 'last_modified']);
     let editCommentDialogPath = R.lensPath([action.group, action.service, action.env, 'show_comment_edit_dialog']);
-    let tickets = R.view(ticketPath, state);
+    let ticketsQueue = R.view(ticketsQueuePath, state);
     switch (action.type) {
         case ADD_TICKET:
-            return R.set(ticketPath, R.append(action.ticketId, tickets), state);
+            return R.set(ticketsQueuePath, R.append(action.ticketId, ticketsQueue), state);
         case REMOVE_TICKET:
-            return R.set(ticketPath, R.without([action.ticketId], tickets), state);
+            return R.set(ticketsQueuePath, R.without([action.ticketId], ticketsQueue), state);
         case SET_MANUAL_GATE_STATE:
             return R.set(manualStatePath, action.state, state);
         case SET_AUTO_GATE_STATE:

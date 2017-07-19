@@ -15,7 +15,7 @@ describe('Gate component', () => {
                                                 comment='comment 1'
                                                 manual_state={true}
                                                 auto_state={true}
-                                                tickets={['ticket 1', 'ticket 2']}
+                                                queue={['ticket 1', 'ticket 2']}
                                                 last_modified='some time ago'
                                                 onTicketRemoveClick={'onTicketRemoveClick'}
                                                 onManualStateClick={'onManualStateClick'}
@@ -80,7 +80,7 @@ describe('load from state', () => {
                             comment: 'some comment',
                             manual_state: false,
                             auto_state: true,
-                            tickets: ['ticket 1'],
+                            queue: ['ticket 1'],
                             last_modified: 'now'
                         }
                     }

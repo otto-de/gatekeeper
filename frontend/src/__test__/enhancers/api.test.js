@@ -1,4 +1,4 @@
-import enhancer,{deleteServiceRequest, createOrUpdateServiceRequest } from  '../../enhancers/api';
+import enhancer,{deleteServiceRequest, createOrUpdateServiceRequest, deleteTicketRequest } from  '../../enhancers/api';
 
 const mockResponse = (status, statusText, body) => {
     let response = new global.Response(body, {
@@ -128,6 +128,55 @@ describe('Api', () => {
             api(createOrUpdateServiceRequest('groupZ', 'serviceZ', ['dev']));
 
             expect(dispatch).toHaveBeenCalledWith({type: 'gatekeeper/api/service/create/ERROR', error: "error!" });
+        });
+
+    });
+
+    describe('delete ticket', () => {
+
+        it('api path', () => {
+            let path;
+            global.fetch = jest.fn().mockImplementation((fetchPath) => {
+                path = fetchPath;
+                return Promise.resolve(mockResponse(204, null, undefined))
+            });
+
+            api(deleteTicketRequest('group1', 'service1', 'env1', 'ticketId1'));
+
+            expect(path).toEqual(`/api/tickets/group1/service1/env1/ticketId1`);
+        });
+
+        it('success should trigger response action', () => {
+            global.fetch = mockFetch(mockResponse(204, null, undefined));
+
+            api(deleteTicketRequest('group1', 'service1', 'env1', 'ticketId1'));
+
+            expect(dispatch).toHaveBeenCalledWith({
+                type: 'gatekeeper/api/tickets/delete/RESPONSE',
+                group:'group1',
+                service:'service1',
+                environment:'env1',
+                ticketId:'ticketId1'
+            });
+        });
+
+        it('failure with 5XX should trigger error action', () => {
+            global.fetch = mockFetch(mockResponse(500, null, '{"status": "error", "message": "error-message"}'));
+
+            api(deleteTicketRequest('group2', 'service2', 'env2', 'ticketId2'));
+
+            expect(dispatch).toHaveBeenCalledWith({
+                type: 'gatekeeper/api/tickets/delete/ERROR',
+                error: {message: "error-message", status: "error"}
+            });
+        });
+
+        it('other failures should trigger error action', () => {
+            global.fetch = mockFetch(undefined, "error!");
+
+            api(deleteTicketRequest('group3', 'service3', 'env3', 'ticketId3'));
+
+            expect(dispatch).toHaveBeenCalledWith({type: 'gatekeeper/api/tickets/delete/ERROR', error: "error!" });
         });
 
     });
