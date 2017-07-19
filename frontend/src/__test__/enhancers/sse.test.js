@@ -68,7 +68,8 @@ describe("Updating the State with Server Sent Events", ()=> {
 
        expect(addEventListener.mock.calls).toEqual([
            ['state', expect.any(Function), false],
-           ['deleteService', expect.any(Function), false]
+           ['deleteService', expect.any(Function), false],
+           ['deleteTicket', expect.any(Function), false]
        ]);
    });
 

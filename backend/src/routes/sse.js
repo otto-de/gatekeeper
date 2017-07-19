@@ -33,4 +33,8 @@ function notifyDeleteService(group, service) {
     send('deleteService', {group, service});
 }
 
-module.exports = { router, notifyStateChange, notifyDeleteService };
+function notifyDeleteTicket(group, service, environment, ticketId) {
+    send('deleteTicket', {group, service, environment, ticketId});
+}
+
+module.exports = { router, notifyStateChange, notifyDeleteService, notifyDeleteTicket };

@@ -1,4 +1,5 @@
-import reducer, {removeTicket, addTicket, setManualState, setAutoState, setComment, setLastModified, setCommentEditDialog} from '../../reducers/gates';
+import reducer, {addTicket, setManualState, setAutoState, setComment, setLastModified, setCommentEditDialog} from '../../reducers/gates';
+import {deleteTicketResponse} from '../../enhancers/api';
 
 describe('Gates reducer', () => {
     const state = {
@@ -14,7 +15,7 @@ describe('Gates reducer', () => {
     };
 
     it('should remove "ticket01" from array', () => {
-        let actionRemoveTicket = removeTicket('ftX', 'gatekeeper', 'test', 'ticket01');
+        let actionRemoveTicket = deleteTicketResponse('ftX', 'gatekeeper', 'test', 'ticket01');
         let stateWithoutATicket = reducer(state, actionRemoveTicket);
         expect(stateWithoutATicket.ftX.gatekeeper.test.queue).toEqual(expect.arrayContaining(['ticket02']))
     });
