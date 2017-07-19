@@ -36,7 +36,7 @@ const createOrUpdateServiceSchema = {
     }
 };
 
-router.post('/', validate(createOrUpdateServiceSchema), (async (req, res) => {
+router.post('/', validate(createOrUpdateServiceSchema), async (req, res) => {
     let {service, group, environments} = req.body;
     try {
         await gateService.createOrUpdateService(group, service, environments);
@@ -47,7 +47,7 @@ router.post('/', validate(createOrUpdateServiceSchema), (async (req, res) => {
         res.status(500);
         res.json({status: 'error', message: error.message});
     }
-}));
+});
 
 const setGateSchema = {
     body: {
@@ -56,7 +56,7 @@ const setGateSchema = {
     }
 };
 
-router.put('/:group/:service/:environment', validate(setGateSchema), (async (req, res) => {
+router.put('/:group/:service/:environment', validate(setGateSchema), async (req, res) => {
     const {group, service, environment} = req.params;
     const {state, message} = req.body;
     try {
@@ -73,9 +73,9 @@ router.put('/:group/:service/:environment', validate(setGateSchema), (async (req
         res.status(500);
         res.send({status: 'error', message: error.message});
     }
-}));
+});
 
-router.delete('/:group/:service', (async (req, res) => {
+router.delete('/:group/:service', async (req, res) => {
     const {group, service} = req.params;
     try {
         const result = await gateService.deleteService(group, service);
@@ -91,6 +91,6 @@ router.delete('/:group/:service', (async (req, res) => {
         res.status(500);
         res.json({status: 'error', message: error.message});
     }
-}));
+});
 
 module.exports = router;
