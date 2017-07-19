@@ -65,20 +65,21 @@ module.exports = {
 
         let gateUpdate = {};
         if (state) {
-            gateUpdate.state = state;
+            gateUpdate['environments.' + environment + '.state'] = state;
         }
         if (timestamp) {
-            gateUpdate.timestamp = timestamp;
+            gateUpdate['environments.' + environment + '.timestamp'] = timestamp;
         }
         if (message) {
-            gateUpdate.message = message;
+            gateUpdate['environments.' + environment + '.message'] = message;
         }
 
         let byGroupAndService = {group: group, name: service};
         let doc = await gatekeeperCollection.findOne(byGroupAndService);
         if (doc) {
-            const result = await gatekeeperCollection.update({_id: doc._id},
-                {$set: {['environments.' + environment]: gateUpdate}});
+            const result = await gatekeeperCollection.update({_id: doc._id},{
+                $set: gateUpdate
+            });
             return result.n >= 1;
         }
         return null;

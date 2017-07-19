@@ -165,7 +165,13 @@ describe('gateRepository', () => {
         expect(state).toEqual(true);
 
         let gate = await gateRepository.findGate('myGroup', 'myService', 'env1');
-        expect(gate.message).toEqual('a message');
+        expect(gate).toEqual({
+            'queue': [],
+            'message_timestamp': '',
+            'state': 'open',
+            'message': 'a message',
+            'state_timestamp': ''
+        });
     });
 
     it('should delete a service', async () => {
