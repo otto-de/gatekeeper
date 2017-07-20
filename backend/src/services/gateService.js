@@ -17,8 +17,8 @@ module.exports = {
         return state;
     },
 
-    findGate: async (group, service, environments) => {
-        return await gateRepository.findGate(group, service, environments);
+    findGate: async (group, service, environment) => {
+        return await gateRepository.findGate(group, service, environment);
     },
 
     createOrUpdateService: async (group, service, environments) => {

@@ -69,7 +69,7 @@ describe("Updating the State with Server Sent Events", ()=> {
        expect(addEventListener.mock.calls).toEqual([
            ['state', expect.any(Function), false],
            ['deleteService', expect.any(Function), false],
-           ['deleteTicket', expect.any(Function), false]
+           ['updateGate', expect.any(Function), false]
        ]);
    });
 
@@ -91,6 +91,21 @@ describe("Updating the State with Server Sent Events", ()=> {
         stateDispatchFN(event);
 
         expect(dispatch).toHaveBeenCalledWith({"state": {"group": "yada", "service": "service-yada"}, "type": "gatekeeper/sse/receive/STATE"})
+
+    it("'updateGate' event listener should dispatch 'RECEIVE_UPDATE_GATE' with data", () => {
+        sse(connect("/stream-path"));
+        let updateGateDispatchFN = addEventListener.mock.calls.filter((call)=>call[0]==='updateGate')[0][1];
+        let event = { data: '{"group":"yada", "service":"service-yada", "environment":"live", "gate": {"queue":[]}}'};
+
+        updateGateDispatchFN(event);
+
+        expect(dispatch).toHaveBeenCalledWith({
+            gate: {queue:[]},
+            group: 'yada',
+            service: 'service-yada',
+            environment:'live',
+            type: 'gatekeeper/sse/receive/gate/UPDATE'
+        });
     });
 
 });

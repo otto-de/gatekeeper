@@ -1,5 +1,5 @@
 import R from 'ramda';
-import { RECEIVE_STATE, RECEIVE_DELETE_SERVICE, RECEIVE_DELETE_TICKET } from '../enhancers/sse';
+import { RECEIVE_STATE, RECEIVE_DELETE_SERVICE, RECEIVE_UPDATE_GATE } from '../enhancers/sse';
 
 const ADD_TICKET = 'gatekeeper/gate/ticket/ADD';
 const SET_MANUAL_GATE_STATE = 'gatekeeper/gate/manual_gate/SET';
@@ -19,8 +19,6 @@ export default function reducer(state = {}, action = {}) {
     switch (action.type) {
         case ADD_TICKET:
             return R.set(ticketsQueuePath, R.append(action.ticketId, ticketsQueue), state);
-        case RECEIVE_DELETE_TICKET:
-            return R.set(ticketsQueuePath, R.without([action.ticketId], ticketsQueue), state);
         case SET_MANUAL_GATE_STATE:
             return R.set(manualStatePath, action.state, state);
         case SET_AUTO_GATE_STATE:
@@ -44,6 +42,8 @@ export default function reducer(state = {}, action = {}) {
                 newState[action.group] = groupWithServiceRemoved;
             }
             return newState;
+        case RECEIVE_UPDATE_GATE:
+            return R.set(R.lensPath([action.group, action.service, action.environment]), action.gate, state);
         default:
             return state;
     }

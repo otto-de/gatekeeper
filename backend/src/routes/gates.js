@@ -67,7 +67,7 @@ router.put('/:group/:service/:environment', validate(setGateSchema), async (req,
         } else {
             res.status(204);
             res.end();
-            await sse.notifyStateChange();
+            await sse.notifyUpdateGate(group, service, environment);
         }
     } catch (error) {
         res.status(500);

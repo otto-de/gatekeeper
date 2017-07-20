@@ -33,8 +33,9 @@ function notifyDeleteService(group, service) {
     send('deleteService', {group, service});
 }
 
-function notifyDeleteTicket(group, service, environment, ticketId) {
-    send('deleteTicket', {group, service, environment, ticketId});
+async function notifyUpdateGate(group, service, environment) {
+    const gate = await gateService.findGate(group, service, environment);
+    send('updateGate', {group, service, environment, gate});
 }
 
-module.exports = { router, notifyStateChange, notifyDeleteService, notifyDeleteTicket };
+module.exports = { router, notifyStateChange, notifyDeleteService, notifyUpdateGate };

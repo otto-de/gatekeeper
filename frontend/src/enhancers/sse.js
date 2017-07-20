@@ -1,6 +1,6 @@
 export const RECEIVE_STATE = 'gatekeeper/sse/receive/STATE';
 export const RECEIVE_DELETE_SERVICE = 'gatekeeper/sse/receive/service/DELETE';
-export const RECEIVE_DELETE_TICKET = 'gatekeeper/sse/receive/ticket/DELETE';
+export const RECEIVE_UPDATE_GATE = 'gatekeeper/sse/receive/gate/UPDATE';
 export const ERROR = 'gatekeeper/sse/ERROR';
 export const CONNECT = 'gatekeeper/sse/CONNECT';
 export const DISCONNECT = 'gatekeeper/sse/DISCONNECT';
@@ -21,8 +21,8 @@ export default function middleware({getState, dispatch}) {
                     dispatch(receiveDeleteService(JSON.parse(e.data)));
                 }, false);
 
-                eventSource.addEventListener('deleteTicket', function (e) {
-                    dispatch(receiveDeleteTicket(JSON.parse(e.data)));
+                eventSource.addEventListener('updateGate', function (e) {
+                    dispatch(receiveUpdateGate(JSON.parse(e.data)));
                 }, false);
 
                 eventSource.onerror = (e) => dispatch(handleError(e));
@@ -56,10 +56,10 @@ export function handleError(error) {
     return {type: ERROR, error};
 }
 
-function receiveDeleteService({group, service}) {
+export function receiveDeleteService({group, service}) {
     return {type: RECEIVE_DELETE_SERVICE, group, service};
 }
 
-function receiveDeleteTicket({group, service, environment, ticketId}) {
-    return {type: RECEIVE_DELETE_TICKET, group, service, environment, ticketId};
+export function receiveUpdateGate({group, service, environment, gate}) {
+    return {type: RECEIVE_UPDATE_GATE, group, service, environment, gate};
 }

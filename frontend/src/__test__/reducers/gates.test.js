@@ -1,5 +1,6 @@
 import reducer, {addTicket, setManualState, setAutoState, setComment, setLastModified, setCommentEditDialog} from '../../reducers/gates';
 import {deleteTicketResponse} from '../../enhancers/api';
+import {receiveUpdateGate} from '../../enhancers/sse';
 
 describe('Gates reducer', () => {
     const state = {
@@ -8,7 +9,8 @@ describe('Gates reducer', () => {
                 test: {
                     manual_state: true,
                     queue: ['ticket01', 'ticket02'],
-                    show_comment_edit_dialog: false
+                    show_comment_edit_dialog: false,
+                    message: "old comment"
                 }
             }
         }
@@ -66,5 +68,12 @@ describe('Gates reducer', () => {
         let actionSetCommentEditDialog = setCommentEditDialog('ftX', 'gatekeeper', 'test', 'now');
         let withOpenCommentDialog = reducer(state, actionSetCommentEditDialog);
         expect(withOpenCommentDialog.ftX.gatekeeper.test.show_comment_edit_dialog).toBeTruthy()
+    });
+
+    it('should update gate state on updateState event', () => {
+        let gate = {message:'new comment'};
+        let action = receiveUpdateGate({group:'ftX', service:'gatekeeper', environment:'test', gate:gate});
+        let withNewComment = reducer(state, action);
+        expect(withNewComment.ftX.gatekeeper.test).toEqual(gate);
     });
 });
