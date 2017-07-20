@@ -151,7 +151,7 @@ describe('gateRepository', () => {
 
         let gate = await gateRepository.findGate('myGroup', 'myService', 'env1');
         expect(gate.state).toEqual('closed');
-        expect(gate.timestamp).toEqual('NOW');
+        expect(gate.state_timestamp).toEqual('NOW');
     });
 
     it('should set the gate message', async () => {

@@ -68,7 +68,7 @@ module.exports = {
             gateUpdate['environments.' + environment + '.state'] = state;
         }
         if (timestamp) {
-            gateUpdate['environments.' + environment + '.timestamp'] = timestamp;
+            gateUpdate['environments.' + environment + '.state_timestamp'] = timestamp;
         }
         if (message) {
             gateUpdate['environments.' + environment + '.message'] = message;
