@@ -85,12 +85,17 @@ describe("Updating the State with Server Sent Events", ()=> {
 
     it("'deleteService' event listener should dispatch 'RECEIVE_DELETE_SERVICE' with data", () => {
         sse(connect("/stream-path"));
-        let stateDispatchFN = addEventListener.mock.calls.filter((call)=>call[0]==='state')[0][1];
+        let deleteServiceDispatchFN = addEventListener.mock.calls.filter((call)=>call[0]==='deleteService')[0][1];
         let event = { data: '{"group":"yada", "service":"service-yada"}'};
 
-        stateDispatchFN(event);
+        deleteServiceDispatchFN(event);
 
-        expect(dispatch).toHaveBeenCalledWith({"state": {"group": "yada", "service": "service-yada"}, "type": "gatekeeper/sse/receive/STATE"})
+        expect(dispatch).toHaveBeenCalledWith({
+            group: 'yada',
+            service: 'service-yada',
+            type: 'gatekeeper/sse/receive/service/DELETE'
+        });
+    });
 
     it("'updateGate' event listener should dispatch 'RECEIVE_UPDATE_GATE' with data", () => {
         sse(connect("/stream-path"));
