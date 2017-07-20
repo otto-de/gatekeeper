@@ -14,6 +14,10 @@ export const DELETE_TICKET_REQUEST = 'gatekeeper/api/tickets/DELETE';
 export const DELETE_TICKET_RESPONSE = 'gatekeeper/api/tickets/delete/RESPONSE';
 export const DELETE_TICKET_ERROR = 'gatekeeper/api/tickets/delete/ERROR';
 
+export const CHANGE_MANUAL_STATE_REQUEST = 'gatekeeper/api/gates/manualState/UPDATE';
+export const CHANGE_MANUAL_STATE_RESPONSE = 'gatekeeper/api/gates/manualState/RESPONSE';
+export const CHANGE_MANUAL_STATE_ERROR = 'gatekeeper/api/gates/manualState/ERROR';
+
 export default function backendRequests({ getState, dispatch }) {
     return next => action => {
         switch (action.type) {
@@ -87,6 +91,25 @@ export default function backendRequests({ getState, dispatch }) {
                 });
                 break;
             }
+            case CHANGE_MANUAL_STATE_REQUEST: {
+                let { group, service, environment, state } = action;
+                fetch(`/api/gates/${group}/${service}/${environment}`, {
+                    method: 'put',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({state: state})
+                }).then(function (response) {
+                    if (response.status === 204) {
+                        dispatch(changeManualStateResponse(group, service, environment, state));
+                    } else if (response.status === 404 || response.status === 500) {
+                        dispatch(handleChangeManualStateError(response.json()));
+                    }
+                }).catch(function (error) {
+                    dispatch(handleChangeManualStateError(error));
+                });
+                break;
+            }
             default:
                 break;
         }
@@ -140,4 +163,16 @@ export function updateCommentResponse(group, service, environment, comment) {
 
 export function handleUpdateCommentError(error) {
     return {type: UPDATE_COMMENT_ERROR, error};
+}
+
+export function changeManualStateRequest(group, service, environment, state) {
+    return { type: CHANGE_MANUAL_STATE_REQUEST, group, service, environment, state};
+}
+
+export function changeManualStateResponse(group, service, environment, state) {
+    return { type: CHANGE_MANUAL_STATE_RESPONSE, group, service, environment, state};
+}
+
+export function handleChangeManualStateError(error) {
+    return {type: CHANGE_MANUAL_STATE_ERROR, error};
 }

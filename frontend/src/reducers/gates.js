@@ -8,6 +8,16 @@ const SET_COMMENT = 'gatekeeper/gate/comment/SET';
 const SET_LAST_MODIFIED = 'gatekeeper/gate/last_modified/SET';
 const SET_EDIT_COMMENT_DIALOG = 'gatekeeper/gate/comment_edit_dialog/SET';
 
+function mapServerGateToFrontend(receivedGate) {
+    return {
+        message: receivedGate.message,
+        queue: receivedGate.queue,
+        manual_state: receivedGate.state === 'open',
+        last_modified: receivedGate.state_timestamp,
+        state: receivedGate.state === 'open'
+    };
+}
+
 export default function reducer(state = {}, action = {}) {
     let ticketsQueuePath = R.lensPath([action.group, action.service, action.env, 'queue']);
     let manualStatePath = R.lensPath([action.group, action.service, action.env, 'manual_state']);
@@ -29,8 +39,21 @@ export default function reducer(state = {}, action = {}) {
             return R.set(lastModifiedPath, action.last_modified, state);
         case SET_EDIT_COMMENT_DIALOG:
             return R.set(editCommentDialogPath, action.show_comment_edit_dialog, state);
-        case RECEIVE_STATE:
-            return {...action.state.gates};
+        case RECEIVE_STATE: {
+            let groups = action.state.gates;
+            let newState = {};
+            Object.keys(groups).forEach(groupKey => {
+                let services = groups[groupKey];
+                Object.keys(services).forEach(serviceKey => {
+                    let environments = services[serviceKey];
+                    Object.keys(environments).forEach(envKey => {
+                        let environment = environments[envKey];
+                        newState = R.set(R.lensPath([groupKey, serviceKey, envKey]), mapServerGateToFrontend(environment), newState)
+                    });
+                });
+            });
+            return newState;
+        }
         case RECEIVE_DELETE_SERVICE:
             let newState = {...state};
             let group = newState[action.group];
@@ -42,8 +65,9 @@ export default function reducer(state = {}, action = {}) {
                 newState[action.group] = groupWithServiceRemoved;
             }
             return newState;
-        case RECEIVE_UPDATE_GATE:
-            return R.set(R.lensPath([action.group, action.service, action.environment]), action.gate, state);
+        case RECEIVE_UPDATE_GATE: {
+            return R.set(R.lensPath([action.group, action.service, action.environment]), mapServerGateToFrontend(action.gate), state);
+        }
         default:
             return state;
     }

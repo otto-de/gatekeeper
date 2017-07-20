@@ -1,4 +1,10 @@
-import enhancer,{deleteServiceRequest, createOrUpdateServiceRequest, deleteTicketRequest, updateCommentRequest } from  '../../enhancers/api';
+import enhancer,{
+    deleteServiceRequest,
+    createOrUpdateServiceRequest,
+    deleteTicketRequest,
+    updateCommentRequest,
+    changeManualStateRequest
+} from  '../../enhancers/api';
 
 const mockResponse = (status, statusText, body) => {
     let response = new global.Response(body, {
@@ -241,4 +247,63 @@ describe('Api', () => {
 
     });
 
+    describe('change manual gate state', () => {
+
+        it('api path', () => {
+            let path;
+            global.fetch = jest.fn().mockImplementation((fetchPath) => {
+                path = fetchPath;
+                return Promise.resolve(mockResponse(204, null, undefined))
+            });
+
+            api(changeManualStateRequest('group1', 'service1', 'env1', 'open'));
+
+            expect(path).toEqual('/api/gates/group1/service1/env1');
+        });
+
+        it('success should trigger response action', () => {
+            global.fetch = mockFetch(mockResponse(204, null, undefined));
+
+            api(changeManualStateRequest('group1', 'service1', 'env1', true));
+
+            expect(dispatch).toHaveBeenCalledWith({
+                type: 'gatekeeper/api/gates/manualState/RESPONSE',
+                group:'group1',
+                service:'service1',
+                environment:'env1',
+                state:true
+            });
+        });
+
+        it('failure with 404 should trigger error action', () => {
+            global.fetch = mockFetch(mockResponse(404, null, '{"status": "error", "message": "error-message"}'));
+
+            api(changeManualStateRequest('group2', 'service2', 'env2', false));
+
+            expect(dispatch).toHaveBeenCalledWith({
+                type: 'gatekeeper/api/gates/manualState/ERROR',
+                error: {message: "error-message", status: "error"}
+            });
+        });
+
+        it('failure with 5XX should trigger error action', () => {
+            global.fetch = mockFetch(mockResponse(500, null, '{"status": "error", "message": "error-message"}'));
+
+            api(changeManualStateRequest('group2', 'service2', 'env2', false));
+
+            expect(dispatch).toHaveBeenCalledWith({
+                type: 'gatekeeper/api/gates/manualState/ERROR',
+                error: {message: "error-message", status: "error"}
+            });
+        });
+
+        it('other failures should trigger error action', () => {
+            global.fetch = mockFetch(undefined, "error!");
+
+            api(changeManualStateRequest('group3', 'service3', 'env3', false));
+
+            expect(dispatch).toHaveBeenCalledWith({type: 'gatekeeper/api/gates/manualState/ERROR', error: "error!" });
+        });
+
+    });
 });

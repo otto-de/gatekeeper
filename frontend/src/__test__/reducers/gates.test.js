@@ -71,9 +71,15 @@ describe('Gates reducer', () => {
     });
 
     it('should update gate state on updateState event', () => {
-        let gate = {message:'new comment'};
+        let gate = {message:'new comment', queue: ['t1'], state: 'open', state_timestamp:13337};
         let action = receiveUpdateGate({group:'ftX', service:'gatekeeper', environment:'test', gate:gate});
         let withNewComment = reducer(state, action);
-        expect(withNewComment.ftX.gatekeeper.test).toEqual(gate);
+        expect(withNewComment.ftX.gatekeeper.test).toEqual({
+            message: 'new comment',
+            queue: ["t1"],
+            manual_state: true,
+            last_modified: 13337,
+            state: true
+        });
     });
 });

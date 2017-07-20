@@ -12,8 +12,8 @@ import {
     Glyphicon,
     Well
 } from 'react-bootstrap';
-import {setManualState, setCommentEditDialog} from './reducers/gates';
-import {deleteTicketRequest} from './enhancers/api';
+import {setCommentEditDialog} from './reducers/gates';
+import {deleteTicketRequest, changeManualStateRequest} from './enhancers/api';
 import CommentDialog from './CommentDialog';
 import './Gate.css';
 
@@ -156,7 +156,7 @@ const mapDispatchToProps = (dispatch, initialProps) => {
             dispatch(deleteTicketRequest(initialProps.group, initialProps.service, initialProps.environment, id));
         },
         onManualStateClick: (state) => {
-            dispatch(setManualState(initialProps.group, initialProps.service, initialProps.environment, state));
+            dispatch(changeManualStateRequest(initialProps.group, initialProps.service, initialProps.environment, state ? 'open' : 'closed'));
         },
         openCommentEditDialog: () => {
             dispatch(setCommentEditDialog(initialProps.group, initialProps.service, initialProps.environment, true));
