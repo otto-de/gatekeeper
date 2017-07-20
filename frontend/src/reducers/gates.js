@@ -14,7 +14,6 @@ function mapServerGateToFrontend(receivedGate) {
         queue: receivedGate.queue,
         manual_state: receivedGate.state === 'open',
         last_modified: receivedGate.state_timestamp,
-        state: receivedGate.state === 'open'
     };
 }
 

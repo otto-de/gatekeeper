@@ -78,8 +78,7 @@ describe('Gates reducer', () => {
             message: 'new comment',
             queue: ["t1"],
             manual_state: true,
-            last_modified: 13337,
-            state: true
+            last_modified: 13337
         });
     });
 });
