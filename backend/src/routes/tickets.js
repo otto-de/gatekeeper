@@ -28,6 +28,7 @@ router.put('/:group/:service/:environment', validate(getTicket), (async (req, re
         }
     } catch (error) {
         res.status(500);
+        res.end();
     }
 }));
 
@@ -40,6 +41,7 @@ router.delete('/:group/:service/:environment/:ticketId', async (req, res) => {
         await sse.notifyUpdateGate(group, service, environment);
     } catch (error) {
         res.status(500);
+        res.end();
     }
 });
 
