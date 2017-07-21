@@ -59,10 +59,6 @@ export function GateArrow({gate_state}) {
     return <Glyphicon className={gate_state ? 'text-danger' : 'text-success'} glyph='chevron-right'/>;
 }
 
-export function GateButton() {
-
-}
-
 export function Comment({comment, openCommentEditDialog}) {
     return (
         <div className={`comment ${comment ? '' : 'default-comment'}`}>

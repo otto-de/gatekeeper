@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import GroupIndex from './GroupIndex';
 import App from './App';
-import About from './About';
 import registerServiceWorker from './registerServiceWorker';
 import './index.css';
 import {Provider} from 'react-redux';
@@ -20,7 +19,6 @@ ReactDOM.render(<Provider store={appStore}>
             <div>
                 <Route exact path="/" component={GroupIndex}/>
                 <Route path="/group/:groupId" component={App}/>
-                <Route path="/about" component={About}/>
             </div>
         </ConnectedRouter>
     </Provider>,

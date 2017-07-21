@@ -1,31 +1,33 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import Group from './Group';
 import './App.css';
+import R from 'ramda';
 import Toolbar from './Toolbar';
 import EditGateDialog from './EditServiceDialog';
-import R from 'ramda';
+import Group from './Group';
+import Header from "./Header";
 
 
 export class App extends Component {
     render() {
         const {groups} = this.props;
-        const target_group = this.props.match.params.groupId;
+        const target_group = R.path(['match', 'params', 'groupId'])(this.props);
 
-        let text;
-        let content = true;
+        let content = null;
         if (groups.length === 0) {
-            text = 'Loading';
-            content = false;
+            content = <div><h1>Loading</h1></div>;
         } else if (!groups.includes(target_group)) {
-            text = '404';
-            content = false;
+            content = <div><h1>404</h1><h3>The group was not found.</h3></div>;
+        } else {
+            content = <Group group={target_group}/>
         }
+
         return (
             <div>
+                <Header links="/"/>
                 <Toolbar/>
                 <EditGateDialog/>
-                {content ? <Group group={target_group}/> : <div>{text}</div>}
+                {content}
             </div>
         );
     }

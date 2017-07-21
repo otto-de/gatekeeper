@@ -1,0 +1,78 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`App component render group1 1`] = `
+<div>
+  <Header
+    links="/"
+  />
+  <Toolbar />
+  <EditServiceDialog />
+  <Group
+    group="group1"
+  />
+</div>
+`;
+
+exports[`App component render with non existing group 1`] = `
+<div>
+  <Header
+    links="/"
+  />
+  <Toolbar />
+  <EditServiceDialog />
+  <div>
+    <h1>
+      404
+    </h1>
+    <h3>
+      The group was not found.
+    </h3>
+  </div>
+</div>
+`;
+
+exports[`App component render without groupId 1`] = `
+<div>
+  <Header
+    links="/"
+  />
+  <Toolbar />
+  <EditServiceDialog />
+  <div>
+    <h1>
+      404
+    </h1>
+    <h3>
+      The group was not found.
+    </h3>
+  </div>
+</div>
+`;
+
+exports[`App component render without state 1`] = `
+<div>
+  <Header
+    links="/"
+  />
+  <Toolbar />
+  <EditServiceDialog />
+  <div>
+    <h1>
+      Loading
+    </h1>
+  </div>
+</div>
+`;
+
+exports[`load from state should load the state correctly 1`] = `
+<div>
+  <Header
+    links="/"
+  />
+  <Toolbar />
+  <EditServiceDialog />
+  <Group
+    group="ftx"
+  />
+</div>
+`;

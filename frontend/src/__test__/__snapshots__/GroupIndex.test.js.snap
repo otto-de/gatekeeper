@@ -20,11 +20,6 @@ exports[`GroupIndex component render 1`] = `
   >
     group2
   </Link>
-  <Link
-    to="/about"
-  >
-    About
-  </Link>
 </div>
 `;
 
@@ -47,11 +42,6 @@ exports[`load from state should load the state correctly 1`] = `
     to="/group/fty"
   >
     fty
-  </Link>
-  <Link
-    to="/about"
-  >
-    About
   </Link>
 </div>
 `;

@@ -58,7 +58,7 @@ export default function reducer(state = {}, action = {}) {
             let group = newState[action.group];
             let serviceNames = Object.keys(group);
             let groupWithServiceRemoved = R.pick(R.without([action.service], serviceNames), group);
-            if(Object.keys(groupWithServiceRemoved).length === 0) {
+            if (Object.keys(groupWithServiceRemoved).length === 0) {
                 delete newState[action.group];
             } else {
                 newState[action.group] = groupWithServiceRemoved;
