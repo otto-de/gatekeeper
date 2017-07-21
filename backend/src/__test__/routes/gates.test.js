@@ -10,6 +10,17 @@ jest.mock('../../services/gateService', () => {
 });
 const gateServiceMock = require('../../services/gateService');
 
+jest.mock('../../routes/sse', () => {
+    const original = require.requireActual('../../routes/sse');
+    return Object.assign({}, original, {
+        notifyUpdateGates: jest.fn(),
+        notifyUpdateGate: jest.fn(),
+        notifyDeleteService: jest.fn()
+    });
+});
+
+const sseMock = require('../../routes/sse');
+
 describe('gates route', () => {
     let server;
     beforeAll(() => {
@@ -21,6 +32,11 @@ describe('gates route', () => {
         gateServiceMock.findGate.mockReset();
         gateServiceMock.setGate.mockReset();
         gateServiceMock.deleteService.mockReset();
+        Object.keys(sseMock).forEach(key => {
+            if(sseMock[key].mock) {
+                sseMock[key].mockReset();
+            }
+        });
     });
 
     afterAll(() => {
@@ -55,7 +71,10 @@ describe('gates route', () => {
                     }
                 )
                 .expect(204)
-                .then(() => expect(gateServiceMock.createOrUpdateService).toBeCalledWith('myGroup', 'myService', ['env1', 'env2']));
+                .then(() => {
+                    expect(gateServiceMock.createOrUpdateService).toBeCalledWith('myGroup', 'myService', ['env1', 'env2']);
+                    expect(sseMock.notifyUpdateGates).toBeCalledWith('myGroup', 'myService', ['env1', 'env2']);
+                });
         }
     );
 
@@ -103,7 +122,8 @@ describe('gates route', () => {
         return request(server)
             .put('/api/gates/group/service/environment')
             .send({state: 'open'})
-            .expect(204);
+            .expect(204)
+            .then(() => expect(sseMock.notifyUpdateGate).toBeCalledWith('group', 'service', 'environment'));
     });
 
     it('PUT: the API should reject invalid gate states', () => {
@@ -158,7 +178,10 @@ describe('gates route', () => {
             return request(server)
                 .del('/api/gates/group/service')
                 .expect(204)
-                .then(() => expect(gateServiceMock.deleteService).toBeCalledWith('group', 'service'));
+                .then(() => {
+                    expect(gateServiceMock.deleteService).toBeCalledWith('group', 'service');
+                    expect(sseMock.notifyDeleteService).toBeCalledWith('group', 'service');
+                });
         }
     );
 
@@ -169,4 +192,5 @@ describe('gates route', () => {
                 .expect(404, '{"status":"error","message":"unknown service: group/service"}');
         }
     );
+
 });
