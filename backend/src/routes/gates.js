@@ -52,7 +52,7 @@ router.post('/', validate(createOrUpdateServiceSchema), async (req, res) => {
 const setGateSchema = {
     body: {
         state: Joi.any().valid(['open', 'closed']),
-        message: Joi.string()
+        message: Joi.string().allow('')
     }
 };
 
