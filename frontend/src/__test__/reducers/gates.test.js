@@ -1,6 +1,6 @@
 import reducer, {addTicket, setManualState, setAutoState, setComment, setLastModified, setCommentEditDialog} from '../../reducers/gates';
 import {deleteTicketResponse} from '../../enhancers/api';
-import {receiveUpdateGate} from '../../enhancers/sse';
+import {receiveUpdateGate, receiveCompleteState} from '../../enhancers/sse';
 
 describe('Gates reducer', () => {
     const state = {
@@ -79,6 +79,20 @@ describe('Gates reducer', () => {
             queue: ["t1"],
             manual_state: true,
             last_modified: 13337
+        });
+    });
+
+    it('should map fetched response state to store state', () => {
+        let action = receiveCompleteState({gates:{
+            grp: {srv: {live: {message:'message1', queue:['1'], state_timestamp:123, state: 'open'}}},
+            grp2: {srv2: {dev: {message:'message2', queue:['2'], state_timestamp:321, state: 'closed'}}}
+        }});
+
+        let withNewCompleteState = reducer(state, action);
+
+        expect(withNewCompleteState).toEqual({
+            grp: {srv: {live: {message:'message1', queue:['1'], last_modified:123, manual_state: true}}},
+            grp2: {srv2: {dev: {message:'message2', queue:['2'], last_modified:321, manual_state: false}}}
         });
     });
 });
