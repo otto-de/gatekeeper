@@ -42,7 +42,7 @@ router.post('/', validate(createOrUpdateServiceSchema), async (req, res) => {
         await gateService.createOrUpdateService(group, service, environments);
         res.status(204);
         res.end();
-        await sse.notifyStateChange();
+        await sse.notifyUpdateGates(group, service, environments);
     } catch (error) {
         res.status(500);
         res.json({status: 'error', message: error.message});

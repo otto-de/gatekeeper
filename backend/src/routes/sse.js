@@ -33,9 +33,15 @@ function notifyDeleteService(group, service) {
     send('deleteService', {group, service});
 }
 
+async function notifyUpdateGates(group, service, environments) {
+    environments.forEach(async env => {
+        return await notifyUpdateGate(group, service, env);
+    });
+}
+
 async function notifyUpdateGate(group, service, environment) {
     const gate = await gateService.findGate(group, service, environment);
     send('updateGate', {group, service, environment, gate});
 }
 
-module.exports = { router, notifyStateChange, notifyDeleteService, notifyUpdateGate };
+module.exports = { router, notifyStateChange, notifyDeleteService, notifyUpdateGate, notifyUpdateGates };
