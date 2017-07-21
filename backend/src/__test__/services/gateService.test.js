@@ -71,9 +71,9 @@ describe('the gate service', () => {
         expect(result).toEqual(expected);
     });
 
-    it('get gate', () => {
-        gateRepositoryMock.findGate.mockReturnValue({state: gateService.OPEN});
-        const result = gateService.findGate('group1', 'service', 'environment');
+    it('get gate', async () => {
+        gateRepositoryMock.findGate.mockReturnValue({state: 'open'});
+        const result = await gateService.findGate('group1', 'service', 'environment');
         expect(result).toBeTruthy();
     });
 
