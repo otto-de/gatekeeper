@@ -11,8 +11,9 @@ const SET_EDIT_COMMENT_DIALOG = 'gatekeeper/gate/comment_edit_dialog/SET';
 function mapServerGateToFrontend(receivedGate) {
     return {
         message: receivedGate.message,
-        queue: receivedGate.queue,
+        queue: receivedGate.queue || [],
         manual_state: receivedGate.state === 'open',
+        auto_state: receivedGate.auto_state === 'open',
         last_modified: receivedGate.state_timestamp,
     };
 }

@@ -35,8 +35,8 @@ describe('the gate service', () => {
                 'group': 'myGroup',
                 'name': 'myService',
                 'environments': {
-                    'env1': 'gate1',
-                    'env2': {gate: 'gate2'}
+                    'env1': {message: 'gate1', state:'open', queue:[]},
+                    'env2': {message: 'gate2', state:'open', queue:['t1']}
                 }
             },
             {
@@ -44,31 +44,24 @@ describe('the gate service', () => {
                 'group': 'edo',
                 'name': 'yada',
                 'environments': {
-                    'live': 'live-gate',
-                    'plop': 'plop-gate'
+                    'live': {message:'live-gate', state:'closed', queue:[]},
+                    'plop': {message:'plop-gate', state:'closed', queue:['t1']}
                 }
             }
         ]);
-        const expected = {
-            gates: {
-                myGroup: {
-                    myService: {
-                        env1: 'gate1',
-                        env2: {gate: 'gate2'}
-                    }
-                },
-                edo: {
-                    yada: {
-                        live: 'live-gate',
-                        plop: 'plop-gate'
-                    }
-                }
-
-            }
-        };
 
         const result = await gateService.getAllGates();
-        expect(result).toEqual(expected);
+
+        expect(result).toEqual({
+            gates: {myGroup: {myService: {
+                env1: {message: 'gate1', state:'open', queue:[], auto_state: "open"},
+                env2: {message: 'gate2', state:'open', queue:['t1'], auto_state: "closed"}
+            }}, edo: {yada: {
+                live: {message:'live-gate', state:'closed', queue:[], auto_state: "open"},
+                plop: {message:'plop-gate', state:'closed', queue:['t1'], auto_state: "closed"}
+            }}
+            }
+        });
     });
 
     it('get gate', async () => {
@@ -105,6 +98,12 @@ describe('the gate service', () => {
         const result = await gateService.deleteService('group', 'service');
         expect(result).toEqual(true);
         expect(gateRepositoryMock.deleteService).toBeCalledWith('group', 'service');
+    });
+
+    it('should derive "auto_state" value witch ticket queue', async () => {
+        gateRepositoryMock.findGate.mockReturnValue({state: 'open'});
+        const enhancedGate = await gateService.findGate('group1', 'service', 'environment');
+        expect(enhancedGate).toEqual({'auto_state': 'open', 'state': 'open'});
     });
 
 });

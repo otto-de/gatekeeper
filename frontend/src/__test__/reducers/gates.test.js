@@ -71,28 +71,29 @@ describe('Gates reducer', () => {
     });
 
     it('should update gate state on updateState event', () => {
-        let gate = {message:'new comment', queue: ['t1'], state: 'open', state_timestamp:13337};
+        let gate = {message:'new comment', queue: ['t1'], state: 'open', state_timestamp:13337, auto_state:'closed'};
         let action = receiveUpdateGate({group:'ftX', service:'gatekeeper', environment:'test', gate:gate});
         let withNewComment = reducer(state, action);
         expect(withNewComment.ftX.gatekeeper.test).toEqual({
             message: 'new comment',
             queue: ["t1"],
             manual_state: true,
+            auto_state:false,
             last_modified: 13337
         });
     });
 
     it('should map fetched response state to store state', () => {
         let action = receiveCompleteState({gates:{
-            grp: {srv: {live: {message:'message1', queue:['1'], state_timestamp:123, state: 'open'}}},
-            grp2: {srv2: {dev: {message:'message2', queue:['2'], state_timestamp:321, state: 'closed'}}}
+            grp: {srv: {live: {message:'message1', queue:undefined, state_timestamp:123, state: 'open', auto_state:'open'}}},
+            grp2: {srv2: {dev: {message:'message2', queue:['2'], state_timestamp:321, state: 'closed', auto_state:'closed'}}}
         }});
 
         let withNewCompleteState = reducer(state, action);
 
         expect(withNewCompleteState).toEqual({
-            grp: {srv: {live: {message:'message1', queue:['1'], last_modified:123, manual_state: true}}},
-            grp2: {srv2: {dev: {message:'message2', queue:['2'], last_modified:321, manual_state: false}}}
+            grp: {srv: {live: {message:'message1', queue:[], last_modified:123, manual_state: true, auto_state:true}}},
+            grp2: {srv2: {dev: {message:'message2', queue:['2'], last_modified:321, manual_state: false, auto_state:false}}}
         });
     });
 });
