@@ -3,7 +3,6 @@ import renderer from 'react-test-renderer';
 import {MockStore} from './mockStore';
 import {Provider} from 'react-redux';
 import ConnectedGroupIndex, {GroupIndex} from '../GroupIndex';
-// import {Link} from 'react-router-dom';
 
 jest.mock('react-router-dom/Link', () => 'Link');
 jest.mock('react-router-dom/NavLink', () => 'NavLink');

@@ -2,46 +2,140 @@
 
 exports[`GroupIndex component render 1`] = `
 <div>
+  <nav
+    className="navbar navbar-default"
+  >
+    <div
+      className="container-fluid"
+    >
+      <div
+        className="navbar-header"
+      >
+        <span
+          className="navbar-brand"
+        >
+          Gatekeeper
+        </span>
+        <ul
+          className="nav navbar-nav"
+          role={null}
+        >
+          <li
+            className=""
+            role="presentation"
+            style={undefined}
+          >
+            <a
+              href="#"
+              onClick={[Function]}
+              role="button"
+              title="Item"
+            >
+              <Link
+                to="/"
+              >
+                Index
+              </Link>
+            </a>
+          </li>
+          <p
+            active={undefined}
+            activeHref={undefined}
+            activeKey={undefined}
+            className="navbar-text"
+            onSelect={null}
+          >
+            
+          </p>
+        </ul>
+      </div>
+    </div>
+  </nav>
   <Toolbar />
   <EditServiceDialog />
   <Link
-    activeClassName="active"
-    to="/"
-  >
-    Home
-  </Link>
-  <Link
     to="/group/group1"
   >
-    group1
+    <h4>
+      group1
+    </h4>
   </Link>
   <Link
     to="/group/group2"
   >
-    group2
+    <h4>
+      group2
+    </h4>
   </Link>
 </div>
 `;
 
 exports[`load from state should load the state correctly 1`] = `
 <div>
+  <nav
+    className="navbar navbar-default"
+  >
+    <div
+      className="container-fluid"
+    >
+      <div
+        className="navbar-header"
+      >
+        <span
+          className="navbar-brand"
+        >
+          Gatekeeper
+        </span>
+        <ul
+          className="nav navbar-nav"
+          role={null}
+        >
+          <li
+            className=""
+            role="presentation"
+            style={undefined}
+          >
+            <a
+              href="#"
+              onClick={[Function]}
+              role="button"
+              title="Item"
+            >
+              <Link
+                to="/"
+              >
+                Index
+              </Link>
+            </a>
+          </li>
+          <p
+            active={undefined}
+            activeHref={undefined}
+            activeKey={undefined}
+            className="navbar-text"
+            onSelect={null}
+          >
+            
+          </p>
+        </ul>
+      </div>
+    </div>
+  </nav>
   <Toolbar />
   <EditServiceDialog />
   <Link
-    activeClassName="active"
-    to="/"
-  >
-    Home
-  </Link>
-  <Link
     to="/group/ftx"
   >
-    ftx
+    <h4>
+      ftx
+    </h4>
   </Link>
   <Link
     to="/group/fty"
   >
-    fty
+    <h4>
+      fty
+    </h4>
   </Link>
 </div>
 `;

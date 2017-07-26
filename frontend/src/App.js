@@ -11,7 +11,7 @@ import Header from "./Header";
 export class App extends Component {
     render() {
         const {groups} = this.props;
-        const target_group = R.path(['match', 'params', 'groupId'])(this.props);
+        const target_group = R.path(['match', 'params', 'groupId'])(this.props) || "";
 
         let content = null;
         if (groups.length === 0) {
@@ -24,7 +24,7 @@ export class App extends Component {
 
         return (
             <div>
-                <Header links="/"/>
+                <Header location={target_group}/>
                 <Toolbar/>
                 <EditGateDialog/>
                 {content}

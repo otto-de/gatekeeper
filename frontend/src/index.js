@@ -14,7 +14,8 @@ import {history} from './AppStore';
 const appStore = createGatekeeperStore();
 appStore.dispatch(connect('/stream'));
 
-ReactDOM.render(<Provider store={appStore}>
+ReactDOM.render(
+    <Provider store={appStore}>
         <ConnectedRouter history={history}>
             <div>
                 <Route exact path="/" component={GroupIndex}/>

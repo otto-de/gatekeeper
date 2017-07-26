@@ -51,6 +51,10 @@ case "$@" in
         frontendDir
         yarn install
         ;;
+    "run")
+        backendDir
+        yarn start
+        ;;
     "back install" | "bi")
         backendDir
         yarn install
@@ -59,9 +63,9 @@ case "$@" in
         backendDir
         tests
         ;;
-    "run")
+    "back run" | "br")
         backendDir
-        yarn start
+        yarn dev
         ;;
     "front install" | "fi")
         frontendDir

@@ -1,26 +1,27 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import R from "ramda";
-import {Nav, Navbar, NavItem} from "react-bootstrap";
-
-export function HeaderLinks({links}) {
-    return (
-        <Nav>
-            {R.addIndex(R.map)((link, index) => <NavItem key={index} href="#">{link}</NavItem>)(links)}
-        </Nav>
-    )
-}
+import {Nav, Navbar, NavItem} from 'react-bootstrap';
+import {Link} from 'react-router-dom';
 
 export class Header extends React.Component {
     render() {
-        const {links} = this.props;
+        const {location} = this.props;
         return (
             <Navbar fluid>
                 <Navbar.Header>
                     <Navbar.Brand>
                         Gatekeeper
                     </Navbar.Brand>
-                    <HeaderLinks links={links}/>
+                    <Nav>
+                        <NavItem title="Item">
+                            <Link to="/">
+                                Index
+                            </Link>
+                        </NavItem>
+                        <Navbar.Text>
+                            {location}
+                        </Navbar.Text>
+                    </Nav>
                 </Navbar.Header>
             </Navbar>
         );
@@ -28,7 +29,7 @@ export class Header extends React.Component {
 }
 
 Header.propTypes = {
-    links: PropTypes.array.isRequired
+    location: PropTypes.string.isRequired
 };
 
 export default (Header);

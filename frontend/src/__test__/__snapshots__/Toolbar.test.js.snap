@@ -16,7 +16,7 @@ exports[`Toolbar component render 1`] = `
     onClick={[Function]}
     type="button"
   >
-    Add Gate
+    Add Service
   </button>
   <button
     className="btn btn-info"
@@ -44,7 +44,7 @@ exports[`Toolbar load from state should load the state correctly 1`] = `
     onClick={[Function]}
     type="button"
   >
-    Add Gate
+    Add Service
   </button>
   <button
     className="btn btn-info"

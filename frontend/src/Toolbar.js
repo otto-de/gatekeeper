@@ -8,7 +8,7 @@ export class Toolbar extends React.Component {
         const {openEditGateDialog} = this.props;
         return (
             <ButtonToolbar style={{margin: '5px'}}>
-                <Button bsStyle="info" onClick={() => openEditGateDialog()}>Add Gate</Button>
+                <Button bsStyle="info" onClick={() => openEditGateDialog()}>Add Service</Button>
                 <Button bsStyle="info">Edit Holidays</Button>
             </ButtonToolbar>
         );

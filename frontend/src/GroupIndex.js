@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import R from 'ramda';
 import Toolbar from './Toolbar';
 import EditServiceDialog from './EditServiceDialog';
+import Header from './Header';
 
 
 export class GroupIndex extends React.Component {
@@ -11,10 +12,16 @@ export class GroupIndex extends React.Component {
         const {groups} = this.props;
         return (
             <div>
+                <Header location=""/>
                 <Toolbar/>
                 <EditServiceDialog/>
-                <Link to="/" activeClassName="active">Home</Link>
-                {R.map((group) => {return <Link key={`group-link-${group}`} to={`/group/${group}`}>{group}</Link>})(groups)}
+                {R.map((group) => {
+                    return (
+                        <Link key={`group-link-${group}`} to={`/group/${group}`}>
+                            <h4>{group}</h4>
+                        </Link>
+                    )
+                })(groups)}
             </div>
         );
     }
