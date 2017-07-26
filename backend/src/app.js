@@ -4,6 +4,8 @@ const favicon = require('serve-favicon');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
+const swaggerJSDoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
 
 const index = require('./routes/index');
 const gates = require('./routes/gates');
@@ -23,8 +25,32 @@ app.use(express.static(path.join(__dirname, '..', '..', 'frontend/build')));
 app.use('/api/gates', gates);
 app.use('/api/tickets', tickets);
 app.use('/stream', sse.router);
-app.use('*', index);
 
+const swaggerApi = express.Router();
+// https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md
+const swaggerDefinition = {
+    info: {
+        title: 'Gatekeeper',
+        version: '0.0.1',
+        description: 'Managing Gates'
+    },
+    // host: 'localhost:3000',
+    basePath: '/api',
+};
+
+const swaggerSpec = swaggerJSDoc({
+    swaggerDefinition: swaggerDefinition,
+    apis: ['./src/routes/*.js'],
+});
+
+swaggerApi.get('/api-docs.json', function(req, res) {
+    res.json(swaggerSpec);
+});
+
+swaggerApi.use('/', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+app.use('/api', swaggerApi);
+app.use('*', index);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

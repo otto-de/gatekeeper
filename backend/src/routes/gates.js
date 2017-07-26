@@ -5,6 +5,89 @@ const router = express.Router();
 const gateService = require('../services/gateService');
 const sse = require('../routes/sse');
 
+/**
+ * @swagger
+ * tags:
+ *   name: Gates
+ *   description: Gates management
+ */
+
+/**
+ * @swagger
+ * definitions:
+ *
+ *   GateContainer:
+ *     required:
+ *       - gates
+ *     properties:
+ *       gates:
+ *         $ref: '#/definitions/Groups'
+ *     example:
+ *       gates:
+ *         myGroupName:
+ *           myServiceName:
+ *             myEnv1:
+ *               state: 'open'
+ *               message: 'comment about gate'
+ *             myEnv2:
+ *               state: 'closed'
+ *               message: 'cause of the state'
+ *   Groups:
+ *     type: object
+ *     description: map of all groups
+ *     additionalProperties:
+ *       $ref: '#/definitions/Services'
+ *
+ *   Services:
+ *     type: object
+ *     description: map of all services under a group
+ *     additionalProperties:
+ *       $ref: '#/definitions/Enironments'
+ *
+ *   Enironments:
+ *     type: object
+ *     description: map of all gates for a service under a specific group
+ *     additionalProperties:
+ *       $ref: '#/definitions/Gate'
+ *
+ *   Gate:
+ *     type: object
+ *     description: a gate
+ *     properties:
+ *       queue:
+ *         type: array
+ *         items:
+ *           type: string
+ *       auto_state:
+ *         type: string
+ *       state:
+ *         type: string
+ *       state_timestamp:
+ *         type: integer
+ *       message:
+ *         type: string
+ *       message_timestamp:
+ *         type: integer
+ */
+
+/**
+ * @swagger
+ * /gates:
+ *   get:
+ *     description: Returns gates
+ *     tags:
+ *      - Gates
+ *     produces:
+ *      - application/json
+ *     responses:
+ *       200:
+ *         description: gates
+ *         schema:
+ *           type: object
+ *           $ref: '#/definitions/GateContainer'
+ *       404:
+ *         description: no gates found
+ */
 router.get('/', (async (req, res) => {
     const gate = await gateService.getAllGates();
     if (gate === null) {
