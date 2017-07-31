@@ -9,7 +9,7 @@ module.exports = {
         let byGroupAndService = {group: group, name: service};
         let doc = await gatekeeperCollection.findOne(byGroupAndService);
         if (doc) {
-            return gatekeeperCollection.update({_id: doc._id},
+            return await gatekeeperCollection.update({_id: doc._id},
                 {
                     $push: {
                         ['environments.' + environment + '.queue']: ticketId
@@ -26,7 +26,7 @@ module.exports = {
         let byGroupAndService = {group: group, name: service};
         let doc = await gatekeeperCollection.findOne(byGroupAndService);
         if (doc) {
-            return gatekeeperCollection.update({_id: doc._id},
+            return await gatekeeperCollection.update({_id: doc._id},
                 {
                     $pull: {
                         ['environments.' + environment + '.queue']: ticketId
