@@ -1,1 +1,2 @@
-module.exports = require('monk')('localhost:27017/gatekeeper');
+const config = require('../config');
+module.exports = require('monk')(config.uri);

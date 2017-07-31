@@ -1,8 +1,9 @@
 const db = require('./database');
+const config = require('../config');
 
 module.exports = {
     getAll: async () => {
-        const gatekeeperCollection = db.get('gatekeeper');
+        const gatekeeperCollection = db.get(config.collection);
         return await gatekeeperCollection.find({});
     },
     updateEnvironments: function (currentEnvironments, newEnvironments) {
@@ -31,7 +32,7 @@ module.exports = {
     },
 
     createOrUpdateService: async function (group, service, environments) {
-        const gatekeeperCollection = db.get('gatekeeper');
+        const gatekeeperCollection = db.get(config.collection);
 
         let byGroupAndService = {group: group, name: service};
         let doc = await gatekeeperCollection.findOne(byGroupAndService);
@@ -50,7 +51,7 @@ module.exports = {
     },
 
     findGate: async function (group, service, environment) {
-        const gatekeeperCollection = db.get('gatekeeper');
+        const gatekeeperCollection = db.get(config.collection);
         let byGroupAndService = {group: group, name: service};
         let gates = await gatekeeperCollection.findOne(byGroupAndService);
         if (gates) {
@@ -61,7 +62,7 @@ module.exports = {
     },
 
     setGate: async function (group, service, environment, state, timestamp, message) {
-        const gatekeeperCollection = db.get('gatekeeper');
+        const gatekeeperCollection = db.get(config.collection);
 
         let gateUpdate = {};
         if (state) {
@@ -86,7 +87,7 @@ module.exports = {
     },
 
     deleteService: async function (group, service) {
-        const gatekeeperCollection = db.get('gatekeeper');
+        const gatekeeperCollection = db.get(config.collection);
         let byGroupAndService = {group: group, name: service};
 
         const result = await gatekeeperCollection.remove(byGroupAndService);

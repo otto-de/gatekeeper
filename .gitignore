@@ -23,3 +23,6 @@ var/
 .idea
 docs/_build
 *.log
+Dockerfile
+develop.json
+live.json

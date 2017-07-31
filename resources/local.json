@@ -1,0 +1,10 @@
+{
+  "username": "",
+  "password": "",
+  "hosts": [
+    "localhost"
+  ],
+  "port": "27017",
+  "database": "gatekeeper",
+  "collection": "gatekeeper"
+}
