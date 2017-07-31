@@ -1,7 +1,22 @@
 const fs = require('fs');
 
 const config = {};
-const environment = process.env.ENVIRONMENT || 'local';
+const args = parseCommandlineArguments();
+const environment = args.env || 'local';
+
+console.log('Starting on ' + environment);
+
+function parseCommandlineArguments() {
+    const args_map = {};
+    process.argv.slice(2).forEach(
+        (arg) => {
+            if (arg.includes('=')) {
+                const split = arg.split('=');
+                args_map[split[0]] = split[1]
+            }
+        });
+    return args_map;
+}
 
 function readConfig(environment) {
     const contents = fs.readFileSync('../resources/' + environment + '.json', 'utf-8');
@@ -19,8 +34,13 @@ function buildMongoUri(config) {
     return uris.join()
 }
 
-const configFile = readConfig(environment);
-config.collection = configFile['collection'];
-config.uri = buildMongoUri(configFile);
+try {
+    const configFile = readConfig(environment);
+    config.collection = configFile['collection'];
+    config.uri = buildMongoUri(configFile);
+} catch (err) {
+    console.error('Could not load/parse config file:\n ' + err);
+    process.exit(1);
+}
 
 module.exports = config;

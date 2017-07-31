@@ -1,3 +1,4 @@
+require('./config');
 const express = require('express');
 const path = require('path');
 const favicon = require('serve-favicon');
@@ -43,7 +44,7 @@ const swaggerSpec = swaggerJSDoc({
     apis: ['./src/routes/*.js'],
 });
 
-swaggerApi.get('/api-docs.json', function(req, res) {
+swaggerApi.get('/api-docs.json', function (req, res) {
     res.json(swaggerSpec);
 });
 
