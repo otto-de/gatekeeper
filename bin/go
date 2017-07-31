@@ -24,12 +24,14 @@ backendDir(){
 
 tests(){
     export CI=true
+    export GROUP=test
     yarn test
     showBuildflag
 }
 
 tests-update(){
     export CI=true
+    export GROUP=test
     yarn test -- -u
     showBuildflag
 }
