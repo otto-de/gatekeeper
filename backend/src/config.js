@@ -2,8 +2,7 @@ const fs = require('fs');
 
 const config = {};
 const args = parseCommandlineArguments();
-const environment = args.env || 'local';
-
+const environment = args.group || process.env.GROUP || 'local';
 console.log('Starting on ' + environment);
 
 function parseCommandlineArguments() {
@@ -12,7 +11,7 @@ function parseCommandlineArguments() {
         (arg) => {
             if (arg.includes('=')) {
                 const split = arg.split('=');
-                args_map[split[0]] = split[1]
+                args_map[split[0].toLowerCase()] = split[1]
             }
         });
     return args_map;
