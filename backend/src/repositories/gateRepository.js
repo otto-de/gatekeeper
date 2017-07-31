@@ -38,11 +38,11 @@ module.exports = {
         let doc = await gatekeeperCollection.findOne(byGroupAndService);
 
         if (doc) {
-            return gatekeeperCollection.update({_id: doc._id},
+            return await gatekeeperCollection.update({_id: doc._id},
                 {$set: {environments: this.updateEnvironments(doc.environments, environments)}}
             );
         } else {
-            return gatekeeperCollection.insert({
+            return await gatekeeperCollection.insert({
                 'group': group,
                 'name': service,
                 'environments': this.updateEnvironments({}, environments)
