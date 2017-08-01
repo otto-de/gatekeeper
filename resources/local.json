@@ -2,9 +2,8 @@
   "username": "",
   "password": "",
   "hosts": [
-    "localhost"
+    "localhost:27017"
   ],
-  "port": "27017",
   "database": "gatekeeper",
   "collection": "gatekeeper"
 }

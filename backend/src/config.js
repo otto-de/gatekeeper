@@ -27,10 +27,7 @@ function buildMongoUri(config) {
     if (config['username']) {
         auth = config['username'] + ':' + config['password'] + '@'
     }
-    const uris = config['hosts'].map((host) => {
-        return auth + host + ':' + config['port'] + '/' + config['database']
-    });
-    return uris.join()
+    return 'mongodb://' + auth + config['hosts'].join(',') + '/' + config['database'] + (config['replica_set'] ? '?replicaSet=' + config['replica_set'] : '')
 }
 
 try {
