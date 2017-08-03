@@ -1,5 +1,15 @@
 const request = require('supertest');
-
+jest.mock('../../repositories/database', () => {
+    return {
+        close: jest.fn(),
+        then: jest.fn()
+    }
+});
+jest.mock('../../config', () => {
+    return {
+        then: jest.fn()
+    }
+});
 jest.mock('../../services/ticketService', () => {
     return {
         createOrUpdateService: jest.fn(),

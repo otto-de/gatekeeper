@@ -1,6 +1,6 @@
 const fs = require('fs');
+const Vault = require('node-vault');
 
-const config = {};
 const args = parseCommandlineArguments();
 const environment = args.group || process.env.GROUP || 'local';
 console.log('Starting on ' + environment);
@@ -27,16 +27,47 @@ function buildMongoUri(config) {
     if (config['username']) {
         auth = config['username'] + ':' + config['password'] + '@'
     }
-    return 'mongodb://' + auth + config['hosts'].join(',') + '/' + config['database'] + (config['replica_set'] ? '?replicaSet=' + config['replica_set'] : '')
+    return 'mongodb://' + auth + config['hosts'].join(',') + '/' + config['database'] + (config['replicaSet'] ? '?replicaSet=' + config['replicaSet'] : '')
 }
 
-try {
-    const configFile = readConfig(environment);
-    config.collection = configFile['collection'];
-    config.uri = buildMongoUri(configFile);
-} catch (err) {
-    console.error('Could not load/parse config file:\n ' + err);
-    process.exit(1);
+async function readSecrets(secret, vault, config) {
+    let {path, key, alias} = secret;
+    try {
+        let result = await vault.read(path);
+        if (result && result.data && result.data[key]) {
+            config[alias] = result.data[key];
+        } else {
+            console.error('Vault response is empty or missing the secret key: ' + key);
+            process.exit(1);
+        }
+    } catch (err) {
+        console.error('Error while reading vault secrets: ' + err);
+        process.exit(1);
+    }
 }
 
-module.exports = config;
+module.exports = new Promise(async (resolve) => {
+    let config;
+    try {
+        config = readConfig(environment);
+        if ('vaultSecrets' in config) {
+            const vault = Vault({
+                endpoint: process.env.VAULT_ADDR,
+                token: process.env.VAULT_TOKEN,
+                requestOptions: {
+                    port: 443,
+                    ca: (config.ca ? fs.readFileSync(config.ca) : ''),
+                    rejectUnauthorized: true
+                }
+            });
+            for (let secret of config['vaultSecrets']) {
+                await readSecrets(secret, vault, config);
+            }
+        }
+        config.uri = buildMongoUri(config);
+    } catch (err) {
+        console.error('Could not load/parse config file:\n ' + err);
+        process.exit(1);
+    }
+    resolve(config)
+});

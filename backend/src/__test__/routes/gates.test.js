@@ -1,5 +1,15 @@
 const request = require('supertest');
-
+jest.mock('../../repositories/database', () => {
+    return {
+        close: jest.fn(),
+        then: jest.fn()
+    }
+});
+jest.mock('../../config', () => {
+    return {
+        then: jest.fn()
+    }
+});
 jest.mock('../../services/gateService', () => {
     return {
         createOrUpdateService: jest.fn(),
@@ -18,7 +28,6 @@ jest.mock('../../routes/sse', () => {
         notifyDeleteService: jest.fn()
     });
 });
-
 const sseMock = require('../../routes/sse');
 
 describe('gates route', () => {

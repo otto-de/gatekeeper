@@ -1,5 +1,16 @@
-const db = require('./database');
-const config = require('../config');
+const configPromise = require('../config');
+const dbPromise = require('./database');
+
+let db;
+let config;
+
+configPromise.then((configResolve) => {
+    config = configResolve;
+});
+
+dbPromise.then((dbResolve) => {
+    db = dbResolve.db;
+});
 
 module.exports = {
 

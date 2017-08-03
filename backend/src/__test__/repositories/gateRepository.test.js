@@ -1,7 +1,14 @@
 const gateRepository = require('../../repositories/gateRepository');
-const db = require('../../repositories/database');
+const dbPromise = require('../../repositories/database');
 
+let db;
 describe('gateRepository', () => {
+    beforeAll(async () => {
+        process.env.GROUP = 'test';
+        await dbPromise.then((dbResolve) => {
+            db = dbResolve.db;
+        });
+    });
 
     beforeEach(async () => {
         const gatekeeperCollection = db.get('gatekeeper');

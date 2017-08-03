@@ -4,6 +4,7 @@
   "license": "MIT",
   "scripts": {
     "start": "cd ../frontend && yarn --production=false && yarn run build && cd ../backend && node ./src/bin/www",
+    "prod": "node ./src/bin/www",
     "test": "jest",
     "dev": "PORT=5000 node ./src/bin/www"
   },
@@ -13,13 +14,15 @@
     "debug": "2.6.8",
     "express": "~4.15.3",
     "express-validation": "^1.0.2",
+    "install": "^0.10.1",
     "joi": "^10.6.0",
     "monk": "^6.0.1",
     "morgan": "~1.8.1",
+    "node-vault": "^0.5.10",
     "serve-favicon": "~2.4.2",
-    "uuid": "^3.1.0",
     "swagger-jsdoc": "^1.9.7",
-    "swagger-ui-express": "^2.0.3"
+    "swagger-ui-express": "^2.0.3",
+    "uuid": "^3.1.0"
   },
   "devDependencies": {
     "bson-objectid": "^1.1.5",

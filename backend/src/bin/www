@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-
 const app = require('../app');
 const debug = require('debug')('backend:server');
 const http = require('http');
@@ -76,6 +75,5 @@ function onListening() {
         : 'port ' + addr.port;
     debug('Listening on ' + bind);
 }
-
 
 module.exports = server;

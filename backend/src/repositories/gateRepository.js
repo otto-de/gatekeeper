@@ -1,11 +1,23 @@
-const db = require('./database');
-const config = require('../config');
+const configPromise = require('../config');
+const dbPromise = require('./database');
+
+let db;
+let config;
+
+configPromise.then((configResolve) => {
+    config = configResolve;
+});
+
+dbPromise.then((dbResolve) => {
+    db = dbResolve.db;
+});
 
 module.exports = {
     getAll: async () => {
         const gatekeeperCollection = db.get(config.collection);
         return await gatekeeperCollection.find({});
     },
+
     updateEnvironments: function (currentEnvironments, newEnvironments) {
         let withoutDeletedEnvironments = Object.keys(currentEnvironments)
             .filter((env) => newEnvironments.includes(env))
@@ -78,7 +90,7 @@ module.exports = {
         let byGroupAndService = {group: group, name: service};
         let doc = await gatekeeperCollection.findOne(byGroupAndService);
         if (doc) {
-            const result = await gatekeeperCollection.update({_id: doc._id},{
+            const result = await gatekeeperCollection.update({_id: doc._id}, {
                 $set: gateUpdate
             });
             return result.n >= 1;
