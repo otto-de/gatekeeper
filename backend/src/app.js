@@ -9,6 +9,7 @@ const swaggerJSDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
 
 const index = require('./routes/index');
+const internal = require('./routes/internal');
 const gates = require('./routes/gates');
 const tickets = require('./routes/tickets');
 const sse = require('./routes/sse');
@@ -51,6 +52,7 @@ swaggerApi.get('/api-docs.json', function (req, res) {
 swaggerApi.use('/', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use('/api', swaggerApi);
+app.use('/internal', internal);
 app.use('*', index);
 
 // catch 404 and forward to error handler
