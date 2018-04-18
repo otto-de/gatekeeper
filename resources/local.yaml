@@ -27,7 +27,10 @@ mongo:
   password: ''
   uris:
     - localhost
+  use_ssl: true
   database: gatekeeper
+  replicaSet: ''
+  authSource: 'admin'
   services_collection: gatekeeper
   tickets_collection: tickets
   holidays_collection: holidays

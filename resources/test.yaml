@@ -21,6 +21,8 @@ mongo:
   uris:
     - localhost
   database: testgatekeeper
+  replicaSet: ''
+  authSource: 'admin'
   services_collection: testgatekeeper
   tickets_collection: testtickets
   holidays_collection: testholidays

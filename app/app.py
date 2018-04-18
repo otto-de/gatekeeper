@@ -18,7 +18,7 @@ def create_app(environment, port):
     flask = Flask(__name__)
     flask.config.from_pyfile('config.py')
 
-    config_loader = ConfigLoader(verify=False)
+    config_loader = ConfigLoader(use_vault=False, verify=False)
     info = config_loader.load_application_info("./")
     config = config_loader.load_config("resources/", environment)
 
