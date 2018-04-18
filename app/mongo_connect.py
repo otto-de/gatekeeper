@@ -30,8 +30,12 @@ class MongoConnect:
     @staticmethod
     def build_uris(config):
         if config['mongo']['username'] and config['mongo']['password']:
-            return ['mongodb://' + config['mongo']['username'] + ':' + config['mongo']['password'] + '@' + db for db in
-                    config['mongo']['uris']]
+            uris = ','.join(config['mongo']['uris'])
+            ssl = 'ssl=' + str(config['mongo']['use_ssl']).lower() if config['mongo']['use_ssl'] else 'false'
+            authSource = '&authSource=' + str(config['mongo']['authSource']) if config['mongo']['authSource'] else ''
+            replicaSet = '&replicaSet=' + str(config['mongo']['replicaSet']) if config['mongo']['replicaSet'] else ''
+            return ['mongodb://' + config['mongo']['username'] + ':' + config['mongo']['password'] + \
+                '@' + uris + '/' + config['mongo']['database'] + '?' + ssl + replicaSet + authSource]
         else:
             return config['mongo']['uris']
 
