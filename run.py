@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 import argparse
 import logging
+import ssl
 
 from app.app import create_app
 
@@ -37,10 +38,11 @@ print("\x1b[32m========================\x1b[0m")
 app = create_app(port=int(args.port), environment=args.env)
 
 if(bool(args.ssl)):
-    from OpenSSL import SSL
-    context = SSL.Context(ssl.PROTOCOL_TLSv1_2)
-    context.use_privatekey_file('/etc/gatekeeper/ssl/server.key')
-    context.use_certificate_file('/etc/gatekeeper/ssl/server.crt')
-    app.run(debug=True, use_reloader=False, port=int(args.port), host='0.0.0.0', ssl_context=context)
+    context = ssl.SSLContext(SSL.PROTOCOL_TLSv1_2)
+    certfile = '/etc/gatekeeper/ssl/server.crt'
+    keyfile = '/etc/gatekeeper/ssl/server.key'
+    context.load_cert_chain(certfile=certfile, keyfile=keyfile)
 else:
-    app.run(debug=True, use_reloader=False, port=int(args.port), host='0.0.0.0')
+    context = "None"
+
+app.run(debug=True, use_reloader=False, port=int(args.port), host='0.0.0.0', ssl_context=context)
