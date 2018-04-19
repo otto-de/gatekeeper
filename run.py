@@ -5,7 +5,6 @@ import logging
 import ssl
 
 from app.app import create_app
-from werkzeug.contrib.fixers import ProxyFix
 
 parser = argparse.ArgumentParser(
     description='Gatekeeper is a service to install and manage gates in build pipelines.')
@@ -39,13 +38,12 @@ print("\x1b[32m========================\x1b[0m")
 app = create_app(port=int(args.port), environment=args.env)
 
 if(bool(args.ssl)):
-    context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_1)
+    app.config['PREFERRED_URL_SCHEME'] = 'https'
+    context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
     certfile = '/etc/gatekeeper/ssl/server.crt'
     keyfile = '/etc/gatekeeper/ssl/server.key'
     context.load_cert_chain(certfile=certfile, keyfile=keyfile)
 else:
     context = "None"
 
-app.wsgi_app = ProxyFix(app.wsgi_app)
-app.config['PREFERRED_URL_SCHEME'] = 'https'
 app.run(debug=True, use_reloader=False, port=int(args.port), host='0.0.0.0', ssl_context=context)
