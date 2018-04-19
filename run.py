@@ -11,6 +11,8 @@ parser.add_argument('-p', '--port', nargs='?', default=8080,
                     help='Port: Specify port. Default is 8080')
 parser.add_argument('-e', '--env', nargs='?', default="local",
                     help='Environment: Specify which config to load. Default is local.')
+parser.add_argument('-s', '--ssl', nargs='?', default=False,
+                    help='Allows use of Flask SSL context to serve https. Application default: False.')
 parser.add_argument('-w', '--workdir', nargs='?', default="./",
                     help='Workdir: Specify which working directory to use. Default is the local directory')
 parser.add_argument('-g', '--greedy', action='store_true',
@@ -27,9 +29,18 @@ logging.basicConfig(level=log_level,
 print("\n\x1b[32mApplication starting...\x1b[0m")
 print(" Port: " + str(args.port))
 print(" Environment: " + str(args.env))
+print(" SSL: " + str(args.ssl))
 print(" Workdir: " + str(args.workdir))
 print(" Greedy: " + str(args.greedy))
 print(" Logging: " + str(args.verbose))
 print("\x1b[32m========================\x1b[0m")
 app = create_app(port=int(args.port), environment=args.env)
-app.run(debug=True, use_reloader=False, port=int(args.port), host='0.0.0.0')
+
+if(bool(args.ssl)):
+    from OpenSSL import SSL
+    context = SSL.Context(ssl.PROTOCOL_TLSv1_2)
+    context.use_privatekey_file('/etc/gatekeeper/ssl/server.key')
+    context.use_certificate_file('/etc/gatekeeper/ssl/server.crt')
+    app.run(debug=True, use_reloader=False, port=int(args.port), host='0.0.0.0', ssl_context=context)
+else:
+    app.run(debug=True, use_reloader=False, port=int(args.port), host='0.0.0.0')
