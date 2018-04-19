@@ -4,17 +4,17 @@
 
 <link href="/static/css/base.css" rel=stylesheet type="text/css" media=screen>
 {% if parameter.style == "night" %}
-    <link href="/static/3rd/css/darkly/bootstrap.min.css" rel="stylesheet" media="screen">
-    <link href="/static/css/footer_night.css" rel=stylesheet type="text/css" media=screen>
-    <link href="/static/css/night.css" rel=stylesheet type="text/css" media=screen>
+    <link href="{{ url_for('static', filename=/static/3rd/css/darkly/bootstrap.min.css) }}" rel="stylesheet" media="screen">
+    <link href="{{ url_for('static', filename=/static/css/footer_night.css) }}" rel=stylesheet type="text/css" media=screen>
+    <link href="{{ url_for('static', filename=/static/css/night.css" rel=stylesheet type="text/css" media=screen>
 {% else %}
-    <link href="/static/3rd/css/flatly/bootstrap.min.css" rel="stylesheet" media="screen">
-    <link href="/static/css/footer_day.css" rel=stylesheet type="text/css" media=screen>
-    <link href="/static/css/day.css" rel=stylesheet type="text/css" media=screen>
+    <link href="{{ url_for('static', filename=/static/3rd/css/flatly/bootstrap.min.css) }}" rel="stylesheet" media="screen">
+    <link href="{{ url_for('static', filename=/static/css/footer_day.css) }}" rel=stylesheet type="text/css" media=screen>
+    <link href="{{ url_for('static', filename=/static/css/day.css) }}" rel=stylesheet type="text/css" media=screen>
 {% endif %}
 
-<script src="/static/3rd/js/jquery-2.1.4.min.js"></script>
-<script src="/static/3rd/js/bootstrap.min.js"></script>
+<script src="{{ url_for('static', filename=/static/3rd/js/jquery-2.1.4.min.js) }}"></script>
+<script src="{{ url_for('static', filename=/static/3rd/js/bootstrap.min.js) }}"></script>
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
