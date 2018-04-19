@@ -38,7 +38,7 @@ print("\x1b[32m========================\x1b[0m")
 app = create_app(port=int(args.port), environment=args.env)
 
 if(bool(args.ssl)):
-    context = ssl.SSLContext(SSL.PROTOCOL_TLSv1_2)
+    context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
     certfile = '/etc/gatekeeper/ssl/server.crt'
     keyfile = '/etc/gatekeeper/ssl/server.key'
     context.load_cert_chain(certfile=certfile, keyfile=keyfile)
