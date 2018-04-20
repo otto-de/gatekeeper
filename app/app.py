@@ -52,11 +52,11 @@ def create_ssl_context(app, use_ssl):
         if not os.path.isfile('/etc/gatekeeper/ssl/server.key') or not os.path.isfile('/etc/gatekeeper/ssl/server.crt'):
             print("If you want to use SSL, a 'server.key' file and 'server.crt' file are required to be stored in '/etc/gatekeeper/ssl/'")
             exit()
-        app.config['PREFERRED_URL_SCHEME'] = 'https'
-        context = ssl.SSLContext(ssl.PROTOCOL_TLS)
-        certfile = '/etc/gatekeeper/ssl/server.crt'
-        keyfile = '/etc/gatekeeper/ssl/server.key'
-        context.load_cert_chain(certfile=certfile, keyfile=keyfile)
+        context = 'adhoc'
+        # context = ssl.SSLContext(ssl.PROTOCOL_TLS)
+        # certfile = '/etc/gatekeeper/ssl/server.crt'
+        # keyfile = '/etc/gatekeeper/ssl/server.key'
+        # context.load_cert_chain(certfile=certfile, keyfile=keyfile)
     else:
         context = None
     return context
