@@ -1,4 +1,7 @@
 import json
+import ssl
+import os.path
+from sys import exit
 from flask import Flask
 from delorean import Delorean
 
@@ -43,3 +46,17 @@ def create_app(environment, port):
     flask.register_blueprint(views.blueprint)
     flask.register_blueprint(api.blueprint)
     return flask
+
+def create_ssl_context(app, use_ssl):
+    if(use_ssl):
+        if not os.path.isfile('/etc/gatekeeper/ssl/server.key') or not os.path.isfile('/etc/gatekeeper/ssl/server.crt'):
+            print("If you want to use SSL, a 'server.key' file and 'server.crt' file are required to be stored in '/etc/gatekeeper/ssl/'")
+            exit()
+        app.config['PREFERRED_URL_SCHEME'] = 'https'
+        context = ssl.SSLContext(ssl.PROTOCOL_TLS)
+        certfile = '/etc/gatekeeper/ssl/server.crt'
+        keyfile = '/etc/gatekeeper/ssl/server.key'
+        context.load_cert_chain(certfile=certfile, keyfile=keyfile)
+    else:
+        context = None
+    return context

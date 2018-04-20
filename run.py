@@ -5,6 +5,7 @@ import logging
 import ssl
 
 from app.app import create_app
+from app.app import create_ssl_context
 
 parser = argparse.ArgumentParser(
     description='Gatekeeper is a service to install and manage gates in build pipelines.')
@@ -35,15 +36,7 @@ print(" Workdir: " + str(args.workdir))
 print(" Greedy: " + str(args.greedy))
 print(" Logging: " + str(args.verbose))
 print("\x1b[32m========================\x1b[0m")
+
 app = create_app(port=int(args.port), environment=args.env)
-
-if(bool(args.ssl)):
-    app.config['PREFERRED_URL_SCHEME'] = 'https'
-    context = ssl.SSLContext(ssl.PROTOCOL_TLS)
-    certfile = '/etc/gatekeeper/ssl/server.crt'
-    keyfile = '/etc/gatekeeper/ssl/server.key'
-    context.load_cert_chain(certfile=certfile, keyfile=keyfile)
-else:
-    context = None
-
+context = create_ssl_context(app, bool(args.ssl))
 app.run(debug=True, use_reloader=False, port=int(args.port), host='0.0.0.0', ssl_context=context)
