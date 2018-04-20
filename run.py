@@ -44,6 +44,6 @@ if(bool(args.ssl)):
     keyfile = '/etc/gatekeeper/ssl/server.key'
     context.load_cert_chain(certfile=certfile, keyfile=keyfile)
 else:
-    context = ssl.SSLContext()
+    context = None
 
 app.run(debug=True, use_reloader=False, port=int(args.port), host='0.0.0.0', ssl_context=context)
