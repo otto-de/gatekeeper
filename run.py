@@ -39,11 +39,11 @@ app = create_app(port=int(args.port), environment=args.env)
 
 if(bool(args.ssl)):
     app.config['PREFERRED_URL_SCHEME'] = 'https'
-    context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
+    context = ssl.SSLContext(ssl.PROTOCOL_TLS)
     certfile = '/etc/gatekeeper/ssl/server.crt'
     keyfile = '/etc/gatekeeper/ssl/server.key'
     context.load_cert_chain(certfile=certfile, keyfile=keyfile)
 else:
-    context = "None"
+    context = ssl.SSLContext()
 
 app.run(debug=True, use_reloader=False, port=int(args.port), host='0.0.0.0', ssl_context=context)
