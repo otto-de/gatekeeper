@@ -39,14 +39,14 @@
             <small>Enter future holidays in the form of DD.MM.YYYY followed by an explanaion text e.g. 01.05.2018 1st May Bank Holiday, one entry one per line</small>
             <div id="holidays_list">
                 {% for holiday in holidays %}
-                    {{ holiday_entry(holiday _external=False )}}
+                    {{ holiday_entry(holiday, _external=False )}}
                 {% endfor %}
                 {%  if not holidays %}
-                    {{ holiday_entry( _external=False )}}
+                    {{ holiday_entry(, _external=False )}}
                 {% endif %}
             </div>
             <div id="holiday_item_template" style="display:none;">
-                {{  holiday_entry( _external=False )}}
+                {{  holiday_entry(, _external=False )}}
             </div>
 
             <div class="form-group">
@@ -62,4 +62,4 @@
         </fieldset>
     </form>
 </div>
-<script async type="text/javascript" src="{{ url_for('static', filename='js/edit_holidays_overlay.js' _external=False )}}"></script>
+<script async type="text/javascript" src="{{ url_for('static', filename='js/edit_holidays_overlay.js', _external=False )}}"></script>

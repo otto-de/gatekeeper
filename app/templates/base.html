@@ -1,20 +1,20 @@
 <!DOCTYPE html>
 <html>
-<link rel="shortcut icon" type="image/png" href="{{ url_for('static', filename='img/fav.png' _external=False )}}">
+<link rel="shortcut icon" type="image/png" href="{{ url_for('static', filename='img/fav.png', _external=False )}}">
 
-<link href="{{ url_for('static', filename='css/base.css' _external=False )}}" rel=stylesheet type="text/css" media=screen>
+<link href="{{ url_for('static', filename='css/base.css', _external=False )}}" rel=stylesheet type="text/css" media=screen>
 {% if parameter.style == "night" %}
-    <link href="{{ url_for('static', filename='3rd/css/darkly/bootstrap.min.css' _external=False )}}" rel="stylesheet" media="screen">
-    <link href="{{ url_for('static', filename='css/footer_night.css' _external=False )}}" rel=stylesheet type="text/css" media=screen>
-    <link href="{{ url_for('static', filename='css/night.css' _external=False )}}" rel=stylesheet type="text/css" media=screen>
+    <link href="{{ url_for('static', filename='3rd/css/darkly/bootstrap.min.css', _external=False )}}" rel="stylesheet" media="screen">
+    <link href="{{ url_for('static', filename='css/footer_night.css', _external=False )}}" rel=stylesheet type="text/css" media=screen>
+    <link href="{{ url_for('static', filename='css/night.css', _external=False )}}" rel=stylesheet type="text/css" media=screen>
 {% else %}
-    <link href="{{ url_for('static', filename='3rd/css/flatly/bootstrap.min.css' _external=False )}}" rel="stylesheet" media="screen">
-    <link href="{{ url_for('static', filename='css/footer_day.css' _external=False )}}" rel=stylesheet type="text/css" media=screen>
-    <link href="{{ url_for('static', filename='css/day.css' _external=False )}}" rel=stylesheet type="text/css" media=screen>
+    <link href="{{ url_for('static', filename='3rd/css/flatly/bootstrap.min.css', _external=False )}}" rel="stylesheet" media="screen">
+    <link href="{{ url_for('static', filename='css/footer_day.css', _external=False )}}" rel=stylesheet type="text/css" media=screen>
+    <link href="{{ url_for('static', filename='css/day.css', _external=False )}}" rel=stylesheet type="text/css" media=screen>
 {% endif %}
 
-<script src="{{ url_for('static', filename='3rd/js/jquery-2.1.4.min.js' _external=False )}}"></script>
-<script src="{{ url_for('static', filename='3rd/js/bootstrap.min.js' _external=False )}}"></script>
+<script src="{{ url_for('static', filename='3rd/js/jquery-2.1.4.min.js', _external=False )}}"></script>
+<script src="{{ url_for('static', filename='3rd/js/bootstrap.min.js', _external=False )}}"></script>
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -49,7 +49,7 @@
                     <ul class="nav navbar-nav">
                         {% for id, caption in navigation_bar %}
                             <li {% if id== active_page %} class="active" {% endif %}>
-                                <a href="{{ url_for(id _external=False )}}{{url_query}}">{{caption}}</a>
+                                <a href="{{ url_for(id, _external=False )}}{{url_query}}">{{caption}}</a>
                             </li>
                         {% endfor %}
                     </ul>
@@ -77,7 +77,7 @@
 </div>
 
 {% if not cinema_mode %}
-    <script src="{{ url_for('static', filename='js/url_params.js' _external=False )}}"></script>
+    <script src="{{ url_for('static', filename='js/url_params.js', _external=False )}}"></script>
     <script>
         $(document).ready(function(){
             $('[data-toggle="tooltip"]').tooltip();
