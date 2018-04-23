@@ -34,13 +34,13 @@ def create_app(environment, port):
     status.blueprint.port = port
     status.blueprint.start_time = Delorean.now()
 
-    # mongo = MongoConnect(config)
-    # state.mongo = mongo
+    mongo = MongoConnect(config)
+    state.mongo = mongo
 
-    # views.blueprint.mongo = mongo
-    # views.blueprint.config = config['app']
-    # api.blueprint.mongo = mongo
-    # api.blueprint.config = config['app']
+    views.blueprint.mongo = mongo
+    views.blueprint.config = config['app']
+    api.blueprint.mongo = mongo
+    api.blueprint.config = config['app']
 
     flask.register_blueprint(status.blueprint)
     flask.register_blueprint(views.blueprint)
