@@ -36,7 +36,6 @@ pip install --user virtualenv
 python -m virtualenv -p python3 venv
 
 ./venv/bin/pip3 install -r requirements.txt
-./venv/bin/pip3 install -r dev-requirements.txt
 
 if [ "${DOCS_DEPENDENCIES}" == "true" ]; then
     echo -e "\x1b[1mInstalling dependencies for docs\x1b[0m"
