@@ -41,4 +41,10 @@ print("\x1b[32m========================\x1b[0m")
 app = create_app(port=int(args.port), environment=args.env)
 context = create_ssl_context(app, bool(args.ssl))
 WSGIRequestHandler.protocol_version = "HTTP/1.1"
-app.run(debug=True, use_reloader=False, port=int(args.port), host='0.0.0.0', ssl_context=context)
+
+@app.route("/")
+def hello():
+    return "Hello World!"
+
+if __name__ == "__main__":
+    app.run(debug=True, use_reloader=False, port=int(args.port), host='0.0.0.0')
