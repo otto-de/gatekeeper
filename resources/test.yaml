@@ -20,10 +20,10 @@ mongo:
   password: ''
   uris:
     - localhost
-  database: testgatekeeper
+  database: testservice
   use_ssl: false
   replicaSet: ''
   authSource: ''
-  services_collection: testgatekeeper
+  services_collection: testcollection
   tickets_collection: testtickets
   holidays_collection: testholidays
