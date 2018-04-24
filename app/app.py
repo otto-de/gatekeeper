@@ -16,6 +16,7 @@ from app.mongo_connect import MongoConnect
 navigation_bar = [('views.get_gates', 'Gates')]
 app_name = "Gatekeeper"
 
+
 def create_app(environment, port):
     flask = Flask(__name__)
     flask.config.from_pyfile('config.py')
@@ -45,3 +46,16 @@ def create_app(environment, port):
     flask.register_blueprint(views.blueprint)
     flask.register_blueprint(api.blueprint)
     return flask
+
+def create_ssl_context(app, use_ssl):
+    if(use_ssl):
+        if not os.path.isfile('/etc/gatekeeper/ssl/server.key') or not os.path.isfile('/etc/gatekeeper/ssl/server.crt'):
+            print("If you want to use SSL, a 'server.key' file and 'server.crt' file are required to be stored in '/etc/gatekeeper/ssl/'")
+            exit()
+        context = ssl.SSLContext(ssl.PROTOCOL_TLS)
+        certfile = '/etc/gatekeeper/ssl/server.crt'
+        keyfile = '/etc/gatekeeper/ssl/server.key'
+        context.load_cert_chain(certfile=certfile, keyfile=keyfile)
+    else:
+        context = None
+    return context
