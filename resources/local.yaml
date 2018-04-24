@@ -28,9 +28,9 @@ mongo:
   uris:
     - localhost
   use_ssl: false
-  database: gatekeeper
+  database: localgatekeeper
   replicaSet: ''
   authSource: 'admin'
-  services_collection: gatekeeper
+  services_collection: localgatekeeper
   tickets_collection: tickets
   holidays_collection: holidays

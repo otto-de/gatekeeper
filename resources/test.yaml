@@ -24,6 +24,6 @@ mongo:
   use_ssl: false
   replicaSet: ''
   authSource: ''
-  services_collection: testgatekeeper
+  services_collection: localgatekeeper
   tickets_collection: testtickets
   holidays_collection: testholidays

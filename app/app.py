@@ -16,7 +16,6 @@ from app.mongo_connect import MongoConnect
 navigation_bar = [('views.get_gates', 'Gates')]
 app_name = "Gatekeeper"
 
-
 def create_app(environment, port):
     flask = Flask(__name__)
     flask.config.from_pyfile('config.py')
