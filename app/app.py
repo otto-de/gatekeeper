@@ -1,7 +1,5 @@
 import json
-import ssl
-import os.path
-from sys import exit
+
 from flask import Flask
 from delorean import Delorean
 
