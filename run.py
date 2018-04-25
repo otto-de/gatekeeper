@@ -4,9 +4,10 @@ import argparse
 import logging
 
 from app.app import create_app
+from werkzeug.serving import WSGIRequestHandler
 
 parser = argparse.ArgumentParser(
-    description='Jellyfish is a service to monitor the health and status of services running in Marathon.')
+    description='Gatekeeper is a service to install and manage gates in build pipelines.')
 parser.add_argument('-p', '--port', nargs='?', default=8080,
                     help='Port: Specify port. Default is 8080')
 parser.add_argument('-e', '--env', nargs='?', default="local",
@@ -24,12 +25,16 @@ logging.basicConfig(level=log_level,
                     datefmt='%d-%m %H:%M:%S',
                     format='%(asctime)s %(name)-s %(levelname)-s %(message)s')
 
-print("\n\x1b[32mApplication staring...\x1b[0m")
+print("\n\x1b[32mApplication starting...\x1b[0m")
 print(" Port: " + str(args.port))
 print(" Environment: " + str(args.env))
 print(" Workdir: " + str(args.workdir))
 print(" Greedy: " + str(args.greedy))
 print(" Logging: " + str(args.verbose))
 print("\x1b[32m========================\x1b[0m")
-app = create_app(port=args.port, environment=args.env)
-app.run(debug=True, use_reloader=False, port=args.port, host='0.0.0.0')
+
+app = create_app(port=int(args.port), environment=args.env)
+WSGIRequestHandler.protocol_version = "HTTP/1.1"
+
+if __name__ == "__main__":
+    app.run(debug=True, use_reloader=False, port=int(args.port), host='0.0.0.0')

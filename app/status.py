@@ -7,7 +7,6 @@ from app import view_util
 
 blueprint = Blueprint('status', __name__)
 
-
 @blueprint.route("/internal/health")
 def status_health():
     dic = {

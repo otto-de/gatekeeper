@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 {% set active_page = "views.get_gates" %}
 {% block content %}
-<link href="/static/css/gates.css" rel=stylesheet type="text/css" media=screen>
+<link href="{{ url_for('static', filename='css/gates.css', _external=False )}}" rel=stylesheet type="text/css" media=screen>
 
 {% if parameter.style == "night" %}
-<link href="/static/3rd/css/colorbox/colorbox_night.css" rel=stylesheet type="text/css" media=screen>
+<link href="{{ url_for('static', filename='3rd/css/colorbox/colorbox_night.css', _external=False )}}" rel=stylesheet type="text/css" media=screen>
 {% else %}
-<link href="/static/3rd/css/colorbox/colorbox_day.css" rel=stylesheet type="text/css" media=screen>
+<link href="{{ url_for('static', filename='3rd/css/colorbox/colorbox_day.css', _external=False )}}" rel=stylesheet type="text/css" media=screen>
 {% endif %}
 
     <h2>Gates</h2>
@@ -115,6 +115,6 @@
 
     </div>
 </div>
-<script src="/static/3rd/js/jquery.colorbox-min.js"></script>
-<script async src="/static/js/gates.js"></script>
+<script src="{{ url_for('static', filename='3rd/js/jquery.colorbox-min.js', _external=False )}}"></script>
+<script async src="{{ url_for('static', filename='js/gates.js', _external=False )}}"></script>
 {% endblock %}
