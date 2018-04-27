@@ -39,8 +39,6 @@ class MongoConnect:
             mongoConnectionString = [
                 'mongodb://' + config['mongo']['username'] + ':' + config['mongo']['password'] + '@' + uris + '/' +
                 config['mongo']['database'] + '?' + ssl + replicaSet + authSource]
-            print (mongoConnectionString)
-
             return mongoConnectionString
         else:
             return config['mongo']['uris']
