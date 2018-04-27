@@ -31,13 +31,17 @@ class MongoConnect:
     def build_uris(config):
         if config['mongo'].get('username') and config['mongo'].get('password'):
             uris = ','.join(config['mongo']['uris'])
-            ssl = 'ssl=' + str(config['mongo']['use_ssl']).lower() if config['mongo'].get('use_ssl') else 'false'
-            authSource = '&authSource=' + str(config['mongo']['authSource']) if config['mongo'].get(
+            ssl = 'ssl=' + (str(config['mongo']['use_ssl']).lower() if config['mongo'].get('use_ssl') else 'false')
+            authSource = ('&authSource=' + str(config['mongo']['authSource'])) if config['mongo'].get(
                 'authSource') else ''
-            replicaSet = '&replicaSet=' + str(config['mongo']['replicaSet']) if config['mongo'].get(
+            replicaSet = ('&replicaSet=' + str(config['mongo']['replicaSet'])) if config['mongo'].get(
                 'replicaSet') else ''
-            return ['mongodb://' + config['mongo']['username'] + ':' + config['mongo']['password'] + \
-                    '@' + uris + '/' + config['mongo']['database'] + '?' + ssl + replicaSet + authSource]
+            mongoConnectionString = [
+                'mongodb://' + config['mongo']['username'] + ':' + config['mongo']['password'] + '@' + uris + '/' +
+                config['mongo']['database'] + '?' + ssl + replicaSet + authSource]
+            print (mongoConnectionString)
+
+            return mongoConnectionString
         else:
             return config['mongo']['uris']
 
