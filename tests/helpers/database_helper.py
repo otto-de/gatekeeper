@@ -1,13 +1,14 @@
 from app.mongo_connect import MongoConnect
 from eliza.config import ConfigLoader
 from datetime import datetime, timedelta
-
+from app import state
 
 class DatabaseHelper:
     def __init__(self, environment):
         config_loader = ConfigLoader(verify=False)
         self.config = config_loader.load_config("resources/", environment)
         self.mongo = MongoConnect(self.config)
+        state.mongo = self.mongo
 
     def decrease_ticket_expiration_date_by(self, ticket_id, delta):
         self.mongo.update_ticket(ticket_id, {"expiration_date": self.mongo.get_expiration_date(delta)})
